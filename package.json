@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.8.1",
-    "@vee-validate/nuxt": "^4.14.4",
+    "@vee-validate/i18n": "^4.14.6",
+    "@vee-validate/nuxt": "^4.14.6",
+    "@vee-validate/rules": "^4.14.6",
     "flowbite": "^2.5.2",
     "nuxt": "^3.13.2",
     "vue": "latest",

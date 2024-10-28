@@ -12,6 +12,7 @@ export default {
     extend: {
       colors: {
         "main-black": "#231815",
+        "error-msg": "#D60404",
       },
     },
   },
