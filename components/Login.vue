@@ -57,7 +57,11 @@ function onSubmit(values) {
           label="密碼"
           class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
           placeholder="請輸入註冊密碼"
-          rules="required|min:6"
+          :rules="{
+            required: true,
+            min: 6,
+            regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
+          }"
         />
         <VeeErrorMessage name="password" class="text-error-msg text-sm" />
       </div>
@@ -67,7 +71,9 @@ function onSubmit(values) {
       >
         登入
       </button>
-      <NuxtLink class="text-[#4b4240] text-lg font-normal underline" to="/"
+      <NuxtLink
+        class="text-[#4b4240] text-lg font-normal underline"
+        to="/forgetPassword"
         >忘記密碼?
       </NuxtLink>
     </VeeForm>
