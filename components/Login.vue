@@ -39,7 +39,7 @@ function onSubmit(values) {
         <VeeField
           type="email"
           name="email"
-          class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
           placeholder="請輸入註冊時的電子郵件"
           rules="required|email"
         />
@@ -55,7 +55,7 @@ function onSubmit(values) {
           type="password"
           name="password"
           label="密碼"
-          class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
           placeholder="請輸入註冊密碼"
           :rules="{
             required: true,
@@ -67,7 +67,7 @@ function onSubmit(values) {
       </div>
       <button
         type="submit"
-        class="text-white bg-[#4c4341] font-bold rounded-[5px] text-lg w-full p-3 mb-6"
+        class="text-white bg-main-black/80 hover:bg-main-black/70 font-bold rounded-[5px] text-lg w-full p-3 mb-6"
       >
         登入
       </button>
@@ -84,7 +84,7 @@ function onSubmit(values) {
     </h2>
     <NuxtLink
       to="/"
-      class="border border-[#423A3C] flex justify-center items-center text-[#423A3C] text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px]"
+      class="border border-main-black/80 hover:border-main-black/70 flex justify-center items-center text-main-black/80 hover:text-main-black/70 text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px]"
     >
       新用戶註冊
     </NuxtLink>

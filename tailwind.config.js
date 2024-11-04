@@ -13,6 +13,9 @@ export default {
       colors: {
         "main-black": "#231815",
         "error-msg": "#D60404",
+        "bg-gray": "#EEEEEE",
+        "logo-gray": "#5F5F5F",
+        "notice-gray": "#B1B1B1",
       },
     },
   },

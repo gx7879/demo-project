@@ -21,7 +21,7 @@ function onSubmit(values) {
             type="password"
             name="password"
             label="密碼"
-            class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+            class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
             placeholder="6~20個字且须包含至少一個英文字母和一個數字"
             :rules="{
               required: true,
@@ -42,7 +42,7 @@ function onSubmit(values) {
             type="password"
             name="confirmPassword"
             label="密碼"
-            class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+            class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
             placeholder="再次輸入新密碼"
             rules="required|confirmed:@password|regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/"
           />
@@ -53,7 +53,7 @@ function onSubmit(values) {
         </div>
         <button
           type="submit"
-          class="text-white bg-[#4c4341] font-bold rounded-[5px] text-lg w-full p-3 mb-6"
+          class="text-white bg-main-black/80 hover:bg-main-black/70 font-bold rounded-[5px] text-lg w-full p-3 mb-6"
         >
           更改密碼
         </button>

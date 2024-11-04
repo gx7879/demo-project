@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="bg-[#EDEDED]">
+  <div class="bg-bg-gray">
     <Marquee>
       <h1>
         ARK-002 現已上市 ARK-001 PLUS 現已上市 ARK-002 貨和運輸 ARK-003 開發實況

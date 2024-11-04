@@ -28,7 +28,7 @@ function onSubmit(values) {
           <VeeField
             type="email"
             name="email"
-            class="bg-gray-50 border border-[#b1b1b1] placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+            class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
             placeholder="請輸入註冊時的電子郵件"
             rules="required|email"
           />
@@ -36,7 +36,7 @@ function onSubmit(values) {
         </div>
         <button
           type="submit"
-          class="text-white bg-[#4c4341] font-bold rounded-[5px] text-lg w-full p-3 mb-6"
+          class="text-white bg-main-black/80 hover:bg-main-black/70 font-bold rounded-[5px] text-lg w-full p-3 mb-6"
         >
           提交
         </button>
