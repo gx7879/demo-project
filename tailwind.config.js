@@ -17,6 +17,10 @@ export default {
         "logo-gray": "#5F5F5F",
         "notice-gray": "#B1B1B1",
       },
+      screens: {
+        "2md": "840px",
+        lg: "992px",
+      },
     },
   },
   plugins: [require("flowbite/plugin")],

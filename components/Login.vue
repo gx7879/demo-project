@@ -1,5 +1,7 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
+const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
+const router = useRouter();
 localize("zh_TW", {
   messages: {
     required: "錯誤的電子郵件地址或密碼，請再試一次。",
@@ -7,14 +9,38 @@ localize("zh_TW", {
   },
 });
 
-function onSubmit(values) {
+async function login(values, { resetForm }) {
   console.log("submit", values);
+  try {
+    const userCredential = await $signInWithEmailAndPassword(
+      $auth,
+      values.email,
+      values.password
+    );
+    console.log(userCredential);
+    if (userCredential.user) {
+      router.push("/");
+    }
+    // .then((userCredential) => {
+    //   console.log(userCredential);
+    // })
+    // .catch((error) => {
+    //   resetForm();
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    // });
+  } catch (error) {
+    resetForm();
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
 }
 </script>
 
 <template>
-  <div class="max-w-[720px] mx-auto py-[100px] text-center">
-    <h1 class="text-[32px] leading-8 font-bold mb-12">立即登入</h1>
+  <div class="max-w-[720px] mx-auto pt-[100px] pb-40 text-center px-6">
+    <h1 class="text-4xl text-main-black/70 font-bold mb-12">立即登入</h1>
     <div class="text-sm mb-6">使用第三方帳號登入</div>
     <div class="flex justify-center items-center gap-12 mb-12">
       <NuxtImg width="36" src="/facebook-login-icon.png"></NuxtImg>
@@ -25,37 +51,37 @@ function onSubmit(values) {
       <img src="assets/images/apple-login-icon.png" alt="" /> -->
     </div>
     <div
-      class="flex items-center text-center before:flex-1 before:border-b before:border-main-black after:flex-1 after:border-b after:border-main-black [&:not(:empty):before]:mr-2 [&:not(:empty):after]:ml-2 mb-12"
+      class="flex items-center text-lg text-center before:flex-1 before:border-b before:border-main-black after:flex-1 after:border-b after:border-main-black [&:not(:empty):before]:mr-2 [&:not(:empty):after]:ml-2 mb-12"
     >
       or
     </div>
-    <VeeForm class="max-w-[460px] mx-auto mb-[60px]" @submit="onSubmit">
-      <div class="mb-5 text-left">
+    <VeeForm class="max-w-[460px] mx-auto mb-[60px]" @submit="login">
+      <div class="mb-6 text-left">
         <label
           for="email"
-          class="block mb-2 text-xl font-light text-main-black text-left"
+          class="block mb-3 text-xl font-medium text-main-black/70 text-left"
           >電子郵件
         </label>
         <VeeField
           type="email"
           name="email"
-          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
           placeholder="請輸入註冊時的電子郵件"
           rules="required|email"
         />
         <VeeErrorMessage name="email" class="text-error-msg text-sm" />
       </div>
-      <div class="mb-5 text-left">
+      <div class="mb-12 text-left">
         <label
           for="password"
-          class="block mb-2 text-xl font-light text-main-black text-left"
+          class="block mb-3 text-xl font-medium text-main-black/70 text-left"
           >密碼
         </label>
         <VeeField
           type="password"
           name="password"
           label="密碼"
-          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
           placeholder="請輸入註冊密碼"
           :rules="{
             required: true,
@@ -72,14 +98,14 @@ function onSubmit(values) {
         登入
       </button>
       <NuxtLink
-        class="text-[#4b4240] text-lg font-normal underline"
+        class="text-main-black/80 text-lg font-normal underline"
         to="/forgetPassword"
         >忘記密碼?
       </NuxtLink>
     </VeeForm>
     <div class="border-main-black border-b mb-[60px]"></div>
 
-    <h2 class="font-semibold text-[28px] text-main-black/80 leading-10 mb-12">
+    <h2 class="font-semibold text-[26px] text-main-black/80 leading-10 mb-12">
       還不是會員?
     </h2>
     <NuxtLink
