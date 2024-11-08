@@ -99,9 +99,9 @@ async function loginWithFirebase(values, { resetForm }) {
           :rules="{
             required: true,
             min: 6,
-            regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
           }"
         />
+        <!-- regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/, -->
         <VeeErrorMessage name="password" class="text-error-msg text-sm" />
       </div>
       <button

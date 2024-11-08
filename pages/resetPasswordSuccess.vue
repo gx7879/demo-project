@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="max-w-[720px] mx-auto py-[100px]">
+  <div class="max-w-[720px] mx-auto pt-[100px] pb-40 px-6">
     <div class="max-w-[460px] mx-auto">
       <h1 class="text-[28px] leading-10 font-medium mb-12 text-main-black/80">
         新密碼設定成功

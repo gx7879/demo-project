@@ -12,7 +12,7 @@ function onSubmit(values) {
 </script>
 
 <template>
-  <div class="max-w-[720px] mx-auto py-[100px]">
+  <div class="max-w-[720px] mx-auto pt-[100px] pb-40 px-6">
     <div class="max-w-[460px] mx-auto">
       <h1 class="text-[32px] leading-8 font-bold mb-12">忘記密碼?</h1>
       <p class="mb-12">
