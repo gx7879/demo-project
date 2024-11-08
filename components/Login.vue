@@ -1,5 +1,10 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
+import { login } from "@/api/member";
+
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+const { setToken } = userStore;
 const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 localize("zh_TW", {
@@ -8,8 +13,7 @@ localize("zh_TW", {
     email: "電子郵件無效",
   },
 });
-
-async function login(values, { resetForm }) {
+async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
     const userCredential = await $signInWithEmailAndPassword(
@@ -18,9 +22,15 @@ async function login(values, { resetForm }) {
       values.password
     );
     console.log(userCredential);
-    if (userCredential.user) {
+    setToken(userCredential.user.accessToken);
+    userInfo.value = userCredential.user;
+    const res = await login();
+    console.log(res);
+    if (res) {
       router.push("/");
     }
+    // if (userCredential.user) {
+    // }
     // .then((userCredential) => {
     //   console.log(userCredential);
     // })
@@ -55,7 +65,10 @@ async function login(values, { resetForm }) {
     >
       or
     </div>
-    <VeeForm class="max-w-[460px] mx-auto mb-[60px]" @submit="login">
+    <VeeForm
+      class="max-w-[460px] mx-auto mb-[60px]"
+      @submit="loginWithFirebase"
+    >
       <div class="mb-6 text-left">
         <label
           for="email"

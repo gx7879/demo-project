@@ -2,9 +2,15 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@vee-validate/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@vee-validate/nuxt", '@pinia/nuxt',],
   image: {
     dir: "assets/images",
+  },
+  runtimeConfig: {
+    // Public keys that are exposed to the client
+    public: {
+      apiBase: ''
+    }
   },
   veeValidate: {
     // 啟用 auto imports
