@@ -22,7 +22,7 @@ function onSubmit(values) {
         <div class="mb-12 text-left">
           <label
             for="email"
-            class="block mb-2 text-xl font-light text-main-black text-left"
+            class="block mb-3 text-xl font-medium text-main-black/70 text-left"
             >電子郵件
           </label>
           <VeeField
@@ -50,7 +50,10 @@ function onSubmit(values) {
       >
         會員登入
       </NuxtLink>
-      <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal underline">
+      <NuxtLink
+        to="/register"
+        class="text-[#4b4240] text-lg font-normal underline"
+      >
         新用戶註冊
       </NuxtLink>
     </div>

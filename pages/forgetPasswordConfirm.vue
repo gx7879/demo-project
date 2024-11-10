@@ -52,7 +52,10 @@ function reSend() {
       >
         會員登入
       </NuxtLink>
-      <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal underline">
+      <NuxtLink
+        to="/register"
+        class="text-[#4b4240] text-lg font-normal underline"
+      >
         新用戶註冊
       </NuxtLink>
     </div>

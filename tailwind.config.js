@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { fontFamily } = require("tailwindcss/defaultTheme");
+
 export default {
   content: [
     "./components/**/*.{js,vue,ts}",
@@ -20,6 +22,9 @@ export default {
       screens: {
         "2md": "840px",
         lg: "992px",
+      },
+      fontFamily: {
+        sans: ["Noto Sans TC", ...fontFamily.sans],
       },
     },
   },

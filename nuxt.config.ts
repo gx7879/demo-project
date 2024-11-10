@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@vee-validate/nuxt", '@pinia/nuxt',],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxt/image",
+    "@vee-validate/nuxt",
+    '@pinia/nuxt',
+    "@nuxtjs/google-fonts",
+  ],
   image: {
     dir: "assets/images",
   },
@@ -23,4 +29,9 @@ export default defineNuxtConfig({
       ErrorMessage: "VeeErrorMessage",
     },
   },
+  googleFonts: {
+    families: {
+      "Noto Sans TC": true
+    }
+  }
 });
