@@ -24,6 +24,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
     generateMessage: localize({
       zh_TW: zhTW,
     }),
+    validateOnBlur: false,
   });
   // localize("zh_TW", {
   //   messages: {

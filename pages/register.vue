@@ -1,14 +1,13 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
-import { login } from "@/api/member";
+// import { login } from "@/api/member";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
+// const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 const email = ref(null);
-// const email = useState("email", () => ref(null));
 localize("zh_TW", {
   fields: {
     agree: {
@@ -21,25 +20,12 @@ localize("zh_TW", {
   },
 });
 
-// onMounted(() => {
-//   console.log(email);
-// });
 async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
-    const userCredential = await $signInWithEmailAndPassword(
-      $auth,
-      values.email,
-      values.password
-    );
-    console.log(userCredential);
-    setToken(userCredential.user.accessToken);
-    userInfo.value = userCredential.user;
-    const res = await login();
-    console.log(res);
-    if (res) {
-      router.push("/");
-    }
+    // if (res) {
+    router.push("/emailVerification");
+    // }
     // if (userCredential.user) {
     // }
     // .then((userCredential) => {
@@ -111,9 +97,9 @@ async function loginWithFirebase(values, { resetForm }) {
           :rules="{
             required: true,
             min: 6,
+            regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
           }"
         />
-        <!-- regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/, -->
         <VeeErrorMessage name="password" class="text-error-msg text-sm" />
       </div>
       <div class="mb-12 text-left">
@@ -128,7 +114,7 @@ async function loginWithFirebase(values, { resetForm }) {
           label="密碼"
           class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
           placeholder="6-20字符，須包含英文與數字"
-          rules="required|confirmed:@password|regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/"
+          rules="required|confirmed:@password"
         />
         <VeeErrorMessage
           name="confirmPassword"
@@ -165,13 +151,17 @@ async function loginWithFirebase(values, { resetForm }) {
               for="agree"
               class="flex gap-x-1 ms-2 text-lg text-main-black/80"
               >我同意網站
-              <NuxtLink to="/serviceTerms" class="underline underline-offset-2"
-                >服務條款
+              <NuxtLink to="/serviceTerms" class="underline underline-offset-2">
+                服務條款
               </NuxtLink>
               與
-              <NuxtLink to="/privacyPolicy" class="underline underline-offset-2"
-                >隱私權政策 </NuxtLink
-              >。
+              <NuxtLink
+                to="/privacyPolicy"
+                class="underline underline-offset-2"
+              >
+                隱私權政策
+              </NuxtLink>
+              。
             </label>
           </VeeField>
         </div>
