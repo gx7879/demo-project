@@ -2,6 +2,10 @@
 import { localize } from "@vee-validate/i18n";
 import { login } from "@/api/member";
 
+const emit = defineEmits(["changePage"]);
+function changePage(page) {
+  emit("changePage", page);
+}
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
@@ -110,23 +114,33 @@ async function loginWithFirebase(values, { resetForm }) {
       >
         登入
       </button>
-      <NuxtLink
+      <!-- <NuxtLink
         class="text-main-black/80 text-lg font-normal underline"
         to="/forgetPassword"
         >忘記密碼?
-      </NuxtLink>
+      </NuxtLink> -->
+      <span
+        class="text-main-black/80 text-lg font-normal underline cursor-pointer"
+        @click="changePage('ForgetPassword')"
+        >忘記密碼?</span
+      >
     </VeeForm>
     <div class="border-main-black border-b mb-[60px]"></div>
 
     <h2 class="font-semibold text-[26px] text-main-black/80 leading-10 mb-12">
       還不是會員?
     </h2>
-    <NuxtLink
+    <!-- <NuxtLink
       to="/register"
       class="border border-main-black/80 hover:border-main-black/70 flex justify-center items-center text-main-black/80 hover:text-main-black/70 text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px]"
     >
       新用戶註冊
-    </NuxtLink>
+    </NuxtLink> -->
+    <span
+      class="border border-main-black/80 hover:border-main-black/70 flex justify-center items-center text-main-black/80 hover:text-main-black/70 text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px] cursor-pointer"
+      @click="changePage('register')"
+      >新用戶註冊</span
+    >
   </div>
 </template>
 

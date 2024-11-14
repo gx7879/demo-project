@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import { useFlowbite } from "~/composables/useFlowbite";
+import { Login, ForgetPassword } from "#components";
 
 const product = ref([]);
 const num = ref(0);
@@ -9,6 +10,14 @@ const num = ref(0);
 // function closeModal() {
 //   modal.value.hide();
 // }
+const pages = {
+  Login,
+  ForgetPassword,
+};
+const currentPage = shallowRef(pages.Login);
+const changePage = function (page) {
+  currentPage.value = pages[page];
+};
 onMounted(() => {
   useFlowbite(() => {
     // set the target element of the input field
@@ -54,7 +63,9 @@ onMounted(() => {
         <div class="py-10 px-6">
           <Breadcrumb :items="['購物車', '訂購資訊', '訂單確認']"></Breadcrumb>
         </div>
-        <Login></Login>
+        <!-- <component :is="currentPage" @changePage="changePage"></component> -->
+        <component :is="currentPage" @changePage="changePage" />
+        <!-- <Login :inner="true" @changePasswordComponent="changePassword"></Login> -->
       </div>
       <div class="hidden pl-10 max-w-[500px] w-full lg:block pt-[100px]">
         <h2
