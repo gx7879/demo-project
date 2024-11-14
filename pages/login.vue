@@ -1,7 +1,9 @@
 <script setup></script>
 
 <template>
-  <Login></Login>
+  <div class="pt-[100px] pb-40">
+    <Login></Login>
+  </div>
 </template>
 
 <style></style>

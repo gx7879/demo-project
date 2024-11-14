@@ -49,7 +49,7 @@ async function loginWithFirebase(values, { resetForm }) {
 </script>
 
 <template>
-  <div class="max-w-[720px] mx-auto pt-[100px] pb-40 text-center px-6">
+  <div class="max-w-[720px] mx-auto text-center px-6">
     <h1 class="text-4xl text-main-black/70 font-bold mb-12">立即登入</h1>
     <div class="text-sm mb-6">使用第三方帳號登入</div>
     <div class="flex justify-center items-center gap-12 mb-12">

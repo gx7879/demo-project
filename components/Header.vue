@@ -8,13 +8,12 @@ const toggleMenu = () => {
 
 <template>
   <header
-    class="absolute w-full"
     :class="{
       'h-[337px] md:h-[401px] bg-[url(@/assets/images/banner.png)] bg-cover bg-center':
         route.name !== 'index',
     }"
   >
-    <div class="bg-bg-gray px-6 lg:px-[50px] h-20 backdrop-blur-[10px]">
+    <div class="bg-bg-gray/30 px-6 lg:px-[50px] h-20 backdrop-blur-[10px]">
       <div
         class="flex justify-between items-center border-b border-white h-full"
         :class="{ 'border-white': !openMenu, 'border-main-black/70': openMenu }"
@@ -45,28 +44,6 @@ const toggleMenu = () => {
             />
           </g>
         </svg>
-        <!-- <transition>
-          <div
-            v-if="openMenu"
-            class="absolute top-full left-0 w-full px-[50px] py-10 bg-bg-gray"
-          >
-            <h6 class="text-[28px] leading-[140%] mb-3">會員專區</h6>
-            <ul
-              class="text-xl text-main-black/70 space-y-6 px-4 py-6 border-t border-l border-main-black mb-6"
-            >
-              <li>會員資料</li>
-              <li>會員身分與優惠</li>
-              <li>訂單追蹤</li>
-              <li>訂購紀錄</li>
-              <li>變更密碼</li>
-            </ul>
-            <button
-              class="border border-main-black/80 w-full h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"
-            >
-              登出
-            </button>
-          </div>
-        </transition> -->
 
         <div class="h-5 lg:h-7 aspect-[23/4]">
           <NuxtImg class="w-full" src="/header-logo.svg"></NuxtImg>
@@ -105,7 +82,7 @@ const toggleMenu = () => {
         </div>
       </div>
     </div>
-    <Vue3SlideUpDown v-model="openMenu" opacityClosed="1">
+    <Vue3SlideUpDown v-model="openMenu" :opacityClosed="1">
       <div class="px-[50px] py-10 bg-bg-gray">
         <h6 class="text-main-black/70 text-[28px] leading-[140%] mb-3">
           會員專區
@@ -128,29 +105,6 @@ const toggleMenu = () => {
         </div>
       </div>
     </Vue3SlideUpDown>
-    <!-- <CollapseTransition :isOpen="isOpen">
-      <div class="px-[50px] py-10 bg-bg-gray">
-        <h6 class="text-main-black/70 text-[28px] leading-[140%] mb-3">
-          會員專區
-        </h6>
-        <div class="flex justify-between items-end">
-          <ul
-            class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black mb-6 grid grid-cols-3 gap-x-[60px] gap-y-6 auto-cols-auto"
-          >
-            <li>會員資料</li>
-            <li>會員身分與優惠</li>
-            <li>訂單追蹤</li>
-            <li>訂購紀錄</li>
-            <li>變更密碼</li>
-          </ul>
-          <button
-            class="border border-main-black/80 w-[216px] h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"
-          >
-            登出
-          </button>
-        </div>
-      </div>
-    </CollapseTransition> -->
     <!-- <NuxtImg class="absolute h-full bg-cover" src="/banner.png"></NuxtImg> -->
   </header>
 </template>
