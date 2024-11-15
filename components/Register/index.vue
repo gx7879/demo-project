@@ -29,7 +29,8 @@ async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
     // if (res) {
-    router.push("/emailVerification");
+    // router.push("/emailVerification");
+    changePage("EmailVerification");
     // }
     // if (userCredential.user) {
     // }

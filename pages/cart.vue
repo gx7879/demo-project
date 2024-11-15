@@ -6,6 +6,8 @@ import {
   LoginResetPassword,
   LoginResetPasswordSuccess,
   Register,
+  RegisterEmailVerification,
+  RegisterRegistrationSuccess,
 } from "#components";
 
 const product = ref([]);
@@ -17,6 +19,8 @@ const pages = {
   ResetPassword: LoginResetPassword,
   ResetPasswordSuccess: LoginResetPasswordSuccess,
   Register,
+  EmailVerification: RegisterEmailVerification,
+  RegistrationSuccess: RegisterRegistrationSuccess,
 };
 const currentPage = shallowRef(pages.Login);
 const changePage = function (page) {
