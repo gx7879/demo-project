@@ -6,18 +6,20 @@ localize("zh_TW", {
     email: "電子郵件無效",
   },
 });
-function onSubmit(values) {
-  console.log("submit", values);
-}
 
 const emit = defineEmits(["changePage"]);
 function changePage(page) {
   emit("changePage", page);
 }
+
+function onSubmit(values) {
+  console.log("submit", values);
+  changePage("ForgetPasswordConfirm");
+}
 </script>
 
 <template>
-  <div class="max-w-[720px] mx-auto pt-[100px] pb-40 px-6">
+  <div class="max-w-[720px] mx-auto px-6">
     <div class="max-w-[460px] mx-auto">
       <h1 class="text-[32px] leading-8 font-bold mb-12">忘記密碼?</h1>
       <p class="mb-12">
@@ -57,9 +59,10 @@ function changePage(page) {
       </NuxtLink> -->
       <span
         class="text-[#4b4240] text-lg font-normal underline mb-6 cursor-pointer"
-        @click="changePage('login')"
-        >會員登入</span
+        @click="changePage('Login')"
       >
+        會員登入
+      </span>
       <NuxtLink
         to="/register"
         class="text-[#4b4240] text-lg font-normal underline"

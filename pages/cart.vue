@@ -1,57 +1,29 @@
 <script setup>
-import { onMounted } from "vue";
-import { useFlowbite } from "~/composables/useFlowbite";
-import { Login, ForgetPassword } from "#components";
+import {
+  Login,
+  ForgetPassword,
+  ForgetPasswordConfirm,
+  ResetPassword,
+  ResetPasswordSuccess,
+} from "#components";
 
 const product = ref([]);
-const num = ref(0);
 
-// let modal = ref(null);
-// function closeModal() {
-//   modal.value.hide();
-// }
 const pages = {
   Login,
   ForgetPassword,
+  ForgetPasswordConfirm,
+  ResetPassword,
+  ResetPasswordSuccess,
 };
 const currentPage = shallowRef(pages.Login);
 const changePage = function (page) {
   currentPage.value = pages[page];
 };
-onMounted(() => {
-  useFlowbite(() => {
-    // set the target element of the input field
-    const $targetEl = document.getElementById("counter-input-example");
 
-    // optionally set the increment and decrement elements
-    const $incrementEl = document.getElementById("increment-button");
-
-    const $decrementEl = document.getElementById("decrement-button");
-    const options = {
-      minValue: 0,
-      maxValue: null, // infinite
-      onIncrement: (input) => {
-        console.log("input field value has been incremented");
-        num.value = input._targetEl.value;
-      },
-      onDecrement: (input) => {
-        console.log("input field value has been decremented");
-        num.value = input._targetEl.value;
-      },
-    };
-    const instanceOptions = {
-      id: "counter-input-example",
-      override: true,
-    };
-    const counterInput = new InputCounter(
-      $targetEl,
-      $incrementEl,
-      $decrementEl,
-      options,
-      instanceOptions
-    );
-  });
-});
+function removeProduct() {
+  console.log("remove");
+}
 </script>
 
 <template>
@@ -63,9 +35,7 @@ onMounted(() => {
         <div class="py-10 px-6">
           <Breadcrumb :items="['購物車', '訂購資訊', '訂單確認']"></Breadcrumb>
         </div>
-        <!-- <component :is="currentPage" @changePage="changePage"></component> -->
         <component :is="currentPage" @changePage="changePage" />
-        <!-- <Login :inner="true" @changePasswordComponent="changePassword"></Login> -->
       </div>
       <div class="hidden pl-10 max-w-[500px] w-full lg:block pt-[100px]">
         <h2
@@ -92,61 +62,7 @@ onMounted(() => {
               </div>
               <div class="flex justify-between items-center">
                 <span>數量</span>
-                <div
-                  class="relative flex items-center border border-main-black/70 h-6 px-2"
-                >
-                  <button
-                    type="button"
-                    id="decrement-button"
-                    class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
-                  >
-                    <svg
-                      class="w-2.5 h-2.5 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 2"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 1h16"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    id="counter-input-example"
-                    class="flex-shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 text-center p-0 mx-3"
-                    placeholder=""
-                    required
-                    v-autoWidth
-                    v-model="num"
-                  />
-                  <button
-                    type="button"
-                    id="increment-button"
-                    class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
-                  >
-                    <svg
-                      class="w-2.5 h-2.5 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 18"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 1v16M1 9h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
+                <TouchSpin @remove="removeProduct"></TouchSpin>
               </div>
             </div>
           </div>
@@ -159,71 +75,17 @@ onMounted(() => {
                 <div class="flex justify-between text-xl font-medium">
                   <div class="mr-5">
                     ARKVO 超濾淨化耗材組
-                    <span class="text-sm font-light mt-1 block">Black </span>
+                    <span class="text-sm font-light mt-1 block">Black</span>
                   </div>
                   <div class="whitespace-nowrap grid text-right">
                     <span class="line-through">$ 89,000</span>
-                    <span class="text-[#ff7700]">$ 8,800 </span>
+                    <span class="text-[#ff7700]">$ 8,800</span>
                   </div>
                 </div>
               </div>
               <div class="flex justify-between items-center">
                 <span>數量</span>
-                <div
-                  class="relative flex items-center border border-main-black/70 h-6 px-2"
-                >
-                  <button
-                    type="button"
-                    id="decrement-button"
-                    class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
-                  >
-                    <svg
-                      class="w-2.5 h-2.5 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 2"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 1h16"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    id="counter-input-example"
-                    class="flex-shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 text-center p-0 mx-3"
-                    placeholder=""
-                    required
-                    v-autoWidth
-                    v-model="num"
-                  />
-                  <button
-                    type="button"
-                    id="increment-button"
-                    class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
-                  >
-                    <svg
-                      class="w-2.5 h-2.5 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 18"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 1v16M1 9h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
+                <TouchSpin @remove="removeProduct"></TouchSpin>
               </div>
             </div>
           </div>
@@ -238,6 +100,11 @@ onMounted(() => {
           />
           <button
             class="text-lg leading-none text-white bg-main-black/20 w-40 h-14 py-3 rounded-[5px]"
+            :disabled="true"
+            :class="{
+              'bg-main-black/20': true,
+              'bg-main-black/80': false,
+            }"
           >
             Apply
           </button>
