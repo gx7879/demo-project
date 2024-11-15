@@ -1,4 +1,8 @@
 <script setup>
+const emit = defineEmits(["changePage"]);
+function changePage(page) {
+  emit("changePage", page);
+}
 const btnText = ref("再寄一次");
 const btnStatus = ref(false);
 let time = 60;
@@ -36,9 +40,9 @@ function reSend() {
         {{ btnText }}
       </button>
       <div class="flex flex-col items-center">
-        <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal mb-6">
+        <span class="text-main-black/70 text-lg font-normal mb-1.5">
           沒收到重設密碼連結?
-        </NuxtLink>
+        </span>
         <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal underline">
           聯繫客服
         </NuxtLink>
@@ -46,18 +50,18 @@ function reSend() {
     </div>
     <div class="border-main-black border-b my-[60px]"></div>
     <div class="flex flex-col items-center">
-      <NuxtLink
-        to="/login"
-        class="text-[#4b4240] text-lg font-normal underline mb-6"
+      <span
+        class="text-main-black/80 text-lg font-normal underline mb-6 cursor-pointer"
+        @click="changePage('Login')"
       >
         會員登入
-      </NuxtLink>
-      <NuxtLink
-        to="/register"
-        class="text-[#4b4240] text-lg font-normal underline"
+      </span>
+      <span
+        class="text-main-black/80 text-lg font-normal underline mb-6 cursor-pointer"
+        @click="changePage('Register')"
       >
         新用戶註冊
-      </NuxtLink>
+      </span>
     </div>
   </div>
 </template>

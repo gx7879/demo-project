@@ -67,18 +67,18 @@ function onSubmit(values) {
     </div>
     <div class="border-main-black border-b my-[60px]"></div>
     <div class="flex flex-col items-center">
-      <NuxtLink
-        to="/login"
-        class="text-[#4b4240] text-lg font-normal underline mb-6"
+      <span
+        class="text-main-black/80 text-lg font-normal underline mb-6 cursor-pointer"
+        @click="changePage('Login')"
       >
         會員登入
-      </NuxtLink>
-      <NuxtLink
-        to="/register"
-        class="text-[#4b4240] text-lg font-normal underline"
+      </span>
+      <span
+        class="text-main-black/80 text-lg font-normal underline mb-6 cursor-pointer"
+        @click="changePage('Register')"
       >
         新用戶註冊
-      </NuxtLink>
+      </span>
     </div>
   </div>
 </template>

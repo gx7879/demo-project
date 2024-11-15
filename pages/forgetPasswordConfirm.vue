@@ -36,9 +36,9 @@ function reSend() {
         {{ btnText }}
       </button>
       <div class="flex flex-col items-center">
-        <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal mb-6">
+        <span class="text-main-black/70 text-lg font-normal mb-1.5">
           沒收到重設密碼連結?
-        </NuxtLink>
+        </span>
         <NuxtLink to="/" class="text-[#4b4240] text-lg font-normal underline">
           聯繫客服
         </NuxtLink>

@@ -1,20 +1,22 @@
 <script setup>
 import {
   Login,
-  ForgetPassword,
-  ForgetPasswordConfirm,
-  ResetPassword,
-  ResetPasswordSuccess,
+  LoginForgetPassword,
+  LoginForgetPasswordConfirm,
+  LoginResetPassword,
+  LoginResetPasswordSuccess,
+  Register,
 } from "#components";
 
 const product = ref([]);
 
 const pages = {
   Login,
-  ForgetPassword,
-  ForgetPasswordConfirm,
-  ResetPassword,
-  ResetPasswordSuccess,
+  ForgetPassword: LoginForgetPassword,
+  ForgetPasswordConfirm: LoginForgetPasswordConfirm,
+  ResetPassword: LoginResetPassword,
+  ResetPasswordSuccess: LoginResetPasswordSuccess,
+  Register,
 };
 const currentPage = shallowRef(pages.Login);
 const changePage = function (page) {

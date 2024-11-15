@@ -1,38 +1,36 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
-import { login } from "@/api/member";
+// import { login } from "@/api/member";
 
 const emit = defineEmits(["changePage"]);
 function changePage(page) {
   emit("changePage", page);
 }
+
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
+// const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
+const email = ref(null);
 localize("zh_TW", {
+  fields: {
+    agree: {
+      required: "你必須同意細則和隱私條款",
+    },
+  },
   messages: {
     required: "錯誤的電子郵件地址或密碼，請再試一次。",
     email: "電子郵件無效",
   },
 });
+
 async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
-    const userCredential = await $signInWithEmailAndPassword(
-      $auth,
-      values.email,
-      values.password
-    );
-    console.log(userCredential);
-    setToken(userCredential.user.accessToken);
-    userInfo.value = userCredential.user;
-    const res = await login();
-    console.log(res);
-    if (res) {
-      router.push("/");
-    }
+    // if (res) {
+    router.push("/emailVerification");
+    // }
     // if (userCredential.user) {
     // }
     // .then((userCredential) => {
@@ -54,9 +52,8 @@ async function loginWithFirebase(values, { resetForm }) {
 
 <template>
   <div class="max-w-[720px] mx-auto text-center px-6">
-    <!-- <h1 class="text-4xl text-main-black/70 font-bold mb-12">立即登入</h1> -->
-    <NuxtImg class="mb-12 w-full" src="/login-banner-img.png"></NuxtImg>
-    <div class="text-sm mb-6">使用第三方帳號登入</div>
+    <h1 class="text-4xl text-main-black/70 font-bold mb-12">註冊會員</h1>
+    <div class="text-sm mb-6">使用第三方帳號註冊</div>
     <div class="flex justify-center items-center gap-12 mb-12">
       <NuxtImg width="36" src="/facebook-login-icon.png"></NuxtImg>
       <NuxtImg width="36" src="/google-login-icon.png"></NuxtImg>
@@ -81,6 +78,7 @@ async function loginWithFirebase(values, { resetForm }) {
           >電子郵件
         </label>
         <VeeField
+          ref="email"
           type="email"
           name="email"
           class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
@@ -89,7 +87,7 @@ async function loginWithFirebase(values, { resetForm }) {
         />
         <VeeErrorMessage name="email" class="text-error-msg text-sm" />
       </div>
-      <div class="mb-12 text-left">
+      <div class="mb-6 text-left">
         <label
           for="password"
           class="block mb-3 text-xl font-medium text-main-black/70 text-left"
@@ -100,48 +98,92 @@ async function loginWithFirebase(values, { resetForm }) {
           name="password"
           label="密碼"
           class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
-          placeholder="請輸入註冊密碼"
+          placeholder="6-20字符，須包含英文與數字"
           :rules="{
             required: true,
             min: 6,
+            regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
           }"
         />
-        <!-- regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/, -->
         <VeeErrorMessage name="password" class="text-error-msg text-sm" />
+      </div>
+      <div class="mb-12 text-left">
+        <label
+          for="password"
+          class="block mb-3 text-xl font-medium text-main-black/70 text-left"
+          >確認密碼
+        </label>
+        <VeeField
+          type="password"
+          name="confirmPassword"
+          label="密碼"
+          class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
+          placeholder="6-20字符，須包含英文與數字"
+          rules="required|confirmed:@password"
+        />
+        <VeeErrorMessage
+          name="confirmPassword"
+          class="text-error-msg text-sm"
+        />
       </div>
       <button
         type="submit"
-        class="text-white bg-main-black/80 hover:bg-main-black/70 font-bold rounded-[5px] text-lg w-full p-3 mb-6"
+        class="text-white bg-main-black/80 hover:bg-main-black/70 disabled:bg-main-black/20 font-bold rounded-[5px] text-lg w-full p-3 mb-6"
+        :disabled="!email?.meta.valid"
       >
-        登入
+        驗證電子郵件
       </button>
-      <!-- <NuxtLink
-        class="text-main-black/80 text-lg font-normal underline"
-        to="/forgetPassword"
-        >忘記密碼?
-      </NuxtLink> -->
-      <span
-        class="text-main-black/80 text-lg font-normal underline cursor-pointer"
-        @click="changePage('ForgetPassword')"
-        >忘記密碼?</span
-      >
+      <div class="mb-5 text-left">
+        <div class="flex items-center">
+          <VeeField
+            v-slot="{ field }"
+            name="agree"
+            type="checkbox"
+            :value="true"
+            :unchecked-value="false"
+            rules="required"
+          >
+            <div class="flex items-center h-6">
+              <input
+                id="agree"
+                type="checkbox"
+                v-bind="field"
+                :value="true"
+                class="w-6 h-6 border border-main-black/80 rounded bg-white focus:ring-3 focus:ring-blue-300"
+              />
+            </div>
+            <label
+              for="agree"
+              class="flex gap-x-1 ms-2 text-lg text-main-black/80"
+              >我同意網站
+              <NuxtLink to="/serviceTerms" class="underline underline-offset-2">
+                服務條款
+              </NuxtLink>
+              與
+              <NuxtLink
+                to="/privacyPolicy"
+                class="underline underline-offset-2"
+              >
+                隱私權政策
+              </NuxtLink>
+              。
+            </label>
+          </VeeField>
+        </div>
+        <VeeErrorMessage name="agree" class="text-error-msg text-sm" />
+      </div>
     </VeeForm>
     <div class="border-main-black border-b mb-[60px]"></div>
 
     <h2 class="font-semibold text-[26px] text-main-black/80 leading-10 mb-12">
-      還不是會員?
+      已經有帳號?
     </h2>
-    <!-- <NuxtLink
-      to="/register"
-      class="border border-main-black/80 hover:border-main-black/70 flex justify-center items-center text-main-black/80 hover:text-main-black/70 text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px]"
-    >
-      新用戶註冊
-    </NuxtLink> -->
     <span
       class="border border-main-black/80 hover:border-main-black/70 flex justify-center items-center text-main-black/80 hover:text-main-black/70 text-lg font-bold max-w-[460px] w-full h-[52px] mx-auto rounded-[5px] cursor-pointer"
-      @click="changePage('register')"
-      >新用戶註冊</span
+      @click="changePage('Login')"
     >
+      登入
+    </span>
   </div>
 </template>
 
