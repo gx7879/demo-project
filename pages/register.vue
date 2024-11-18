@@ -144,7 +144,7 @@ async function loginWithFirebase(values, { resetForm }) {
                 type="checkbox"
                 v-bind="field"
                 :value="true"
-                class="w-6 h-6 border border-main-black/80 rounded bg-white focus:ring-3 focus:ring-blue-300"
+                class="w-6 h-6 border border-main-black/80 rounded bg-white focus:ring-3 focus:ring-blue-300 checked:bg-main-black/80"
               />
             </div>
             <label

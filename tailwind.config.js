@@ -20,6 +20,7 @@ export default {
         "notice-gray": "#B1B1B1",
       },
       screens: {
+        sm: "576px",
         "2md": "840px",
         lg: "992px",
       },
