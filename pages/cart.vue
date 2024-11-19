@@ -11,22 +11,10 @@ import {
   RegisterRegistrationSuccess,
 } from "#components";
 
-const products = ref([
-  {
-    name: "ARK-002乾•淨•水循環空淨取水智慧機",
-    stock: 1,
-    num: 1,
-    price: 89000,
-    discount_price: 0,
-  },
-  {
-    name: "ARKVO 超濾淨化耗材組",
-    stock: 1,
-    num: 1,
-    price: 89000,
-    discount_price: 8000,
-  },
-]);
+const store = useProductStore();
+
+const { products } = storeToRefs(store);
+
 const isLogin = ref(true);
 
 const pages = {

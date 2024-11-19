@@ -1,5 +1,7 @@
 <script setup>
 const route = useRoute();
+const store = useProductStore();
+const { products } = storeToRefs(store);
 const openMenu = ref(false);
 const isModalOpen = ref(false);
 const toggleMenu = () => {
@@ -67,7 +69,11 @@ const closeModal = function () {
             會員
           </div>
           <!-- <div class="flex items-center"> -->
-          <NuxtLink to="/" class="flex items-center">
+          <!-- <NuxtLink to="/" class="flex items-center"> -->
+          <div
+            class="flex items-center cursor-pointer"
+            @click="isModalOpen = true"
+          >
             <div class="text-xl text-white mr-2 hidden 2md:inline-block">
               購物車
             </div>
@@ -80,7 +86,8 @@ const closeModal = function () {
             >
               0
             </div>
-          </NuxtLink>
+          </div>
+          <!-- </NuxtLink> -->
           <!-- </div> -->
         </div>
       </div>
@@ -110,11 +117,41 @@ const closeModal = function () {
     </Vue3SlideUpDown>
     <!-- <NuxtImg class="absolute h-full bg-cover" src="/banner.png"></NuxtImg> -->
     <teleport to="body">
-      <div class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-50">
-        <div class="absolute right-0 w-[500px] bg-white h-screen p-6">
-          <div class="flex justify-between items-end text-main-black/70">
-            <h2 class="text-[28px] leading-[140%]">購物車</h2>
-            <span @click="closeModal">關閉</span>
+      <div
+        v-if="isModalOpen"
+        class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-50 cursor-pointer"
+        @click="closeModal"
+      >
+        <div
+          class="absolute right-0 w-[500px] bg-white h-screen p-6 flex flex-col"
+        >
+          <div
+            class="flex justify-between items-end text-main-black/70 pb-3 border-b border-main-black"
+          >
+            <h2 class="text-[28px] leading-[140%]">
+              購物車({{ products.length }})
+            </h2>
+            <span class="cursor-pointer" @click="closeModal">關閉</span>
+          </div>
+          <div class="py-6 space-y-6 overflow-y-auto">
+            <Product
+              v-for="(product, index) of products"
+              :key="index"
+              :product="product"
+            ></Product>
+          </div>
+          <div class="border-t border-main-black pt-3 mt-auto">
+            <div
+              class="flex justify-between items-center text-xl text-main-black/70 mb-3"
+            >
+              <span class="font-medium">總金額</span>
+              <span class="font-bold">TWD $ 96,800</span>
+            </div>
+            <button
+              class="w-full h-[52px] bg-main-black/80 rounded-[5px] text-white text-lg font-bold"
+            >
+              前往結帳
+            </button>
           </div>
         </div>
       </div>
