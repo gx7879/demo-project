@@ -1,8 +1,13 @@
 <script setup>
 const route = useRoute();
 const openMenu = ref(false);
+const isModalOpen = ref(false);
 const toggleMenu = () => {
   openMenu.value = !openMenu.value;
+};
+
+const closeModal = function () {
+  isModalOpen.value = false;
 };
 </script>
 
@@ -56,16 +61,14 @@ const toggleMenu = () => {
             >會員
           </NuxtLink> -->
           <div
-            class="text-xl text-main-black/70 hidden 2md:inline-block mr-[85px] cursor-pointer"
+            class="text-xl text-white hidden 2md:inline-block mr-[85px] cursor-pointer"
             @click="toggleMenu"
           >
             會員
           </div>
           <!-- <div class="flex items-center"> -->
           <NuxtLink to="/" class="flex items-center">
-            <div
-              class="text-xl text-main-black/70 mr-2 hidden 2md:inline-block"
-            >
+            <div class="text-xl text-white mr-2 hidden 2md:inline-block">
               購物車
             </div>
             <div
@@ -106,6 +109,16 @@ const toggleMenu = () => {
       </div>
     </Vue3SlideUpDown>
     <!-- <NuxtImg class="absolute h-full bg-cover" src="/banner.png"></NuxtImg> -->
+    <teleport to="body">
+      <div class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-50">
+        <div class="absolute right-0 w-[500px] bg-white h-screen p-6">
+          <div class="flex justify-between items-end text-main-black/70">
+            <h2 class="text-[28px] leading-[140%]">購物車</h2>
+            <span @click="closeModal">關閉</span>
+          </div>
+        </div>
+      </div>
+    </teleport>
   </header>
 </template>
 

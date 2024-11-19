@@ -1,0 +1,58 @@
+<script setup>
+const { product } = defineProps({
+  product: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+
+const { currency } = useCurrency();
+
+function removeProduct() {
+  console.log("remove");
+}
+</script>
+
+<template>
+  <div class="grid grid-cols-[120px,_1fr] gap-x-3">
+    <div>
+      <NuxtImg class="w-full" src="/cart-product-img.png"></NuxtImg>
+    </div>
+    <div class="text-main-black/70 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between text-xl font-medium">
+          <div class="sm:mr-5">
+            {{ product.name }}
+            <span class="text-sm font-light mt-1 block">Black </span>
+          </div>
+          <div
+            class="whitespace-nowrap auto-rows-max text-right hidden sm:grid"
+          >
+            <span :class="{ 'line-through': product.discount_price > 0 }">
+              $ {{ currency(product.price) }}
+            </span>
+            <span v-if="product.discount_price > 0" class="text-[#ff7700]">
+              $ {{ currency(product.discount_price) }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between items-end sm:items-center">
+        <span class="hidden sm:block">數量</span>
+        <TouchSpin v-model="product.num" @remove="removeProduct"></TouchSpin>
+        <div
+          class="whitespace-nowrap grid auto-rows-max text-right sm:hidden text-xl"
+        >
+          <span :class="{ 'line-through': product.discount_price > 0 }">
+            $ {{ currency(product.price) }}
+          </span>
+          <span v-if="product.discount_price > 0" class="text-[#ff7700]">
+            $ {{ currency(product.discount_price) }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style></style>

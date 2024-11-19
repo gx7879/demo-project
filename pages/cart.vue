@@ -11,10 +11,6 @@ import {
   RegisterRegistrationSuccess,
 } from "#components";
 
-import { useCurrency } from "~/composables/useCurrency";
-
-const { currency } = useCurrency();
-
 const products = ref([
   {
     name: "ARK-002乾•淨•水循環空淨取水智慧機",
@@ -48,9 +44,6 @@ const changePage = function (page) {
   currentPage.value = pages[page];
 };
 
-function removeProduct() {
-  console.log("remove");
-}
 localize("zh_TW", {
   fields: {
     agree: {
@@ -66,12 +59,35 @@ function submit(values) {
   console.log(values);
 }
 
-const sameAsOrdererInfo = ref(false);
+const isSameAsOrder = ref(false);
+
+const handleCheckboxChange = (values, setFieldValue) => {
+  if (isSameAsOrder.value) {
+    setFieldValue("recipientLastName", values.lastName);
+    setFieldValue("recipientFirstName", values.firstName);
+    setFieldValue("recipientPhone", values.phone);
+    setFieldValue("recipientCountry", values.country);
+    setFieldValue("recipientPostalCode", values.postalCode);
+    setFieldValue("recipientAddress", values.address);
+  } else {
+    setFieldValue("recipientLastName", "");
+    setFieldValue("recipientFirstName", "");
+    setFieldValue("recipientPhone", "");
+    setFieldValue("recipientCountry", "");
+    setFieldValue("recipientPostalCode", "");
+    setFieldValue("recipientAddress", "");
+  }
+};
+onMounted(() => {
+  useFlowbite(() => {
+    initFlowbite();
+  });
+});
 </script>
 
 <template>
   <div class="max-w-[1200px] mx-auto">
-    <VeeForm @submit="submit">
+    <VeeForm v-slot="{ values, setFieldValue }" @submit="submit">
       <div class="grid lg:grid-cols-[1fr,_520px] lg:justify-center">
         <div
           class="lg:max-w-[740px] mx-auto border-main-black lg:border-r lg:pr-4 w-full pb-30 lg:pb-40"
@@ -187,58 +203,61 @@ const sameAsOrdererInfo = ref(false);
               <div class="grid sm:grid-cols-[2fr,_1fr] sm:gap-x-3">
                 <div class="mb-6">
                   <label
-                    for="phone"
+                    for="country"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     所在國家與地區
                   </label>
                   <VeeField
                     type="text"
-                    name="phone"
+                    name="country"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder="台灣"
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="phone"
+                    name="country"
                     class="text-error-msg text-sm"
                   />
                 </div>
                 <div>
                   <label
-                    for="company"
+                    for="postalCode"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     郵遞區號
                   </label>
                   <VeeField
                     type="text"
-                    name="company"
+                    name="postalCode"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder="112"
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="company"
+                    name="postalCode"
                     class="text-error-msg text-sm"
                   />
                 </div>
               </div>
               <div>
                 <label
-                  for="email"
+                  for="address"
                   class="block text-xl text-main-black/70 font-normal mb-3"
                 >
                   地址
                 </label>
                 <VeeField
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="address"
                   class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                   placeholder="台北市中正區中正路123號"
-                  rules="required|email"
+                  rules="required"
                 />
-                <VeeErrorMessage name="email" class="text-error-msg text-sm" />
+                <VeeErrorMessage
+                  name="address"
+                  class="text-error-msg text-sm"
+                />
               </div>
               <div class="border-main-black border-b my-12"></div>
               <h2 class="text-[28px] leading-[140%] text-main-black/70 mb-6">
@@ -247,14 +266,15 @@ const sameAsOrdererInfo = ref(false);
               <div class="flex items-center mb-6">
                 <div class="flex items-center h-6">
                   <input
-                    id="sameAsOrdererInfo"
+                    id="isSameAsOrder"
                     type="checkbox"
-                    v-model="sameAsOrdererInfo"
+                    v-model="isSameAsOrder"
                     class="w-6 h-6 border border-main-black/80 rounded bg-white focus:ring-3 focus:ring-blue-300 checked:bg-main-black/80"
+                    @change="handleCheckboxChange(values, setFieldValue)"
                   />
                 </div>
                 <label
-                  for="sameAsOrdererInfo"
+                  for="isSameAsOrder"
                   class="flex gap-x-1 ms-2 text-xl text-main-black/80"
                 >
                   同訂購人資訊
@@ -263,39 +283,39 @@ const sameAsOrdererInfo = ref(false);
               <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
                 <div class="mb-6">
                   <label
-                    for="lastName"
+                    for="recipientLastName"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     姓氏
                   </label>
                   <VeeField
                     type="text"
-                    name="lastName"
+                    name="recipientLastName"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder=""
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="lastName"
+                    name="recipientLastName"
                     class="text-error-msg text-sm"
                   />
                 </div>
                 <div>
                   <label
-                    for="firstName"
+                    for="recipientFirstName"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     名字
                   </label>
                   <VeeField
                     type="text"
-                    name="firstName"
+                    name="recipientFirstName"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder=""
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="firstName"
+                    name="recipientFirstName"
                     class="text-error-msg text-sm"
                   />
                 </div>
@@ -303,20 +323,20 @@ const sameAsOrdererInfo = ref(false);
               <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
                 <div class="mb-6">
                   <label
-                    for="phone"
+                    for="recipientPhone"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     連絡電話
                   </label>
                   <VeeField
                     type="text"
-                    name="phone"
+                    name="recipientPhone"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder="0912345678"
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="phone"
+                    name="recipientPhone"
                     class="text-error-msg text-sm"
                   />
                 </div>
@@ -324,58 +344,61 @@ const sameAsOrdererInfo = ref(false);
               <div class="grid sm:grid-cols-[2fr,_1fr] sm:gap-x-3">
                 <div class="mb-6">
                   <label
-                    for="phone"
+                    for="recipientCountry"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     所在國家與地區
                   </label>
                   <VeeField
                     type="text"
-                    name="phone"
+                    name="recipientCountry"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder="台灣"
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="phone"
+                    name="recipientCountry"
                     class="text-error-msg text-sm"
                   />
                 </div>
                 <div>
                   <label
-                    for="company"
+                    for="recipientPostalCode"
                     class="block text-xl text-main-black/70 font-normal mb-3"
                   >
                     郵遞區號
                   </label>
                   <VeeField
                     type="text"
-                    name="company"
+                    name="recipientPostalCode"
                     class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                     placeholder="112"
                     rules="required"
                   />
                   <VeeErrorMessage
-                    name="company"
+                    name="recipientPostalCode"
                     class="text-error-msg text-sm"
                   />
                 </div>
               </div>
               <div>
                 <label
-                  for="email"
+                  for="recipientAddress"
                   class="block text-xl text-main-black/70 font-normal mb-3"
                 >
                   地址
                 </label>
                 <VeeField
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="recipientAddress"
                   class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
                   placeholder="台北市中正區中正路123號"
-                  rules="required|email"
+                  rules="required"
                 />
-                <VeeErrorMessage name="email" class="text-error-msg text-sm" />
+                <VeeErrorMessage
+                  name="recipientAddress"
+                  class="text-error-msg text-sm"
+                />
               </div>
 
               <div class="border-main-black border-b my-12"></div>
@@ -453,62 +476,11 @@ const sameAsOrdererInfo = ref(false);
             購物車({{ products.length }})
           </h2>
           <div class="grid gap-y-6">
-            <div
+            <Product
               v-for="(product, index) of products"
+              :product="product"
               :key="index"
-              class="grid grid-cols-[120px,_1fr] gap-x-3"
-            >
-              <div>
-                <NuxtImg class="w-full" src="/cart-product-img.png"></NuxtImg>
-              </div>
-              <div class="text-main-black/70 flex flex-col justify-between">
-                <div>
-                  <div class="flex justify-between text-xl font-medium">
-                    <div class="sm:mr-5">
-                      {{ product.name }}
-                      <span class="text-sm font-light mt-1 block">Black </span>
-                    </div>
-                    <div
-                      class="whitespace-nowrap auto-rows-max text-right hidden sm:grid"
-                    >
-                      <span
-                        :class="{ 'line-through': product.discount_price > 0 }"
-                      >
-                        $ {{ currency(product.price) }}
-                      </span>
-                      <span
-                        v-if="product.discount_price > 0"
-                        class="text-[#ff7700]"
-                      >
-                        $ {{ currency(product.discount_price) }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex justify-between items-end sm:items-center">
-                  <span class="hidden sm:block">數量</span>
-                  <TouchSpin
-                    v-model="product.num"
-                    @remove="removeProduct"
-                  ></TouchSpin>
-                  <div
-                    class="whitespace-nowrap grid auto-rows-max text-right sm:hidden"
-                  >
-                    <span
-                      :class="{ 'line-through': product.discount_price > 0 }"
-                    >
-                      $ {{ currency(product.price) }}
-                    </span>
-                    <span
-                      v-if="product.discount_price > 0"
-                      class="text-[#ff7700]"
-                    >
-                      $ {{ currency(product.discount_price) }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            />
             <!-- <div class="grid grid-cols-[120px,_1fr] gap-x-3">
               <div>
                 <NuxtImg class="w-full" src="/cart-product-img.png"></NuxtImg>
@@ -564,7 +536,31 @@ const sameAsOrdererInfo = ref(false);
               <span>$0</span>
             </div>
             <div class="flex justify-between">
-              <span>折扣總金額</span>
+              <span class="flex items-center">
+                折扣總金額
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="none"
+                  class="text-main-black/70 fill-current ml-2 cursor-pointer"
+                  data-tooltip-target="tooltip-hover"
+                  data-tooltip-trigger="hover"
+                >
+                  <path
+                    d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+                <div
+                  id="tooltip-hover"
+                  role="tooltip"
+                  class="absolute z-10 invisible inline-block px-[15px] py-4 text-xl font-light text-white bg-main-black rounded-[5px] shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                >
+                  此為VIP會員以及特別活動優惠，在這筆訂單中所計算的折扣總金額
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </span>
               <span>-$ 1,000</span>
             </div>
           </div>
