@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     '@pinia/nuxt',
     "@nuxtjs/google-fonts",
+    '@vueuse/nuxt'
   ],
   image: {
     dir: "assets/images",

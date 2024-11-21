@@ -11,9 +11,11 @@ import {
   RegisterRegistrationSuccess,
 } from "#components";
 
-const store = useProductStore();
+const product = useProductStore();
+const { products } = storeToRefs(product);
 
-const { products } = storeToRefs(store);
+const cart = useCartStore();
+const { isSubmittingOrder } = storeToRefs(cart);
 
 const isLogin = ref(true);
 
@@ -463,38 +465,16 @@ onMounted(() => {
           >
             購物車({{ products.length }})
           </h2>
-          <div class="grid gap-y-6">
+          <div class="grid gap-y-6 border-b border-main-black mb-6 pb-6">
             <Product
               v-for="(product, index) of products"
               :product="product"
               :key="index"
             />
-            <!-- <div class="grid grid-cols-[120px,_1fr] gap-x-3">
-              <div>
-                <NuxtImg class="w-full" src="/cart-product-img.png"></NuxtImg>
-              </div>
-              <div class="text-main-black/70 flex flex-col justify-between">
-                <div>
-                  <div class="flex justify-between text-xl font-medium">
-                    <div class="mr-5">
-                      ARKVO 超濾淨化耗材組
-                      <span class="text-sm font-light mt-1 block">Black</span>
-                    </div>
-                    <div class="whitespace-nowrap grid text-right">
-                      <span class="line-through">$ 89,000</span>
-                      <span class="text-[#ff7700]">$ 8,800</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span>數量</span>
-                  <TouchSpin @remove="removeProduct"></TouchSpin>
-                </div>
-              </div>
-            </div> -->
           </div>
           <div
-            class="border-y border-main-black my-6 py-6 flex items-center gap-x-2"
+            v-if="!isSubmittingOrder"
+            class="border-b border-main-black mb-6 pb-6 flex items-center gap-x-2"
           >
             <input
               type="text"

@@ -1,4 +1,6 @@
 <script setup>
+const store = useCartStore();
+const { isSubmittingOrder } = storeToRefs(store);
 const { product } = defineProps({
   product: {
     type: Object,
@@ -23,7 +25,7 @@ function removeProduct() {
         <div class="flex justify-between text-xl font-medium">
           <div class="sm:mr-5">
             {{ product.name }}
-            <span class="text-sm font-light mt-1 block">Black </span>
+            <span class="text-sm font-light mt-1 block">Black</span>
           </div>
           <div
             class="whitespace-nowrap auto-rows-max text-right hidden sm:grid"
@@ -39,7 +41,14 @@ function removeProduct() {
       </div>
       <div class="flex justify-between items-end sm:items-center">
         <span class="hidden sm:block">數量</span>
-        <TouchSpin v-model="product.num" @remove="removeProduct"></TouchSpin>
+        <template v-if="!isSubmittingOrder">
+          <TouchSpin v-model="product.num" @remove="removeProduct"></TouchSpin>
+        </template>
+        <template v-else>
+          <div class="w-12 text-center">
+            {{ product.num }}
+          </div>
+        </template>
         <div
           class="whitespace-nowrap grid auto-rows-max text-right sm:hidden text-xl"
         >
