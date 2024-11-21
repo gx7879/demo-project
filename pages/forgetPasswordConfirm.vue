@@ -30,7 +30,7 @@ function reSend() {
       </p>
       <button
         @click="reSend"
-        class="text-white bg-main-black/80 font-bold rounded-[5px] text-lg w-full p-3 mb-[55px] disabled:border-main-black/80 disabled:border disabled:text-main-black/80 disabled:bg-transparent"
+        class="text-white bg-main-black/80 font-bold rounded-[5px] text-lg w-full p-3 mb-[55px] disabled:border-main-black/80 disabled:border disabled:text-main-black/20 disabled:bg-transparent"
         :disabled="btnStatus"
       >
         {{ btnText }}
