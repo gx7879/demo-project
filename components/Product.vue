@@ -18,7 +18,7 @@ function removeProduct() {
 <template>
   <div class="grid grid-cols-[120px,_1fr] gap-x-3">
     <div>
-      <NuxtImg class="w-full" src="/cart-product-img.png"></NuxtImg>
+      <NuxtImg class="w-full" src="/cart-product-img.jpg"></NuxtImg>
     </div>
     <div class="text-main-black/70 flex flex-col justify-between">
       <div>

@@ -28,8 +28,14 @@
 
 <template>
   <div
-    class="bg-[url(@/assets/images/product-img.jpg)] bg-cover bg-center h-screen"
-  ></div>
+    class="bg-[url(@/assets/images/product-img-bg.jpg)] bg-cover bg-center h-screen relative"
+  >
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center overflow-hidden w-full"
+    >
+      <NuxtImg class="w-[1920px] max-w-none" src="/product-img.png"></NuxtImg>
+    </div>
+  </div>
 </template>
 
 <style scoped></style>

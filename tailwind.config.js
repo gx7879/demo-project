@@ -23,6 +23,7 @@ export default {
         sm: "576px",
         "2md": "840px",
         lg: "992px",
+        "2xl": "1440px",
       },
       fontFamily: {
         sans: ["Noto Sans TC", ...fontFamily.sans],
