@@ -16,7 +16,9 @@
         <li>會員資料</li>
         <li>會員身分與優惠</li>
         <li>訂單追蹤</li>
-        <li>訂購紀錄</li>
+        <li>
+          <NuxtLink to="/member/orderList">訂購紀錄</NuxtLink>
+        </li>
         <li>變更密碼</li>
       </ul>
       <button
