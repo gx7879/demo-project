@@ -1,81 +1,43 @@
-<script setup>
-const data = ref([
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    details: "Lorem ipsum dolor sit amet.",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    details: "Consectetur adipiscing elit.",
-  },
-  {
-    id: 3,
-    name: "Sam Wilson",
-    email: "sam@example.com",
-    details: "Sed do eiusmod tempor incididunt.",
-  },
-]);
-
-// 管理展開行的 ID 列表
-const expandedRows = ref([]);
-
-const toggleRow = (id) => {
-  if (expandedRows.value.includes(id)) {
-    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id);
-  } else {
-    expandedRows.value.push(id);
-  }
-};
-</script>
+<script setup></script>
 
 <template>
-  <div>
-    <h2 class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium">
-      訂購紀錄
+  <div class="px-6 2xl:px-0">
+    <h2
+      class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium border-b border-main-black pb-3"
+    >
+      會員資料
     </h2>
-    <table class="border-t border-main-black">
-      <thead>
-        <tr
-          class="relative after:left-0 after:right-0 after:bottom-0 after:bg-main-black after:h-px after:block after:absolute after:scale-y-50"
-        >
-          <td>訂單編號</td>
-          <td>訂單日期</td>
-          <td>合計</td>
-          <td>狀態</td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody is="transition-group" tag="tbody" name="fade">
-        <!-- eslint-disable-next-line vue/no-v-for-template-key -->
-        <template v-for="(item, index) in data" :key="index">
-          <tr
-            class="relative after:left-0 after:right-0 after:bottom-0 after:bg-main-black after:h-px after:block after:absolute after:scale-y-50"
-          >
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr
-            v-if="expandedRows.includes(item.id)"
-            :key="`detail-${item.data}`"
-          >
-            <td colspan="4">
-              <div class="details">
-                <strong>Details for {{ item.name }}</strong>
-                <p>{{ item.details }}</p>
-              </div>
-            </td>
-            <td></td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+    <div class="pt-6 mb-12 space-y-6">
+      <div class="text-xl font-medium text-main-black/70">
+        電子郵件 : abcde10@gmail.com
+      </div>
+      <div class="flex items-center">
+        <NuxtImg class="mr-3 w-9" src="/facebook-login-icon.png"></NuxtImg>
+        <div class="text-xl font-medium text-main-black/70">與facebook綁定</div>
+      </div>
+      <div class="flex items-center">
+        <NuxtImg class="mr-3 w-9" src="/google-login-icon.png"></NuxtImg>
+        <div class="text-xl font-medium text-main-black/70">未綁定</div>
+      </div>
+      <div class="flex items-center">
+        <NuxtImg class="mr-3 w-9" src="/apple-login-icon.png"></NuxtImg>
+        <div class="text-xl font-medium text-main-black/70">未綁定</div>
+      </div>
+    </div>
+    <h2
+      class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium border-b border-main-black pb-3"
+    >
+      基本資料
+    </h2>
+    <div class="pt-6 space-y-6">
+      <div class="text-xl font-medium text-main-black/70">姓氏 : 未填寫</div>
+      <div class="text-xl font-medium text-main-black/70">名字 : 未填寫</div>
+      <div class="text-xl font-medium text-main-black/70">性別 : 未填寫</div>
+      <div class="text-xl font-medium text-main-black/70">
+        連絡電話 : 未填寫
+      </div>
+      <div class="text-xl font-medium text-main-black/70">地址 : 未填寫</div>
+    </div>
   </div>
 </template>
 

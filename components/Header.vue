@@ -93,7 +93,7 @@ const closeModal = function () {
       </div>
     </div>
     <Vue3SlideUpDown v-model="openMenu" :opacityClosed="1">
-      <div class="px-[50px] py-10 bg-bg-gray">
+      <div class="px-[50px] py-10 bg-bg-gray relative z-50">
         <h6 class="text-main-black/70 text-[28px] leading-[140%] mb-3">
           會員專區
         </h6>
@@ -101,10 +101,10 @@ const closeModal = function () {
           <ul
             class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-cols-3 gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
           >
-            <li>會員資料</li>
+            <li><NuxtLink to="/member">會員資料</NuxtLink></li>
             <li>會員身分與優惠</li>
             <li>訂單追蹤</li>
-            <li>訂購紀錄</li>
+            <li><NuxtLink to="/member/orderList">訂購紀錄</NuxtLink></li>
             <li>變更密碼</li>
           </ul>
           <button
