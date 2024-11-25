@@ -137,18 +137,6 @@ const orders = ref([
   },
 ]);
 
-// 管理展開行的 ID 列表
-const expandedRows = ref([]);
-
-const toggleRow = (id) => {
-  console.log(id, expandedRows.value, expandedRows.value.includes(id));
-  if (expandedRows.value.includes(id)) {
-    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id);
-  } else {
-    expandedRows.value.push(id);
-  }
-};
-
 const { currency } = useCurrency();
 
 function orderStatusTransfer(id) {
@@ -226,105 +214,22 @@ function orderStatusTransfer(id) {
                 <td
                   class="h-14 sticky right-0 z-10 pl-4 2xl:pl-11 drop-shadow-[-4px_0px_4px_rgba(0,_0,_0,_0.25)] bg-bg-gray font-medium after:left-0 after:right-0 after:bottom-0 after:bg-main-black after:h-px after:block after:absolute after:scale-y-50"
                 >
-                  <div
-                    class="flex justify-between items-center cursor-pointer"
-                    @click="toggleRow(order.trade_no)"
+                  <NuxtLink
+                    custom
+                    v-slot="{ navigate }"
+                    :to="{
+                      name: 'member-orderDetail-orderId',
+                      params: { orderId: 1 },
+                    }"
                   >
                     <button
                       class="rounded-[5px] bg-main-black/80 text-white py-[7px] px-3 text-lg leading-none font-bold"
+                      @click="navigate"
                     >
                       詳情
                     </button>
-                    <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white transition-transform"
-                      :class="{
-                        'rotate-180': expandedRows.includes(order.trade_no),
-                      }"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18.425 10.271C19.499 8.967 18.57 7 16.88 7H7.12c-1.69 0-2.618 1.967-1.544 3.271l4.881 5.927a2 2 0 0 0 3.088 0l4.88-5.927Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
+                  </NuxtLink>
                 </td>
-              </tr>
-              <tr
-                v-if="expandedRows.includes(order.trade_no)"
-                :key="`detail-${order.id}`"
-              >
-                <td colspan="2">
-                  <div class="flex py-6">
-                    <div class="w-[100px] rounded-[5px] overflow-hidden mr-3">
-                      <NuxtImg
-                        class="w-full"
-                        src="/cart-product-img.jpg"
-                      ></NuxtImg>
-                    </div>
-                    <div class="text-xl font-medium flex flex-col">
-                      <div class="sm:mr-5">
-                        {{
-                          order.OrderCommodities[0].CommodityPropertyInfo
-                            .Commodity.name
-                        }}
-                        <span class="text-sm font-light mt-1 block">Black</span>
-                      </div>
-                      <span class="text-sm text-main-black/70 mt-auto"
-                        >數量</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="flex flex-col py-6 h-full">
-                    <div>
-                      <span
-                        :class="{
-                          'line-through':
-                            order.OrderCommodities[0].CommodityPropertyInfo
-                              .Commodity.discount_price > 0,
-                        }"
-                      >
-                        $
-                        {{
-                          currency(
-                            order.OrderCommodities[0].CommodityPropertyInfo
-                              .Commodity.price
-                          )
-                        }}
-                      </span>
-                      <span
-                        v-if="
-                          order.OrderCommodities[0].CommodityPropertyInfo
-                            .Commodity.discount_price > 0
-                        "
-                        class="text-[#ff7700]"
-                      >
-                        $
-                        {{
-                          currency(
-                            order.OrderCommodities[0].CommodityPropertyInfo
-                              .Commodity.discount_price
-                          )
-                        }}
-                      </span>
-                    </div>
-                    <span class="mt-auto w-12 text-center">{{
-                      order.OrderCommodities[0].amount
-                    }}</span>
-                  </div>
-                </td>
-                <td></td>
-                <td
-                  class="h-14 sticky right-0 z-10 pl-4 2xl:pl-11 drop-shadow-[-4px_0px_4px_rgba(0,_0,_0,_0.25)] bg-bg-gray"
-                ></td>
               </tr>
             </template>
           </tbody>
