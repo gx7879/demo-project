@@ -103,8 +103,8 @@ const closeModal = function () {
           >
             <li>
               <NuxtLink to="/member" @click.native="openMenu = false"
-                >會員資料</NuxtLink
-              >
+                >會員資料
+              </NuxtLink>
             </li>
             <li>
               <NuxtLink
@@ -114,11 +114,17 @@ const closeModal = function () {
                 會員身分與優惠
               </NuxtLink>
             </li>
-            <li>訂單追蹤</li>
+            <li>
+              <NuxtLink
+                to="/member/orderTracking"
+                @click.native="openMenu = false"
+                >訂單追蹤
+              </NuxtLink>
+            </li>
             <li>
               <NuxtLink to="/member/orderList" @click.native="openMenu = false"
-                >訂購紀錄</NuxtLink
-              >
+                >訂購紀錄
+              </NuxtLink>
             </li>
             <li>變更密碼</li>
           </ul>

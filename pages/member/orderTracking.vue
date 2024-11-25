@@ -165,7 +165,7 @@ function orderStatusTransfer(id) {
 <template>
   <div class="px-6 2xl:px-0">
     <h2 class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium">
-      訂購紀錄
+      訂單追蹤
     </h2>
     <template v-if="orders.length !== 0">
       <div
