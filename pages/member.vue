@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup>
+definePageMeta({
+  middleware: [
+    function (to, from) {
+      console.log(to, from);
+    },
+  ],
+});
+</script>
 
 <template>
   <div class="2xl:grid 2xl:grid-cols-[300px,_1fr] max-w-[1200px] mx-auto">
@@ -13,8 +21,12 @@
       <ul
         class="border-t border-l border-main-black text-xl leading-[150%] text-main-black/70 space-y-6 px-4 py-6 mb-6"
       >
-        <li>會員資料</li>
-        <li>會員身分與優惠</li>
+        <li><NuxtLink to="/member">會員資料</NuxtLink></li>
+        <li>
+          <NuxtLink to="/member/membershipAndDiscounts">
+            會員身分與優惠
+          </NuxtLink>
+        </li>
         <li>訂單追蹤</li>
         <li>
           <NuxtLink to="/member/orderList">訂購紀錄</NuxtLink>

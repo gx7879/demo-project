@@ -101,10 +101,25 @@ const closeModal = function () {
           <ul
             class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-cols-3 gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
           >
-            <li><NuxtLink to="/member">會員資料</NuxtLink></li>
-            <li>會員身分與優惠</li>
+            <li>
+              <NuxtLink to="/member" @click.native="openMenu = false"
+                >會員資料</NuxtLink
+              >
+            </li>
+            <li>
+              <NuxtLink
+                to="/member/membershipAndDiscounts"
+                @click.native="openMenu = false"
+              >
+                會員身分與優惠
+              </NuxtLink>
+            </li>
             <li>訂單追蹤</li>
-            <li><NuxtLink to="/member/orderList">訂購紀錄</NuxtLink></li>
+            <li>
+              <NuxtLink to="/member/orderList" @click.native="openMenu = false"
+                >訂購紀錄</NuxtLink
+              >
+            </li>
             <li>變更密碼</li>
           </ul>
           <button
