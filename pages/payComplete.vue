@@ -25,7 +25,7 @@ function handleCopy() {
       <p class="mb-3 text-xl text-main-black/70">訂單編號:</p>
       <div class="flex justify-center items-center">
         <span
-          class="font-medium text-[28px] leading-[140%] text-main-black/70 mr-1"
+          class="font-medium text-[28px] leading-[1.4] text-main-black/70 mr-1"
         >
           {{ orderId }}
         </span>

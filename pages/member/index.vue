@@ -7,7 +7,7 @@ const isAppleLogin = ref(false);
 <template>
   <div class="px-6 2xl:px-0">
     <h2
-      class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium border-b border-main-black pb-3"
+      class="mb-3 text-main-black/70 text-[28px] leading-[1.4] font-medium border-b border-main-black pb-3"
     >
       會員資料
     </h2>
@@ -64,7 +64,7 @@ const isAppleLogin = ref(false);
       </div>
     </div>
     <h2
-      class="mb-3 text-main-black/80 text-[28px] leading-[140%] font-medium border-b border-main-black pb-3 flex justify-between items-center"
+      class="mb-3 text-main-black/80 text-[28px] leading-[1.4] font-medium border-b border-main-black pb-3 flex justify-between items-center"
     >
       基本資料
       <button

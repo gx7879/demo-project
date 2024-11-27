@@ -94,7 +94,7 @@ const closeModal = function () {
     </div>
     <Vue3SlideUpDown v-model="openMenu" :opacityClosed="1">
       <div class="px-[50px] py-10 bg-bg-gray relative z-50">
-        <h6 class="text-main-black/70 text-[28px] leading-[140%] mb-3">
+        <h6 class="text-main-black/70 text-[28px] leading-[1.4] mb-3">
           會員專區
         </h6>
         <div class="2md:flex justify-between items-end">
@@ -149,7 +149,7 @@ const closeModal = function () {
           <div
             class="flex justify-between items-end text-main-black/70 pb-3 border-b border-main-black"
           >
-            <h2 class="text-[28px] leading-[140%]">
+            <h2 class="text-[28px] leading-[1.4]">
               購物車({{ products.length }})
             </h2>
             <span class="cursor-pointer" @click="closeModal">關閉</span>

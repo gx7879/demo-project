@@ -5,13 +5,11 @@
     <div
       class="hidden 2xl:block border-r border-main-black pr-10 pt-[100px] pb-40"
     >
-      <h2
-        class="mb-3 text-main-black/70 text-[28px] leading-[140%] font-medium"
-      >
+      <h2 class="mb-3 text-main-black/70 text-[28px] leading-[1.4] font-medium">
         會員專區
       </h2>
       <ul
-        class="border-t border-l border-[#777] text-xl leading-[150%] text-main-black/70 space-y-6 px-4 py-6 mb-6"
+        class="border-t border-l border-[#777] text-xl leading-normal text-main-black/70 space-y-6 px-4 py-6 mb-6"
       >
         <li class="flex items-center">
           <NuxtLink class="peer" to="/member">會員資料</NuxtLink>

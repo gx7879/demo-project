@@ -92,7 +92,7 @@ onMounted(() => {
           </template>
           <template v-else>
             <div class="px-6">
-              <h1 class="text-[28px] leading-[140%] text-main-black/70 mb-6">
+              <h1 class="text-[28px] leading-[1.4] text-main-black/70 mb-6">
                 訂購人資訊
               </h1>
               <div class="mb-6">
@@ -250,7 +250,7 @@ onMounted(() => {
                 />
               </div>
               <div class="border-main-black border-b my-12"></div>
-              <h2 class="text-[28px] leading-[140%] text-main-black/70 mb-6">
+              <h2 class="text-[28px] leading-[1.4] text-main-black/70 mb-6">
                 收貨資訊確認
               </h2>
               <div class="flex items-center mb-6">
@@ -392,7 +392,7 @@ onMounted(() => {
               </div>
 
               <div class="border-main-black border-b my-12"></div>
-              <h2 class="text-[28px] leading-[140%] text-main-black/70 mb-6">
+              <h2 class="text-[28px] leading-[1.4] text-main-black/70 mb-6">
                 付款資訊
               </h2>
               <p class="text-xl text-main-black/70 font-light lg:mb-[120px]">
@@ -461,7 +461,7 @@ onMounted(() => {
           :class="{ 'hidden lg:block': !isLogin }"
         >
           <h2
-            class="text-[28px] leading-[140%] text-main-black/70 pb-3 border-b border-main-black mb-6"
+            class="text-[28px] leading-[1.4] text-main-black/70 pb-3 border-b border-main-black mb-6"
           >
             購物車({{ products.length }})
           </h2>
