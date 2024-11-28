@@ -226,17 +226,25 @@ function orderStatusTransfer(id) {
                 <td
                   class="h-14 sticky right-0 z-10 pl-4 2xl:pl-11 drop-shadow-[-4px_0px_4px_rgba(0,_0,_0,_0.25)] bg-bg-gray font-medium after:left-0 after:right-0 after:bottom-0 after:bg-main-black after:h-px after:block after:absolute after:scale-y-50"
                 >
-                  <div
-                    class="flex justify-between items-center cursor-pointer"
-                    @click="toggleRow(order.trade_no)"
-                  >
-                    <button
-                      class="rounded-[5px] bg-main-black/80 text-white py-[7px] px-3 text-lg leading-none font-bold"
+                  <div class="flex justify-between items-center">
+                    <NuxtLink
+                      custom
+                      v-slot="{ navigate }"
+                      :to="{
+                        name: 'member-orderDetail-orderId',
+                        params: { orderId: 1 },
+                      }"
                     >
-                      詳情
-                    </button>
+                      <button
+                        class="rounded-[5px] bg-main-black/80 text-white py-[7px] px-3 text-lg leading-none font-bold"
+                        @click="navigate"
+                      >
+                        詳情
+                      </button>
+                    </NuxtLink>
                     <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white transition-transform"
+                      @click="toggleRow(order.trade_no)"
+                      class="w-6 h-6 text-gray-800 dark:text-white transition-transform cursor-pointer"
                       :class="{
                         'rotate-180': expandedRows.includes(order.trade_no),
                       }"

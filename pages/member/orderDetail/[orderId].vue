@@ -3,6 +3,15 @@ import { useClipboard } from "@vueuse/core";
 
 const orderId = ref("20241030043700389");
 
+const orderStatus = ref("cancel");
+
+const modalState = reactive({
+  title: "",
+  text: "",
+  icon: "",
+  isVisible: false,
+});
+
 const { copy, isSupported } = useClipboard();
 
 function handleCopy() {
@@ -37,7 +46,31 @@ const steps = ref([
 const currentActive = ref(2);
 console.log(route.params.orderId);
 function cancelOrder() {
-  console.log("取消訂單");
+  modalState.title = "取消訂單";
+  modalState.title = "確定要取消訂單?";
+  modalState.isVisible = true;
+}
+
+function closeModal() {
+  modalState.isVisible = false;
+}
+
+function cancelSuccess() {
+  modalState.title = "取消成功";
+  modalState.text = "您的訂單已取消";
+  modalState.icon = "success";
+  modalState.isVisible = true;
+  setTimeout(() => {
+    modalState.title = "";
+    modalState.text = "";
+    modalState.icon = "";
+    modalState.isVisible = false;
+  }, 2000);
+}
+
+function confirmModal() {
+  modalState.isVisible = false;
+  cancelSuccess();
 }
 </script>
 
@@ -204,7 +237,24 @@ function cancelOrder() {
       <div>付款方式 : 信用卡</div>
     </div>
     <div class="border-b border-main-black my-11 2md:my-12"></div>
-    <template v-if="currentActive < 3">
+    <template v-if="orderStatus === 'cancel'">
+      <div class="flex gap-6 flex-col 2md:flex-row">
+        <NuxtLink custom v-slot="{ navigate }" to="/contact">
+          <button
+            @click="navigate"
+            class="h-[52px] text-lg font-bold rounded-[5px] border border-main-black/80 text-main-black/80 2md:flex-1"
+          >
+            聯絡客服
+          </button>
+        </NuxtLink>
+        <button
+          class="h-[52px] text-lg font-bold rounded-[5px] bg-main-black/80 text-white 2md:flex-1"
+        >
+          再買一次
+        </button>
+      </div>
+    </template>
+    <template v-else-if="currentActive < 3">
       <div class="flex gap-6 flex-col 2md:flex-row">
         <button
           @click="cancelOrder"
@@ -219,7 +269,7 @@ function cancelOrder() {
         </button>
       </div>
     </template>
-    <template v-else>
+    <template v-else-if="currentActive >= 3">
       <div class="flex gap-6 flex-col 2md:flex-row">
         <button
           class="h-[52px] text-lg font-bold rounded-[5px] border border-main-black/80 text-main-black/80 2md:flex-1"
@@ -233,6 +283,15 @@ function cancelOrder() {
         </button>
       </div>
     </template>
+
+    <Modal
+      :title="modalState.title"
+      :text="modalState.text"
+      :icon="modalState.icon"
+      :is-visible="modalState.isVisible"
+      @close="closeModal"
+      @confirm="confirmModal"
+    ></Modal>
   </div>
 </template>
 
