@@ -126,7 +126,13 @@ const closeModal = function () {
                 >訂購紀錄
               </NuxtLink>
             </li>
-            <li>變更密碼</li>
+            <li>
+              <NuxtLink
+                to="/member/resetPassword"
+                @click.native="openMenu = false"
+                >變更密碼
+              </NuxtLink>
+            </li>
           </ul>
           <button
             class="border border-main-black/80 w-full 2md:w-[216px] h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"

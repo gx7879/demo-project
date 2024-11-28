@@ -1,4 +1,18 @@
-<script setup></script>
+<script setup>
+const route = useRoute();
+definePageMeta({
+  middleware: [
+    function (to, from) {
+      console.log(to, from);
+    },
+  ],
+});
+
+const activePage = function (name) {
+  if (route.path) return route.path.includes(name);
+  return "";
+};
+</script>
 
 <template>
   <div class="2xl:grid 2xl:grid-cols-[300px,_1fr] max-w-[1200px] mx-auto">
@@ -38,7 +52,15 @@
           </svg>
         </li>
         <li class="flex items-center">
-          <NuxtLink class="peer" to="/member/orderTracking">訂單追蹤</NuxtLink>
+          <NuxtLink
+            class="peer"
+            to="/member/orderTracking"
+            :class="{
+              'router-link-exact-active': activePage('orderTracking'),
+            }"
+          >
+            訂單追蹤
+          </NuxtLink>
           <svg
             class="ml-1 hidden peer-[.router-link-exact-active]:block"
             width="9"
@@ -50,7 +72,15 @@
           </svg>
         </li>
         <li class="flex items-center">
-          <NuxtLink class="peer" to="/member/orderList">訂購紀錄</NuxtLink>
+          <NuxtLink
+            class="peer"
+            to="/member/orderList"
+            :class="{
+              'router-link-exact-active': activePage('orderList'),
+            }"
+          >
+            訂購紀錄
+          </NuxtLink>
           <svg
             class="ml-1 hidden peer-[.router-link-exact-active]:block"
             width="9"
@@ -61,7 +91,7 @@
             <path d="m9 6-9 5.196V.804L9 6Z" fill="#4B4240" />
           </svg>
         </li>
-        <li>變更密碼</li>
+        <li><NuxtLink to="/member/resetPassword">變更密碼</NuxtLink></li>
       </ul>
       <button
         class="border border-main-black/80 rounded-[5px] text-lg leading-none font-bold w-full h-[52px]"

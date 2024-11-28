@@ -231,7 +231,7 @@ function orderStatusTransfer(id) {
                       custom
                       v-slot="{ navigate }"
                       :to="{
-                        name: 'member-orderDetail-orderId',
+                        name: 'member-orderTracking-orderId',
                         params: { orderId: 1 },
                       }"
                     >
