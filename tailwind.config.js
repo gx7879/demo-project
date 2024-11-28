@@ -30,5 +30,16 @@ export default {
       },
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [
+    require("flowbite/plugin"),
+    function ({ addUtilities }) {
+      addUtilities({
+        ".underline-auto": { "text-underline-position": "auto" },
+        ".underline-under": { "text-underline-position": "under" },
+        ".underline-left": { "text-underline-position": "left" },
+        ".underline-right": { "text-underline-position": "right" },
+        ".underline-from-font": { "text-underline-position": "from-font" },
+      });
+    },
+  ],
 };
