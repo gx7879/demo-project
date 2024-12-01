@@ -87,7 +87,7 @@ function onSubmit(values) {
           沒收到重設密碼連結?
         </span>
         <NuxtLink
-          to="/"
+          to="/contact"
           class="text-main-black/80 text-lg font-normal underline"
         >
           聯繫客服
