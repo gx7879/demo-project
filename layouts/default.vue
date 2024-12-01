@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+const store = useResetPasswordStore();
+const { confirm, cancel } = store;
+const { isVisible, resetPasswordState } = storeToRefs(store);
+</script>
 
 <template>
   <div class="bg-bg-gray">
@@ -14,6 +18,15 @@
       <slot />
     </div>
     <Footer></Footer>
+    <Modal
+      :title="resetPasswordState.title"
+      :text="resetPasswordState.text"
+      :icon="resetPasswordState.icon"
+      :password="resetPasswordState.password"
+      :isVisible="isVisible"
+      @close="cancel"
+      @confirm="confirm"
+    ></Modal>
   </div>
 </template>
 

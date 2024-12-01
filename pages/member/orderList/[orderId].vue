@@ -3,14 +3,17 @@ import { useClipboard } from "@vueuse/core";
 
 const orderId = ref("20241030043700389");
 
-const orderStatus = ref("cancel");
+const { isVisible, modalState, showModal, closeModal, confirm, cancel } =
+  useModal();
 
-const modalState = reactive({
-  title: "",
-  text: "",
-  icon: "",
-  isVisible: false,
-});
+const orderStatus = ref("");
+
+// const modalState = reactive({
+//   title: "",
+//   text: "",
+//   icon: "",
+//   isVisible: false,
+// });
 
 const { copy, isSupported } = useClipboard();
 
@@ -46,32 +49,47 @@ const steps = ref([
 const currentActive = ref(2);
 console.log(route.params.orderId);
 function cancelOrder() {
-  modalState.title = "取消訂單";
-  modalState.title = "確定要取消訂單?";
-  modalState.isVisible = true;
+  // modalState.title = "取消訂單";
+  // modalState.text = "確定要取消訂單?";
+  // modalState.isVisible = true;
+  showModal(
+    "取消訂單",
+    "確定要取消訂單?",
+    "",
+    () => {
+      cancelSuccess();
+    },
+    () => {
+      console.log("cancel");
+    }
+  );
 }
 
-function closeModal() {
-  modalState.isVisible = false;
-}
+// function closeModal() {
+// modalState.isVisible = false;
+// }
 
 function cancelSuccess() {
-  modalState.title = "取消成功";
-  modalState.text = "您的訂單已取消";
-  modalState.icon = "success";
-  modalState.isVisible = true;
+  //   modalState.title = "取消成功";
+  //   modalState.text = "您的訂單已取消";
+  //   modalState.icon = "success";
+  //   modalState.isVisible = true;
+  //   setTimeout(() => {
+  //     modalState.title = "";
+  //     modalState.text = "";
+  //     modalState.icon = "";
+  //     modalState.isVisible = false;
+  //   }, 2000);
+  showModal("取消成功", "您的訂單已取消", "success");
   setTimeout(() => {
-    modalState.title = "";
-    modalState.text = "";
-    modalState.icon = "";
-    modalState.isVisible = false;
+    closeModal();
   }, 2000);
 }
 
-function confirmModal() {
-  modalState.isVisible = false;
-  cancelSuccess();
-}
+// function confirmModal() {
+// modalState.isVisible = false;
+// cancelSuccess();
+// }
 </script>
 
 <template>
@@ -288,9 +306,9 @@ function confirmModal() {
       :title="modalState.title"
       :text="modalState.text"
       :icon="modalState.icon"
-      :is-visible="modalState.isVisible"
-      @close="closeModal"
-      @confirm="confirmModal"
+      :isVisible="isVisible"
+      @close="cancel"
+      @confirm="confirm"
     ></Modal>
   </div>
 </template>

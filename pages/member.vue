@@ -1,17 +1,19 @@
 <script setup>
 const route = useRoute();
-definePageMeta({
-  middleware: [
-    function (to, from) {
-      console.log(to, from);
-    },
-  ],
-});
+
+// const { isVisible, modalState, showModal, closeModal, confirm, cancel } = useModal();
+
+const store = useResetPasswordStore();
+const { setIsVisible } = store;
 
 const activePage = function (name) {
   if (route.path) return route.path.includes(name);
   return "";
 };
+
+function resetPassword() {
+  setIsVisible(true);
+}
 </script>
 
 <template>
@@ -91,7 +93,26 @@ const activePage = function (name) {
             <path d="m9 6-9 5.196V.804L9 6Z" fill="#4B4240" />
           </svg>
         </li>
-        <li><NuxtLink to="/member/resetPassword">變更密碼</NuxtLink></li>
+        <li class="flex items-center">
+          <button
+            class="peer cursor-pointer"
+            :class="{
+              'router-link-exact-active': activePage('resetPassword'),
+            }"
+            @click="resetPassword"
+          >
+            變更密碼
+          </button>
+          <svg
+            class="ml-1 hidden peer-[.router-link-exact-active]:block"
+            width="9"
+            height="12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="m9 6-9 5.196V.804L9 6Z" fill="#4B4240" />
+          </svg>
+        </li>
       </ul>
       <button
         class="border border-main-black/80 rounded-[5px] text-lg leading-none font-bold w-full h-[52px]"

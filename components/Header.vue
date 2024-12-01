@@ -2,19 +2,29 @@
 const route = useRoute();
 const store = useProductStore();
 const { products } = storeToRefs(store);
+
+const useResetPassword = useResetPasswordStore();
+const { setIsVisible } = useResetPassword;
+
 const openMenu = ref(false);
 const isModalOpen = ref(false);
 const toggleMenu = () => {
   openMenu.value = !openMenu.value;
 };
 
-const closeModal = function () {
+const closeCart = function () {
   isModalOpen.value = false;
 };
+
+function resetPassword() {
+  setIsVisible(true);
+  openMenu.value = false;
+}
 </script>
 
 <template>
   <header
+    class="relative z-50"
     :class="{
       'h-[337px] md:h-[401px] bg-[url(@/assets/images/banner.png)] bg-cover bg-center':
         route.name !== 'index',
@@ -127,11 +137,9 @@ const closeModal = function () {
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                to="/member/resetPassword"
-                @click.native="openMenu = false"
+              <a class="cursor-pointer" @click.native="resetPassword"
                 >變更密碼
-              </NuxtLink>
+              </a>
             </li>
           </ul>
           <button
@@ -147,7 +155,7 @@ const closeModal = function () {
       <div
         v-if="isModalOpen"
         class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-50 cursor-pointer"
-        @click="closeModal"
+        @click="closeCart"
       >
         <div
           class="absolute right-0 w-[500px] bg-white h-screen p-6 flex flex-col"
@@ -158,7 +166,7 @@ const closeModal = function () {
             <h2 class="text-[28px] leading-[1.4]">
               購物車({{ products.length }})
             </h2>
-            <span class="cursor-pointer" @click="closeModal">關閉</span>
+            <span class="cursor-pointer" @click="closeCart">關閉</span>
           </div>
           <div class="py-6 space-y-6 overflow-y-auto">
             <Product
