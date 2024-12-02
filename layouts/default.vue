@@ -18,11 +18,9 @@ const { isVisible, resetPasswordState } = storeToRefs(store);
       <slot />
     </div>
     <Footer></Footer>
+    {{ resetPasswordState.onConfirm }}
     <Modal
-      :title="resetPasswordState.title"
-      :text="resetPasswordState.text"
-      :icon="resetPasswordState.icon"
-      :password="resetPasswordState.password"
+      v-bind="resetPasswordState"
       :isVisible="isVisible"
       @close="cancel"
       @confirm="confirm"

@@ -4,7 +4,7 @@ const store = useProductStore();
 const { products } = storeToRefs(store);
 
 const useResetPassword = useResetPasswordStore();
-const { setIsVisible } = useResetPassword;
+const { showResetPasswordModal } = useResetPassword;
 
 const openMenu = ref(false);
 const isModalOpen = ref(false);
@@ -17,7 +17,18 @@ const closeCart = function () {
 };
 
 function resetPassword() {
-  setIsVisible(true);
+  showResetPasswordModal({
+    title: "變更密碼",
+    text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
+    password: true,
+    onCancel: () => {
+      console.log("cancel");
+    },
+    onSuccess: () => {
+      const router = useRouter();
+      router.push("/member/resetPassword");
+    },
+  });
   openMenu.value = false;
 }
 </script>

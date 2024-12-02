@@ -20,6 +20,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  onSuccess: {
+    type: Function,
+    default: () => {},
+  },
+  onCancel: {
+    type: Function,
+    default: () => {},
+  },
 });
 
 const emit = defineEmits(["close", "confirm"]);
@@ -28,6 +36,7 @@ const enterPassword = ref("");
 
 function closeModal() {
   emit("close");
+  props.onCancel();
 }
 
 function confirmModal() {
@@ -36,6 +45,7 @@ function confirmModal() {
   } else {
     emit("confirm");
   }
+  props.onSuccess();
 }
 </script>
 
