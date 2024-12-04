@@ -1,9 +1,12 @@
 <script setup>
+import { sendResetPassword } from "@/api/member";
+const store = useResetPasswordStore();
+const { currentMail } = storeToRefs(store);
 const btnText = ref("再寄一次");
 const btnStatus = ref(false);
 let time = 60;
 let timeInterval = null;
-function reSend() {
+async function reSend() {
   btnStatus.value = true;
   btnText.value = `再寄一次(${time}S)`;
   timeInterval = setInterval(() => {
@@ -16,6 +19,23 @@ function reSend() {
       btnStatus.value = false;
     }
   }, 1000);
+  if (btnStatus.value) {
+    try {
+      const result = await sendResetPassword({
+        email: currentMail.value,
+        hostname: "localhost:3000/resetPassword",
+      });
+      console.log(result);
+      if (result.state) {
+        const router = useRouter();
+        router.push("/forgetPasswordConfirm");
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    }
+  }
 }
 </script>
 

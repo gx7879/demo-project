@@ -7,9 +7,11 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@vee-validate/nuxt",
     '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     "@nuxtjs/google-fonts",
     '@vueuse/nuxt',
-    "dayjs-nuxt"
+    "dayjs-nuxt",
+    "nuxt-lodash"
   ],
   image: {
     dir: "assets/images",

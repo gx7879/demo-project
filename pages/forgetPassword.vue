@@ -1,13 +1,32 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
+import { sendResetPassword } from "@/api/member";
+const store = useResetPasswordStore();
+const { currentMail } = storeToRefs(store);
 localize("zh_TW", {
   messages: {
     required: "輸入電子郵件 是必須的",
     email: "電子郵件無效",
   },
 });
-function onSubmit(values) {
+async function onSubmit(values) {
   console.log("submit", values);
+  currentMail.value = values.email;
+  try {
+    const result = await sendResetPassword({
+      email: currentMail.value,
+      hostname: "localhost:3000/resetPassword",
+    });
+    console.log(result);
+    if (result.state) {
+      const router = useRouter();
+      router.push("/forgetPasswordConfirm");
+    }
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
 }
 </script>
 

@@ -1,4 +1,5 @@
 <script setup>
+import { sendVerifyEmail } from "@/api/member";
 // const btnText = ref("再寄一次");
 const btnStatus = ref(false);
 const time = ref(60);
@@ -30,6 +31,17 @@ function onSubmit(values) {
   console.log("submit", values);
   router.push("/registrationSuccess");
 }
+
+onMounted(async () => {
+  try {
+    const result = await sendVerifyEmail();
+    console.log(result);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+});
 </script>
 
 <template>

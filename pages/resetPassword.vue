@@ -1,7 +1,56 @@
 <script setup>
-function onSubmit(values) {
+import { getCustomToken } from "@/api/member";
+const { $auth, $signInWithCustomToken, $updatePassword } = useNuxtApp();
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+const { setToken } = userStore;
+
+async function onSubmit(values) {
   console.log("submit", values);
+  const user = $auth.currentUser;
+  $updatePassword(user, values.password)
+    .then(() => {
+      const router = useRouter();
+      router.push("/resetPasswordSuccess");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    });
 }
+
+async function getCustomTokenFun() {
+  try {
+    const route = useRoute();
+    const token = route.query.token;
+    const result = await getCustomToken({ token });
+    console.log(result);
+    return { ...result };
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+
+async function signWithToken(token) {
+  try {
+    const userCredential = await $signInWithCustomToken($auth, token);
+    console.log(userCredential);
+    setToken(userCredential.user.accessToken);
+    userInfo.value = userCredential.user;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+
+onMounted(async () => {
+  const { token } = await getCustomTokenFun();
+  await signWithToken(token);
+});
 </script>
 
 <template>
@@ -44,7 +93,10 @@ function onSubmit(values) {
             label="密碼"
             class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg rounded-[10px] block w-full p-2.5"
             placeholder="再次輸入新密碼"
-            rules="required|confirmed:@password|regex: /^(?=.*[a-zA-Z])(?=.*\d).+$/"
+            :rules="{
+              required: true,
+              min: 6,
+            }"
           />
           <VeeErrorMessage
             name="confirmPassword"

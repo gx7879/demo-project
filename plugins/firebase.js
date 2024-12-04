@@ -3,7 +3,9 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithCustomToken,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -26,5 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     "createUserWithEmailAndPassword",
     createUserWithEmailAndPassword
   );
+  nuxtApp.provide("signInWithCustomToken", signInWithCustomToken);
+  nuxtApp.provide("updatePassword", updatePassword);
   nuxtApp.provide("signOut", signOut);
 });

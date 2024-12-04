@@ -1,11 +1,10 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
-// import { login } from "@/api/member";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-// const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
+const { $auth, $createUserWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 const email = ref(null);
 localize("zh_TW", {
@@ -20,9 +19,21 @@ localize("zh_TW", {
   },
 });
 
-async function loginWithFirebase(values, { resetForm }) {
+async function createAccount(values, { resetForm }) {
   console.log("submit", values);
   try {
+    const userCredential = await $createUserWithEmailAndPassword(
+      $auth,
+      values.email,
+      values.password
+    );
+    console.log(userCredential);
+    const token = await userCredential.user.getIdToken();
+    setToken(token);
+    // const res = await $createUserWithEmailAndPassword(
+    //   values.email,
+    //   values.password
+    // );
     // if (res) {
     router.push("/emailVerification");
     // }
@@ -62,10 +73,7 @@ async function loginWithFirebase(values, { resetForm }) {
     >
       or
     </div>
-    <VeeForm
-      class="max-w-[460px] mx-auto mb-[60px]"
-      @submit="loginWithFirebase"
-    >
+    <VeeForm class="max-w-[460px] mx-auto mb-[60px]" @submit="createAccount">
       <div class="mb-6 text-left">
         <label
           for="email"
