@@ -33,7 +33,8 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      "Noto Sans TC": [300, 400, 500, 700]
+      "Noto Sans TC": [300, 400, 500, 700],
+      "Space Grotesk": [300]
     }
   }
 });
