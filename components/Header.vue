@@ -84,7 +84,7 @@ function resetPassword() {
             >會員
           </NuxtLink> -->
           <div
-            class="text-xl text-white hidden 2md:inline-block mr-[85px] cursor-pointer"
+            class="text-xl text-main-black/70 hidden 2md:inline-block mr-[85px] cursor-pointer"
             @click="toggleMenu"
           >
             會員
@@ -95,16 +95,18 @@ function resetPassword() {
             class="flex items-center cursor-pointer"
             @click="isModalOpen = true"
           >
-            <div class="text-xl text-white mr-2 hidden 2md:inline-block">
+            <div
+              class="text-xl text-main-black/70 mr-2 hidden 2md:inline-block"
+            >
               購物車
             </div>
             <div
-              class="border w-[38px] h-[38px] rounded-full flex justify-center items-center text-lg"
-              :class="{
+              class="border w-[38px] h-[38px] rounded-full flex justify-center items-center text-lg text-main-black/70 border-main-black/70"
+            >
+              <!-- :class="{
                 'text-white border-white': !openMenu,
                 'text-main-black/70 border-main-black/70': openMenu,
-              }"
-            >
+              }" -->
               0
             </div>
           </div>
