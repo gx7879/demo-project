@@ -3,9 +3,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithCustomToken,
   signOut,
-  updatePassword,
   onAuthStateChanged,
 } from "firebase/auth";
 import { useUserStore } from "@/stores/User";
@@ -24,12 +22,21 @@ export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  onAuthStateChanged(auth, (user) => {
-    // console.log(nuxtApp.$pinia.User);
-    const { setUserInfo } = useUserStore(nuxtApp.$pinia);
-    setUserInfo(user);
-    // nuxtApp.$pinia.User.setUserInfo(user); // 更新全域使用者狀態
-  });
+  const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged(auth, (user) => {
+        const userStore = useUserStore(nuxtApp.$pinia);
+        const { setUserInfo } = userStore;
+        setUserInfo(user);
+        return resolve(user);
+      });
+    });
+  };
+  // onAuthStateChanged(auth, (user) => {
+  //   const userStore = useUserStore(nuxtApp.$pinia)
+  //   const {setUserInfo} = userStore
+  //   setUserInfo(user)
+  // })
 
   nuxtApp.provide("auth", auth);
   nuxtApp.provide("signInWithEmailAndPassword", signInWithEmailAndPassword);
@@ -37,7 +44,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     "createUserWithEmailAndPassword",
     createUserWithEmailAndPassword
   );
-  nuxtApp.provide("signInWithCustomToken", signInWithCustomToken);
-  nuxtApp.provide("updatePassword", updatePassword);
   nuxtApp.provide("signOut", signOut);
+  nuxtApp.provide("getCurrentUser", getCurrentUser);
 });

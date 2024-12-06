@@ -1,27 +1,29 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: [
+    "@pinia/nuxt",
+    "nuxt-vuefire",
     "@nuxtjs/tailwindcss",
     "@nuxt/image",
     "@vee-validate/nuxt",
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    "@nuxtjs/google-fonts",
-    '@vueuse/nuxt',
+    "pinia-plugin-persistedstate/nuxt",
+    "@vueuse/nuxt",
     "dayjs-nuxt",
     "nuxt-lodash",
-    "nuxt-vuefire",
+    "@nuxtjs/google-fonts"
   ],
   image: {
     dir: "assets/images",
   },
+  imports: {
+    dirs: ["stores"],
+  },
   runtimeConfig: {
-    // Public keys that are exposed to the client
     public: {
-      apiBase: ''
-    }
+      apiBase: "",
+    },
   },
   veeValidate: {
     // 啟用 auto imports
@@ -34,12 +36,6 @@ export default defineNuxtConfig({
       ErrorMessage: "VeeErrorMessage",
     },
   },
-  googleFonts: {
-    families: {
-      "Noto Sans TC": [300, 400, 500, 700],
-      "Space Grotesk": [300]
-    }
-  },
   vuefire: {
     auth: true,
     config: {
@@ -50,6 +46,12 @@ export default defineNuxtConfig({
       messagingSenderId: "543311698134",
       appId: "1:543311698134:web:27d8166f4abf5f5b111177",
       measurementId: "G-6V0DT2Z8Z7",
+    },
+  },
+  googleFonts: {
+    families: {
+      "Noto Sans TC": [300, 400, 500, 700],
+      "Space Grotesk": [300]
     }
   }
 });

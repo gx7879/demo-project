@@ -1,36 +1,31 @@
-import { defineStore } from "pinia";
+export const useUserStore = defineStore("user", () => {
+  const user = useCurrentUser();
+  const cookie = useCookie("token");
+  const userInfo = ref(user);
+  const token = ref(cookie);
+  const isLogin = computed(() => {
+    return !!userInfo.value?.uid;
+  });
+  const setUserInfo = (data) => {
+    userInfo.value = data;
+  };
 
-export const useUserStore = defineStore(
-  "user",
-  () => {
-    const userInfo = ref(null);
-    const getUserInfo = computed(() => userInfo.value);
-    const isLogin = computed(() => !!userInfo.value?.uid);
-    const token = ref(null);
-    const getToken = computed(() => token.value);
+  const getUserInfo = computed(() => {
+    return userInfo.value;
+  });
+  const setToken = (data) => {
+    token.value = data;
+  };
+  const getToken = computed(() => {
+    return token.value;
+  });
 
-    function setToken(accessToken) {
-      token.value = accessToken;
-    }
-
-    function setUserInfo(user) {
-      userInfo.value = user;
-    }
-
-    function clearUserInfo() {
-      userInfo.value = null;
-    }
-    return {
-      userInfo,
-      getUserInfo,
-      isLogin,
-      getToken,
-      setToken,
-      setUserInfo,
-      clearUserInfo,
-    };
-  },
-  {
-    persist: true,
-  }
-);
+  return {
+    userInfo,
+    setUserInfo,
+    getUserInfo,
+    setToken,
+    getToken,
+    isLogin,
+  };
+});

@@ -1,6 +1,3 @@
-// import { Message } from "@arco-design/web-vue";
-// import { useUserStore } from "~/stores/user.store";
-
 // 處理錯誤
 function handleError(response) {
   const err = (text) => {
@@ -50,6 +47,7 @@ function paramsSerializer(params) {
   return query;
 }
 
+
 const fetch = $fetch.create({
   // 请求拦截器
   onRequest({ options }) {
@@ -95,7 +93,8 @@ const fetch = $fetch.create({
   },
 });
 
-// 自动导出
+
+
 export const useHttp = {
   get(url, params) {
     return fetch(url, { method: "get", params });

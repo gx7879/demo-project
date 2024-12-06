@@ -2,7 +2,8 @@
 import { getCustomToken } from "@/api/member";
 const { $auth, $signInWithCustomToken, $updatePassword } = useNuxtApp();
 const userStore = useUserStore();
-const { setToken, setUserInfo } = userStore;
+const { userInfo } = storeToRefs(userStore);
+const { setToken } = userStore;
 
 async function onSubmit(values) {
   console.log("submit", values);
@@ -38,7 +39,7 @@ async function signWithToken(token) {
     const userCredential = await $signInWithCustomToken($auth, token);
     console.log(userCredential);
     setToken(userCredential.user.accessToken);
-    setUserInfo(userCredential.user);
+    userInfo.value = userCredential.user;
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;

@@ -6,6 +6,8 @@ const store = useProductStore();
 const { products } = storeToRefs(store);
 const { setProduct } = store;
 
+const { currency } = useCurrency();
+
 const useResetPassword = useResetPasswordStore();
 const { showResetPasswordModal } = useResetPassword;
 
@@ -62,6 +64,13 @@ function handleLogin() {
   const router = useRouter();
   router.push("/login");
 }
+
+const amountTotal = computed(() => {
+  return products.value.reduce(
+    (total, product) => total + product.CommodityInfo.price,
+    0
+  );
+});
 </script>
 
 <template>
@@ -198,7 +207,7 @@ function handleLogin() {
     <teleport to="body">
       <div
         v-if="isModalOpen"
-        class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-[99] cursor-pointer"
+        class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-[99]"
         @click.self="closeCart"
       >
         <div
@@ -224,7 +233,7 @@ function handleLogin() {
               class="flex justify-between items-center text-xl text-main-black/70 mb-3"
             >
               <span class="font-medium">總金額</span>
-              <span class="font-bold">TWD $ 96,800</span>
+              <span class="font-bold">TWD $ {{ currency(amountTotal) }}</span>
             </div>
             <button
               class="w-full h-[52px] bg-main-black/80 rounded-[5px] text-white text-lg font-bold"
