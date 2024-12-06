@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  middleware: ["auth"],
+});
 import { localize } from "@vee-validate/i18n";
 import { login } from "@/api/member";
 
@@ -7,8 +10,7 @@ function changePage(page) {
   emit("changePage", page);
 }
 const userStore = useUserStore();
-const { userInfo } = storeToRefs(userStore);
-const { setToken } = userStore;
+const { setToken, setUserInfo } = userStore;
 const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 localize("zh_TW", {
@@ -27,7 +29,7 @@ async function loginWithFirebase(values, { resetForm }) {
     );
     console.log(userCredential);
     setToken(userCredential.user.accessToken);
-    userInfo.value = userCredential.user;
+    setUserInfo(userCredential.user);
     const res = await login();
     console.log(res);
     if (res) {

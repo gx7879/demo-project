@@ -13,6 +13,10 @@ export const useUserStore = defineStore(
       token.value = accessToken;
     }
 
+    function setUserInfo(user) {
+      userInfo.value = user;
+    }
+
     function clearUserInfo() {
       userInfo.value = null;
     }
@@ -22,6 +26,7 @@ export const useUserStore = defineStore(
       isLogin,
       getToken,
       setToken,
+      setUserInfo,
       clearUserInfo,
     };
   },

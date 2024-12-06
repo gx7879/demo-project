@@ -6,7 +6,9 @@ import {
   signInWithCustomToken,
   signOut,
   updatePassword,
+  onAuthStateChanged,
 } from "firebase/auth";
+import { useUserStore } from "@/stores/User";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1V-QOXomHb-pvcyBr04oVIAX4MJeTUJo",
@@ -21,6 +23,13 @@ const firebaseConfig = {
 export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    // console.log(nuxtApp.$pinia.User);
+    const { setUserInfo } = useUserStore(nuxtApp.$pinia);
+    setUserInfo(user);
+    // nuxtApp.$pinia.User.setUserInfo(user); // 更新全域使用者狀態
+  });
 
   nuxtApp.provide("auth", auth);
   nuxtApp.provide("signInWithEmailAndPassword", signInWithEmailAndPassword);

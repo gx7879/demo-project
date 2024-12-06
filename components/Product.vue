@@ -8,6 +8,10 @@ const { product } = defineProps({
   },
 });
 
+const productInfo = computed(() => {
+  return product.CommodityInfo.Commodity;
+});
+
 const { currency } = useCurrency();
 
 function removeProduct() {
@@ -24,17 +28,22 @@ function removeProduct() {
       <div>
         <div class="flex justify-between text-xl font-medium">
           <div class="sm:mr-5">
-            {{ product.name }}
+            {{ productInfo.name }}
             <span class="text-sm font-light mt-1 block">Black</span>
           </div>
           <div
             class="whitespace-nowrap auto-rows-max text-right hidden sm:grid"
           >
-            <span :class="{ 'line-through': product.discount_price > 0 }">
-              $ {{ currency(product.price) }}
+            <span
+              :class="{ 'line-through': productInfo.discount_price !== null }"
+            >
+              $ {{ currency(productInfo.price) }}
             </span>
-            <span v-if="product.discount_price > 0" class="text-[#ff7700]">
-              $ {{ currency(product.discount_price) }}
+            <span
+              v-if="productInfo.discount_price !== null"
+              class="text-[#ff7700]"
+            >
+              $ {{ currency(productInfo.discount_price) }}
             </span>
           </div>
         </div>
@@ -46,17 +55,22 @@ function removeProduct() {
         </template>
         <template v-else>
           <div class="w-12 text-center">
-            {{ product.num }}
+            {{ product.amount }}
           </div>
         </template>
         <div
           class="whitespace-nowrap grid auto-rows-max text-right sm:hidden text-xl"
         >
-          <span :class="{ 'line-through': product.discount_price > 0 }">
-            $ {{ currency(product.price) }}
+          <span
+            :class="{ 'line-through': productInfo.discount_price !== null }"
+          >
+            $ {{ currency(productInfo.price) }}
           </span>
-          <span v-if="product.discount_price > 0" class="text-[#ff7700]">
-            $ {{ currency(product.discount_price) }}
+          <span
+            v-if="productInfo.discount_price !== null"
+            class="text-[#ff7700]"
+          >
+            $ {{ currency(productInfo.discount_price) }}
           </span>
         </div>
       </div>

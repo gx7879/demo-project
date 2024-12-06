@@ -1,7 +1,10 @@
 <script setup>
+import { shoppingCarts } from "@/api/order";
+import { signOut } from "firebase/auth";
 const route = useRoute();
 const store = useProductStore();
 const { products } = storeToRefs(store);
+const { setProduct } = store;
 
 const useResetPassword = useResetPasswordStore();
 const { showResetPasswordModal } = useResetPassword;
@@ -10,6 +13,19 @@ const openMenu = ref(false);
 const isModalOpen = ref(false);
 const toggleMenu = () => {
   openMenu.value = !openMenu.value;
+};
+
+const toggleCart = async function () {
+  try {
+    const result = await shoppingCarts();
+    setProduct(result);
+    console.log(result);
+    isModalOpen.value = true;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
 };
 
 const closeCart = function () {
@@ -31,6 +47,21 @@ function resetPassword() {
   });
   openMenu.value = false;
 }
+
+const auth = useFirebaseAuth();
+const user = useCurrentUser();
+const router = useRouter();
+
+function handleSignOut() {
+  signOut(auth).then(() => {
+    router.push("/login");
+  });
+}
+
+function handleLogin() {
+  const router = useRouter();
+  router.push("/login");
+}
 </script>
 
 <template>
@@ -46,14 +77,6 @@ function resetPassword() {
         class="flex justify-between items-center border-b border-white h-full"
         :class="{ 'border-white': !openMenu, 'border-main-black/70': openMenu }"
       >
-        <!-- <NuxtImg
-          class="2md:hidden"
-          :class="{ 'text-main-black/70': true }"
-          width="36"
-          height="36"
-          src="/bar-icon.svg"
-          @click="toggleMenu"
-        ></NuxtImg> -->
         <svg
           class="2md:hidden fill-current stroke-current"
           :class="{ 'text-white': !openMenu, 'text-main-black/70': openMenu }"
@@ -91,10 +114,7 @@ function resetPassword() {
           </div>
           <!-- <div class="flex items-center"> -->
           <!-- <NuxtLink to="/" class="flex items-center"> -->
-          <div
-            class="flex items-center cursor-pointer"
-            @click="isModalOpen = true"
-          >
+          <div class="flex items-center cursor-pointer" @click="toggleCart">
             <div
               class="text-xl text-main-black/70 mr-2 hidden 2md:inline-block"
             >
@@ -155,11 +175,22 @@ function resetPassword() {
               </a>
             </li>
           </ul>
-          <button
-            class="border border-main-black/80 w-full 2md:w-[216px] h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"
-          >
-            登出
-          </button>
+          <template v-if="user">
+            <button
+              class="border border-main-black/80 w-full 2md:w-[216px] h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"
+              @click="handleSignOut"
+            >
+              登出
+            </button>
+          </template>
+          <template v-else>
+            <button
+              class="border border-main-black/80 w-full 2md:w-[216px] h-[54px] text-lg text-main-black/80 font-bold rounded-[5px]"
+              @click="handleLogin"
+            >
+              登入
+            </button>
+          </template>
         </div>
       </div>
     </Vue3SlideUpDown>
@@ -167,8 +198,8 @@ function resetPassword() {
     <teleport to="body">
       <div
         v-if="isModalOpen"
-        class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-50 cursor-pointer"
-        @click="closeCart"
+        class="bg-black/50 fixed top-0 left-0 right-0 bottom-0 z-[99] cursor-pointer"
+        @click.self="closeCart"
       >
         <div
           class="absolute right-0 w-[500px] bg-white h-screen p-6 flex flex-col"
