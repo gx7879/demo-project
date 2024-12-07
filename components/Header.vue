@@ -1,10 +1,12 @@
 <script setup>
-import { shoppingCarts } from "@/api/order";
 import { signOut } from "firebase/auth";
+import { shoppingCarts } from "@/api/order";
 const route = useRoute();
 const store = useProductStore();
 const { products } = storeToRefs(store);
 const { setProduct } = store;
+const userStore = useUserStore();
+const { isLogin } = storeToRefs(userStore);
 
 const { currency } = useCurrency();
 
@@ -18,16 +20,7 @@ const toggleMenu = () => {
 };
 
 const toggleCart = async function () {
-  try {
-    const result = await shoppingCarts();
-    setProduct(result);
-    console.log(result);
-    isModalOpen.value = true;
-  } catch (error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorCode, errorMessage);
-  }
+  isModalOpen.value = true;
 };
 
 const closeCart = function () {
@@ -70,6 +63,19 @@ const amountTotal = computed(() => {
     (total, product) => total + product.CommodityInfo.price,
     0
   );
+});
+
+onMounted(async () => {
+  if (isLogin.value) {
+    try {
+      const result = await shoppingCarts();
+      setProduct(result);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    }
+  }
 });
 </script>
 
@@ -136,7 +142,7 @@ const amountTotal = computed(() => {
                 'text-white border-white': !openMenu,
                 'text-main-black/70 border-main-black/70': openMenu,
               }" -->
-              0
+              {{ products.length }}
             </div>
           </div>
           <!-- </NuxtLink> -->
@@ -235,11 +241,14 @@ const amountTotal = computed(() => {
               <span class="font-medium">總金額</span>
               <span class="font-bold">TWD $ {{ currency(amountTotal) }}</span>
             </div>
-            <button
-              class="w-full h-[52px] bg-main-black/80 rounded-[5px] text-white text-lg font-bold"
-            >
-              前往結帳
-            </button>
+            <nuxt-link custom v-slot="{ navigate }" to="/cart">
+              <button
+                @click="navigate"
+                class="w-full h-[52px] bg-main-black/80 rounded-[5px] text-white text-lg font-bold"
+              >
+                前往結帳
+              </button>
+            </nuxt-link>
           </div>
         </div>
       </div>

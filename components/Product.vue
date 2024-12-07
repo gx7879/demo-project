@@ -51,7 +51,10 @@ function removeProduct() {
       <div class="flex justify-between items-end sm:items-center">
         <span class="hidden sm:block">數量</span>
         <template v-if="!isSubmittingOrder">
-          <TouchSpin v-model="product.num" @remove="removeProduct"></TouchSpin>
+          <TouchSpin
+            v-model="product.amount"
+            @remove="removeProduct"
+          ></TouchSpin>
         </template>
         <template v-else>
           <div class="w-12 text-center">

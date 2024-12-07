@@ -1,5 +1,19 @@
 <script setup>
+import { addShoppingCart } from "@/api/order";
 const type = ref("white");
+async function addToCart() {
+  try {
+    const result = await addShoppingCart({
+      commodity_info_id: 4,
+      amount: 1,
+    });
+    console.log(result);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
 </script>
 
 <template>
@@ -99,6 +113,7 @@ const type = ref("white");
             </div>
             <button
               class="flex justify-between items-center w-full bg-main-black h-[72px] px-9 text-xl"
+              @click="addToCart"
             >
               <span>立即購買</span>
               <span class="font-['Space_Grotesk'] font-light">79,800 元</span>

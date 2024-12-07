@@ -1,11 +1,12 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
 import { login } from "@/api/member";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
+// const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 localize("zh_TW", {
   messages: {
@@ -13,16 +14,19 @@ localize("zh_TW", {
     email: "電子郵件無效",
   },
 });
+const cookie = useCookie("token", { maxAge: 3600 });
+const auth = useFirebaseAuth();
 async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
-    const userCredential = await $signInWithEmailAndPassword(
-      $auth,
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
       values.email,
       values.password
     );
     console.log(userCredential);
     setToken(userCredential.user.accessToken);
+    cookie.value = userCredential.user.accessToken;
     userInfo.value = userCredential.user;
     const res = await login();
     console.log(res);

@@ -68,11 +68,11 @@ const handleCheckboxChange = (values, setFieldValue) => {
     setFieldValue("recipientAddress", "");
   }
 };
-onMounted(() => {
-  useFlowbite(() => {
-    initFlowbite();
-  });
-});
+// onMounted(() => {
+//   useFlowbite(() => {
+//     initFlowbite();
+//   });
+// });
 </script>
 
 <template>
