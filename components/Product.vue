@@ -1,12 +1,19 @@
 <script setup>
+const emit = defineEmits(["remove", "valueUpdate"]);
 const store = useCartStore();
 const { isSubmittingOrder } = storeToRefs(store);
-const { product } = defineProps({
+const { product, disabled } = defineProps({
   product: {
     type: Object,
     default: () => ({}),
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const status = ref(disabled);
 
 const productInfo = computed(() => {
   return product.CommodityInfo.Commodity;
@@ -14,8 +21,13 @@ const productInfo = computed(() => {
 
 const { currency } = useCurrency();
 
+async function updateCart(value) {
+  emit("valueUpdate", value);
+}
+
 function removeProduct() {
   console.log("remove");
+  emit("remove");
 }
 </script>
 
@@ -51,9 +63,12 @@ function removeProduct() {
       <div class="flex justify-between items-end sm:items-center">
         <span class="hidden sm:block">數量</span>
         <template v-if="!isSubmittingOrder">
+          <!-- eslint-disable vue/no-v-model-argument -->
           <TouchSpin
-            v-model="product.amount"
+            v-model:number="product.amount"
+            v-model:disabled="status"
             @remove="removeProduct"
+            @valueUpdate="updateCart"
           ></TouchSpin>
         </template>
         <template v-else>

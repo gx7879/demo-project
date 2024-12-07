@@ -3,8 +3,8 @@
 const Api = {
   shoppingCarts: "/api/order/shopping_carts",
   addShoppingCart: "/api/order/add_shopping_cart",
-  sendResetPassword: "/api/auth/send_reset_password",
-  getCustomToken: "/api/auth/get_custom_token",
+  deleteShoppingCart: "/api/order/delete_shopping_cart",
+  updateShoppingCart: "/api/order/update_shopping_cart",
 };
 
 export function shoppingCarts(data) {
@@ -15,11 +15,10 @@ export function addShoppingCart(data) {
   return useHttp.post(Api.addShoppingCart, data);
 }
 
-export function sendResetPassword(data) {
-  console.log(data);
-  return useHttp.post(Api.sendResetPassword, data);
+export function deleteShoppingCart(data) {
+  return useHttp.delete(`${Api.deleteShoppingCart}/${data.id}`);
 }
 
-export function getCustomToken(data) {
-  return useHttp.get(Api.getCustomToken, data);
+export function updateShoppingCart(data) {
+  return useHttp.post(Api.updateShoppingCart, data);
 }

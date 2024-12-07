@@ -1,15 +1,23 @@
 <script setup>
-const emit = defineEmits(["remove"]);
-const number = defineModel({ type: Number, default: 0 });
+const emit = defineEmits(["remove", "valueUpdate"]);
+const number = defineModel("number", { type: Number, default: 0 });
+const disabled = defineModel("disabled", { type: Boolean, default: false });
 function inCrease() {
   number.value++;
+  nextTick(() => {
+    emit("valueUpdate", number.value);
+  });
 }
 
 function deCrease() {
-  if (number.value === 0) return;
-  number.value--;
-  if (number.value === 0) {
-    emit("remove");
+  if (number.value > 0) {
+    number.value--;
+    nextTick(() => {
+      emit("valueUpdate", number.value);
+      if (number.value === 0) {
+        emit("remove");
+      }
+    });
   }
 }
 </script>
@@ -20,6 +28,7 @@ function deCrease() {
   >
     <button
       type="button"
+      :disabled="disabled"
       class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
       @click="deCrease"
     >
@@ -43,11 +52,12 @@ function deCrease() {
       type="text"
       class="min-w-2.5 flex-shrink-0 flex-grow-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 text-center p-0 mx-3"
       placeholder=""
-      v-model="number"
+      v-model.lazy="number"
       v-autoWidth
     />
     <button
       type="button"
+      :disabled="disabled"
       class="flex-shrink-0 inline-flex items-center justify-center w-2 h-2"
       @click="inCrease"
     >

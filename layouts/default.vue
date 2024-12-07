@@ -1,7 +1,36 @@
 <script setup>
+import { onAuthStateChanged } from "firebase/auth";
 const store = useResetPasswordStore();
 const { confirm, cancel } = store;
 const { isVisible, resetPasswordState } = storeToRefs(store);
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+const { setUserInfo, setToken } = userStore;
+const cookie = useCookie("token");
+watch(userInfo, (newVal) => {
+  // console.log(newVal);
+  if (newVal) {
+    console.log(newVal.stsTokenManager.accessToken);
+    cookie.value = newVal.stsTokenManager.accessToken;
+    setToken(newVal.stsTokenManager.accessToken);
+  }
+});
+// console.log(cookie);
+// const auth = useFirebaseAuth();
+// onMounted(() => {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       console.log(user);
+//       setUserInfo(user);
+//       cookie.value = user.stsTokenManager.accessToken;
+//       setToken(user.stsTokenManager.accessToken);
+//     } else {
+//       setUserInfo(null);
+//       cookie.value = null;
+//       setToken(null);
+//     }
+//   });
+// });
 </script>
 
 <template>

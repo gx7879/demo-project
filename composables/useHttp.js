@@ -15,7 +15,12 @@ function handleError(response) {
   const handleMap = {
     404: () => err("服务器资源不存在"),
     500: () => err("服务器内部错误"),
-    403: () => err("没有权限访问该资源"),
+    403: () => {
+      err("没有权限访问该资源");
+      userStore.clearUserInfo();
+      // TODO 跳转实际登录页
+      navigateTo("/");
+    },
     401: () => {
       err("登录状态已过期，需要重新登录");
       userStore.clearUserInfo();
@@ -46,7 +51,6 @@ function paramsSerializer(params) {
 
   return query;
 }
-
 
 const fetch = $fetch.create({
   // 请求拦截器
@@ -92,8 +96,6 @@ const fetch = $fetch.create({
     return Promise.reject(response?._data ?? null);
   },
 });
-
-
 
 export const useHttp = {
   get(url, params) {

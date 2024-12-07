@@ -1,6 +1,10 @@
 <script setup>
 import { signOut } from "firebase/auth";
-import { shoppingCarts } from "@/api/order";
+import {
+  shoppingCarts,
+  deleteShoppingCart,
+  updateShoppingCart,
+} from "@/api/order";
 const route = useRoute();
 const store = useProductStore();
 const { products } = storeToRefs(store);
@@ -65,18 +69,49 @@ const amountTotal = computed(() => {
   );
 });
 
-onMounted(async () => {
-  if (isLogin.value) {
-    try {
-      const result = await shoppingCarts();
-      setProduct(result);
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    }
+async function getCart() {
+  try {
+    const result = await shoppingCarts();
+    setProduct(result);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
   }
-});
+}
+
+async function deleteProduct(product) {
+  try {
+    await deleteShoppingCart({ id: product.id });
+    await getCart();
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+const isLoading = ref(false);
+async function updateCart(product, value) {
+  try {
+    isLoading.value = true;
+    const result = await updateShoppingCart({ id: product.id, amount: value });
+    isLoading.value = false;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+
+watch(
+  isLogin,
+  async (newValue) => {
+    if (newValue) {
+      await getCart();
+    }
+  },
+  { once: true }
+);
 </script>
 
 <template>
@@ -227,13 +262,26 @@ onMounted(async () => {
             </h2>
             <span class="cursor-pointer" @click="closeCart">關閉</span>
           </div>
-          <div class="py-6 space-y-6 overflow-y-auto">
-            <Product
-              v-for="(product, index) of products"
-              :key="index"
-              :product="product"
-            ></Product>
-          </div>
+          <template v-if="products.length !== 0">
+            <div class="py-6 space-y-6 overflow-y-auto">
+              <Product
+                v-for="(product, index) of products"
+                :key="index"
+                :product="product"
+                :disabled="isLoading"
+                @remove="deleteProduct(product)"
+                @valueUpdate="updateCart(product, $event)"
+              ></Product>
+            </div>
+          </template>
+          <template v-else>
+            <div class="flex flex-col justify-center items-center pt-[60px]">
+              <NuxtImg class="w-[71px] mb-6" src="/cart-icon.png"></NuxtImg>
+              <div class="text-main-black/70 leading-[1.4]">
+                你的購物車是空的
+              </div>
+            </div>
+          </template>
           <div class="border-t border-main-black pt-3 mt-auto">
             <div
               class="flex justify-between items-center text-xl text-main-black/70 mb-3"

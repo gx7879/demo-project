@@ -1,13 +1,23 @@
 <script setup>
-import { addShoppingCart } from "@/api/order";
+import { shoppingCarts, addShoppingCart } from "@/api/order";
 const type = ref("white");
+async function getCart() {
+  try {
+    const result = await shoppingCarts();
+    setProduct(result);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
 async function addToCart() {
   try {
     const result = await addShoppingCart({
       commodity_info_id: 4,
       amount: 1,
     });
-    console.log(result);
+    await getCart();
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
