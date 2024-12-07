@@ -64,7 +64,7 @@ function handleLogin() {
 
 const amountTotal = computed(() => {
   return products.value.reduce(
-    (total, product) => total + product.CommodityInfo.price,
+    (total, product) => total + product.CommodityInfo.price * product.amount,
     0
   );
 });

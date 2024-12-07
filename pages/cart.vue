@@ -11,6 +11,12 @@ import {
   RegisterRegistrationSuccess,
 } from "#components";
 
+import {
+  deleteShoppingCart,
+  updateShoppingCart,
+  createOrder,
+} from "@/api/order";
+
 const product = useProductStore();
 const { products } = storeToRefs(product);
 
@@ -45,10 +51,6 @@ localize("zh_TW", {
   },
 });
 
-function submit(values) {
-  console.log(values);
-}
-
 const isSameAsOrder = ref(false);
 
 const handleCheckboxChange = (values, setFieldValue) => {
@@ -68,6 +70,94 @@ const handleCheckboxChange = (values, setFieldValue) => {
     setFieldValue("recipientAddress", "");
   }
 };
+
+const { currency } = useCurrency();
+const amountTotal = computed(() => {
+  return products.value.reduce(
+    (total, product) => total + product.CommodityInfo.price * product.amount,
+    0
+  );
+});
+
+const discountPrice = computed(() => {
+  const discount = products.value
+    .map((product) => product.discount_price)
+    .filter(Boolean);
+  // return 0;
+  return discount.reduce((total, discountValue) => total + discountValue, 0);
+});
+
+const totalPrice = computed(() => amountTotal.value - discountPrice.value);
+const router = useRouter();
+async function submit(values) {
+  console.log(values);
+  try {
+    const result = await createOrder({
+      order_address: {
+        delivery_type: "home",
+        email: values.email,
+        first_name: values.firstName,
+        last_name: values.lastName,
+        phone_number: values.phone,
+        company_name: values.company,
+        country: values.country,
+        zip_code: values.postalCode,
+        address: values.address,
+      },
+      receive_address: {
+        is_same: isSameAsOrder.value,
+        first_name: values.recipientFirstName,
+        last_name: values.recipientLastName,
+        phone_number: values.recipientPhone,
+        country: values.recipientCountry,
+        zip_code: values.recipientPostalCode,
+        address: values.recipientAddress,
+      },
+      payment_method: "Credit",
+      price: totalPrice.value,
+      shopping_carts: [
+        {
+          shopping_cart_id: 0,
+          commodity_info_id: products.value[0].commodity_info_id,
+          price: products.value[0].CommodityInfo.price,
+          amount: products.value[0].amount,
+          subtotal: amountTotal.value,
+          promotion_id: 0,
+        },
+      ],
+    });
+    console.log(result);
+    router.push({ path: "/payment", query: { orderId: result.order.id } });
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+
+async function deleteProduct(product) {
+  try {
+    await deleteShoppingCart({ id: product.id });
+    await getCart();
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
+
+const isLoading = ref(false);
+async function updateCart(product, value) {
+  try {
+    isLoading.value = true;
+    const result = await updateShoppingCart({ id: product.id, amount: value });
+    isLoading.value = false;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
+}
 // onMounted(() => {
 //   useFlowbite(() => {
 //     initFlowbite();
@@ -466,11 +556,19 @@ const handleCheckboxChange = (values, setFieldValue) => {
             購物車({{ products.length }})
           </h2>
           <div class="grid gap-y-6 border-b border-main-black mb-6 pb-6">
-            <Product
+            <!-- <Product
               v-for="(product, index) of products"
               :product="product"
               :key="index"
-            />
+            /> -->
+            <Product
+              v-for="(product, index) of products"
+              :key="index"
+              :product="product"
+              :disabled="isLoading"
+              @remove="deleteProduct(product)"
+              @valueUpdate="updateCart(product, $event)"
+            ></Product>
           </div>
           <div
             v-if="!isSubmittingOrder"
@@ -497,7 +595,7 @@ const handleCheckboxChange = (values, setFieldValue) => {
           >
             <div class="flex justify-between">
               <span>小計</span>
-              <span>$ 97,800</span>
+              <span>$ {{ currency(amountTotal) }}</span>
             </div>
             <div class="flex justify-between">
               <span>運費</span>
@@ -529,14 +627,14 @@ const handleCheckboxChange = (values, setFieldValue) => {
                   <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
               </span>
-              <span>-$ 1,000</span>
+              <span>-$ {{ currency(discountPrice) }}</span>
             </div>
           </div>
           <div
             class="flex justify-between mt-3 text-xl text-main-black/70 font-bold mb-[120px]"
           >
             <span>總計</span>
-            <span>TWD $ 96,800</span>
+            <span>TWD $ {{ currency(totalPrice) }}</span>
           </div>
 
           <div class="flex justify-center lg:hidden">
