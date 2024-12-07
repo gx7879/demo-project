@@ -1,6 +1,6 @@
 export const useUserStore = defineStore("user", () => {
   const user = useCurrentUser();
-  // const cookie = useCookie("token");
+  const cookie = useCookie("token");
   const userInfo = ref(user);
   const token = ref(null);
   const isLogin = computed(() => {
@@ -19,6 +19,11 @@ export const useUserStore = defineStore("user", () => {
   const getToken = computed(() => {
     return token.value;
   });
+  const clearUserInfo = () => {
+    setToken(null);
+    cookie.value = null;
+    userInfo.value = null;
+  };
 
   return {
     userInfo,
@@ -27,5 +32,6 @@ export const useUserStore = defineStore("user", () => {
     setToken,
     getToken,
     isLogin,
+    clearUserInfo,
   };
 });

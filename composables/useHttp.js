@@ -17,9 +17,9 @@ function handleError(response) {
     500: () => err("服务器内部错误"),
     403: () => {
       err("没有权限访问该资源");
-      userStore.clearUserInfo();
+      // userStore.clearUserInfo();
       // TODO 跳转实际登录页
-      navigateTo("/");
+      // navigateTo("/");
     },
     401: () => {
       err("登录状态已过期，需要重新登录");
@@ -66,11 +66,15 @@ const fetch = $fetch.create({
     console.log(apiBase);
 
     // 添加请求头, 没登录不携带token
-    const userStore = useUserStore();
-    if (!userStore.isLogin) return;
+    // const userStore = useUserStore();
+    // console.log("111");
+    // if (!userStore.isLogin) return;
+    // console.log("222");
+    const cookie = useCookie("token");
+    if (!cookie.value) return;
 
     options.headers = new Headers(options.headers);
-    options.headers.set("Authorization", `Bearer ${userStore.getToken}`);
+    options.headers.set("Authorization", `Bearer ${cookie.value}`);
   },
 
   // 响应拦截

@@ -103,6 +103,11 @@ async function updateCart(product, value) {
   }
 }
 
+function goToOrder(navigate) {
+  closeCart();
+  navigate();
+}
+
 watch(
   isLogin,
   async (newValue) => {
@@ -291,7 +296,7 @@ watch(
             </div>
             <nuxt-link custom v-slot="{ navigate }" to="/cart">
               <button
-                @click="navigate"
+                @click="goToOrder(navigate)"
                 class="w-full h-[52px] bg-main-black/80 rounded-[5px] text-white text-lg font-bold"
               >
                 前往結帳

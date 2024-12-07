@@ -1,14 +1,31 @@
 <script setup>
+import { userProfiles } from "@/api/member";
 import dayjs from "dayjs";
 import { DatePicker } from "ant-design-vue";
 const dateFormat = "YYYY/MM/DD";
+const cookie = useCookie("token");
+const { data: userProfile } = await useAsyncData("userProfiles", () =>
+  userProfiles()
+);
+// const {
+//   data: userProfile,
+//   pending,
+//   error,
+// } = await useAsyncData("userProfiles", () =>
+//   $fetch("https://arkdemo.31app.tw/api/user/user_profiles/self", {
+//     method: "GET",
+//     headers: { Authorization: `Bearer ${cookie.value}` },
+//   })
+// );
+// console.log(data);
+const user = computed(() => userProfile.value);
 
 const now = dayjs();
 const value1 = ref(null);
 const info = ref({
   lastName: null,
   firstName: null,
-  birthday: null,
+  birthday: user.value?.birthday,
   sex: null,
   phone: null,
   address: null,
@@ -51,6 +68,7 @@ function onSubmit(values) {
     >
       會員資料
     </h2>
+    {{ userProfile }}
     <div class="pt-6 mb-12 space-y-6">
       <div class="text-xl font-medium text-main-black/70">
         電子郵件 : abcde10@gmail.com
