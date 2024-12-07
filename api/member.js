@@ -4,6 +4,7 @@ const Api = {
   sendResetPassword: "/api/auth/send_reset_password",
   getCustomToken: "/api/auth/get_custom_token",
   userProfiles: "/api/user/user_profiles/self",
+  orders: "/api/order/orders",
 };
 
 export function login(data) {
@@ -24,4 +25,8 @@ export function getCustomToken(data) {
 
 export function userProfiles() {
   return useHttp.get(Api.userProfiles);
+}
+
+export function orders(data) {
+  return useHttp.get(Api.orders, data);
 }
