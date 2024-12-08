@@ -1,14 +1,15 @@
 <script setup>
 import { getCustomToken } from "@/api/member";
-const { $auth, $signInWithCustomToken, $updatePassword } = useNuxtApp();
+// const { $auth, $signInWithCustomToken, $updatePassword } = useNuxtApp();
+import { signInWithCustomToken, updatePassword } from "firebase/auth";
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-
+const auth = useFirebaseAuth();
 async function onSubmit(values) {
   console.log("submit", values);
-  const user = $auth.currentUser;
-  $updatePassword(user, values.password)
+  const user = auth.currentUser;
+  updatePassword(user, values.password)
     .then(() => {
       const router = useRouter();
       router.push("/resetPasswordSuccess");
@@ -26,6 +27,9 @@ async function getCustomTokenFun() {
     const token = route.query.token;
     const result = await getCustomToken({ token });
     console.log(result);
+    if (result.status === "fail") {
+      navigateTo("/forgetPassword");
+    }
     return { ...result };
   } catch (error) {
     const errorCode = error.code;
@@ -36,7 +40,7 @@ async function getCustomTokenFun() {
 
 async function signWithToken(token) {
   try {
-    const userCredential = await $signInWithCustomToken($auth, token);
+    const userCredential = await signInWithCustomToken(auth, token);
     console.log(userCredential);
     setToken(userCredential.user.accessToken);
     userInfo.value = userCredential.user;

@@ -121,12 +121,12 @@ async function navigateToIndex() {
 
 watch(
   isLogin,
-  async (newValue) => {
+  async (newValue, oldValue) => {
     if (newValue) {
       await getCart();
     }
   },
-  { once: true }
+  { immediate: true, once: true }
 );
 </script>
 

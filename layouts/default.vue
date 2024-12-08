@@ -7,20 +7,32 @@ const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setUserInfo, setToken } = userStore;
 const cookie = useCookie("token");
-watch(userInfo, (newVal) => {
-  // console.log(newVal);
-  if (newVal) {
-    console.log(newVal.stsTokenManager.accessToken);
-    cookie.value = newVal.stsTokenManager.accessToken;
-    setToken(newVal.stsTokenManager.accessToken);
+const user = ref(null);
+const currentUser = await getCurrentUser();
+user.value = currentUser;
+watchEffect(() => {
+  if (user.value) {
+    console.log(user.value.stsTokenManager.accessToken);
+    cookie.value = user.value.stsTokenManager.accessToken;
+    setUserInfo(user.value);
+    setToken(user.value.stsTokenManager.accessToken);
   }
 });
+// watch(user, (newVal) => {
+//   console.log(newVal);
+//   if (newVal) {
+//     console.log(newVal.stsTokenManager.accessToken);
+//     cookie.value = newVal.stsTokenManager.accessToken;
+//     setUserInfo(newVal);
+//     setToken(newVal.stsTokenManager.accessToken);
+//   }
+// });
 // console.log(cookie);
 // const auth = useFirebaseAuth();
-// onMounted(() => {
+// onBeforeMount(() => {
 //   onAuthStateChanged(auth, (user) => {
 //     if (user) {
-//       console.log(user);
+//       // console.log(user);
 //       setUserInfo(user);
 //       cookie.value = user.stsTokenManager.accessToken;
 //       setToken(user.stsTokenManager.accessToken);

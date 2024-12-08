@@ -1,14 +1,6 @@
 <script setup>
 import { useClipboard } from "@vueuse/core";
 
-definePageMeta({
-  middleware: [
-    function () {
-      console.log("payComplete");
-    },
-  ],
-});
-
 const orderId = ref("20241030043700389");
 
 const { copy, isSupported } = useClipboard();

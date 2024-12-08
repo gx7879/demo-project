@@ -1,5 +1,7 @@
 <script setup>
 import { shoppingCarts, addShoppingCart } from "@/api/order";
+const store = useProductStore();
+const { setProduct } = store;
 const type = ref("white");
 async function getCart() {
   try {

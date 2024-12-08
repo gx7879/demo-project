@@ -1,7 +1,8 @@
 export const useUserStore = defineStore("user", () => {
-  const user = useCurrentUser();
+  // const user = useCurrentUser();
+  // console.log(user);
   const cookie = useCookie("token");
-  const userInfo = ref(user);
+  const userInfo = ref(null);
   const token = ref(null);
   const isLogin = computed(() => {
     return !!userInfo.value?.uid;

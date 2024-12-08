@@ -22,14 +22,24 @@ useHead({
       src: "https://code.jquery.com/jquery-3.5.1.min.js",
       tagPosition: "bodyClose",
       onload: () => {
-        jqueryLoaded.value = true;
+        const checkJqueryLoaded = setInterval(() => {
+          if (window.ECPay) {
+            clearInterval(checkJqueryLoaded);
+            jqueryLoaded.value = true;
+          }
+        }, 100);
       },
     },
     {
       src: "https://ecpg.ecpay.com.tw/Scripts/sdk-1.0.0.js?t=20210121100116",
       tagPosition: "bodyClose",
       onload: () => {
-        ecpayLoaded.value = true;
+        const checkSDKLoaded = setInterval(() => {
+          if (window.$) {
+            clearInterval(checkSDKLoaded);
+            ecpayLoaded.value = true;
+          }
+        }, 100);
       },
     },
   ],
