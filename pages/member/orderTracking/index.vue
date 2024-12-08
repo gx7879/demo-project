@@ -1,141 +1,13 @@
 <script setup>
-const orders = ref([
-  {
-    discount: {
-      vip: 0,
-      other: 0,
-      coupon: 0,
-      promotion: null,
-      data: {},
+import { orders } from "@/api/member";
+const { data: orderList } = await useAsyncData("orderList", () =>
+  orders({
+    filter: {
+      "order_status_id.list": [2, 3, 4],
     },
-    id: 4,
-    trade_no: "#0000000004",
-    user_id: 1,
-    order_status_id: 1,
-    is_paid: false,
-    is_refund: false,
-    status_update_date: "2024-11-22T03:54:58.000Z",
-    status_expired_date: null,
-    price: 1000,
-    note: null,
-    payment_method: "Credit",
-    created_at: "2024-11-22T03:54:58.000Z",
-    updated_at: "2024-11-22T03:54:58.000Z",
-    deleted_at: null,
-    User: {
-      id: 1,
-      uuid: "896025702748",
-      name: null,
-      email: null,
-      created_at: "2024-10-24T03:37:24.000Z",
-    },
-    UserProfile: {
-      user_id: 1,
-      name: "string",
-    },
-    PaidUpdate: null,
-    OrderStatus: null,
-    TransportingUpdate: null,
-    CompletedUpdate: null,
-    CancelUpdate: null,
-    OrderAddress: {
-      detail: null,
-      id: 7,
-      type: "order",
-      order_id: 4,
-      delivery_type: "home",
-      is_same: false,
-      first_name: "名字",
-      last_name: "姓氏",
-      email: "123456@gmail.com",
-      phone_number: "0912345678",
-      company_name: "",
-      place_name: null,
-      country: "台灣",
-      address: "台北市中正區中正路123號",
-      zip_code: "112",
-      note: null,
-      created_at: "2024-11-22T03:54:58.000Z",
-      updated_at: "2024-11-22T03:54:58.000Z",
-      deleted_at: null,
-    },
-    ReceiveAddress: {
-      detail: null,
-      id: 8,
-      type: "receive",
-      order_id: 4,
-      delivery_type: "home",
-      is_same: false,
-      first_name: "收件人名字",
-      last_name: "收件人姓氏",
-      email: null,
-      phone_number: "0910100100",
-      company_name: null,
-      place_name: null,
-      country: "台灣",
-      address: "台北市大同區承德路一段1號",
-      zip_code: "103",
-      note: null,
-      created_at: "2024-11-22T03:54:58.000Z",
-      updated_at: "2024-11-22T03:54:58.000Z",
-      deleted_at: null,
-    },
-    OrderCommodities: [
-      {
-        discount: {
-          vip: 0,
-          coupon: 0,
-          other: 0,
-        },
-        id: 4,
-        status: "normal",
-        user_id: 1,
-        order_id: 4,
-        commodity_info_id: 4,
-        amount: 1,
-        commodity_type: "normal",
-        price: 1000,
-        created_at: "2024-11-22T03:54:58.000Z",
-        updated_at: "2024-11-22T03:54:58.000Z",
-        deleted_at: null,
-        CommodityPropertyInfo: {
-          id: 4,
-          type: "main",
-          commodity_id: 1,
-          price: 1000,
-          discount_price: null,
-          stock: 92,
-          original_stock: 100,
-          created_at: "2024-11-01T09:29:07.000Z",
-          updated_at: "2024-11-22T03:54:58.000Z",
-          Commodity: {
-            id: 1,
-            is_active: true,
-            start_date: "2024-11-01T09:01:08.000Z",
-            end_date: null,
-            name: "測試",
-            order: 1,
-            created_at: "2024-11-01T09:01:08.000Z",
-            updated_at: "2024-11-07T10:57:06.000Z",
-            deleted_at: null,
-            Covers: [],
-            CategoryList: [],
-            LabelList: [],
-            CommodityProperties: [],
-            CommodityPropertyInfos: [],
-            discount_price: null,
-            price: 1000,
-            stock: 92,
-            original_stock: 100,
-            commodity_info_id: 4,
-          },
-          CommodityPropertyValues: [],
-          is_calculated: true,
-        },
-      },
-    ],
-  },
-]);
+  })
+);
+console.log(orderList.value);
 
 // 管理展開行的 ID 列表
 const expandedRows = ref([]);
@@ -201,7 +73,7 @@ function orderStatusTransfer(id) {
           </thead>
           <tbody>
             <!-- eslint-disable-next-line vue/no-v-for-template-key -->
-            <template v-for="order in orders" :key="order.trade_no">
+            <template v-for="order in orderList" :key="order.trade_no">
               <tr class="">
                 <td
                   class="after:absolute after:w-full after:h-px after:bg-main-black after:left-0 after:scale-y-50 after:bottom-0 relative h-14 whitespace-nowrap"

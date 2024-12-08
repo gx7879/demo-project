@@ -1,7 +1,9 @@
 <script setup>
 import { useClipboard } from "@vueuse/core";
 
-const orderId = ref("20241030043700389");
+const route = useRoute();
+
+const orderId = ref(route.query.orderId);
 
 const { copy, isSupported } = useClipboard();
 
@@ -46,7 +48,11 @@ function handleCopy() {
           會員登入
         </button>
       </NuxtLink>
-      <NuxtLink to="/orderDetail" custom v-slot="{ navigate }">
+      <NuxtLink
+        :to="{ name: 'member-orderList-orderId', params: { orderId: orderId } }"
+        custom
+        v-slot="{ navigate }"
+      >
         <button
           class="text-main-black/80 border border-main-black/80 font-bold rounded-[5px] text-lg max-w-[460px] mx-auto w-full p-3"
           @click="navigate"

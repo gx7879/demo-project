@@ -47,7 +47,9 @@ useHead({
 
 watchEffect(() => {
   if (jqueryLoaded.value && ecpayLoaded.value) {
-    ecpayInit();
+    nextTick(() => {
+      ecpayInit();
+    });
   }
 });
 
