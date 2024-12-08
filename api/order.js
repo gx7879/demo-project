@@ -6,6 +6,7 @@ const Api = {
   deleteShoppingCart: "/api/order/delete_shopping_cart",
   updateShoppingCart: "/api/order/update_shopping_cart",
   createOrder: "/api/order/create_order",
+  orderDetail: "/api/order/orders",
 };
 
 export function shoppingCarts(data) {
@@ -26,4 +27,8 @@ export function updateShoppingCart(data) {
 
 export function createOrder(data) {
   return useHttp.post(Api.createOrder, data);
+}
+
+export function orderDetail(data) {
+  return useHttp.get(`${Api.orderDetail}/${data.id}`);
 }

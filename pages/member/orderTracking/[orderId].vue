@@ -1,16 +1,28 @@
 <script setup>
 import { useClipboard } from "@vueuse/core";
+import { orderDetail } from "@/api/order";
 
-const orderId = ref("20241030043700389");
+const route = useRoute();
 
-const orderStatus = ref("cancel");
+const orderId = ref(route.params.orderId);
 
-const modalState = reactive({
-  title: "",
-  text: "",
-  icon: "",
-  isVisible: false,
-});
+const { data: orderDetailInfo, error } = await useAsyncData("orderDetail", () =>
+  orderDetail({ id: orderId.value })
+);
+
+console.log(orderDetailInfo);
+
+const { isVisible, modalState, showModal, closeModal, confirm, cancel } =
+  useModal();
+
+const orderStatus = ref("");
+
+// const modalState = reactive({
+//   title: "",
+//   text: "",
+//   icon: "",
+//   isVisible: false,
+// });
 
 const { copy, isSupported } = useClipboard();
 
@@ -22,7 +34,6 @@ function handleCopy() {
   }
   copy(orderId.value);
 }
-const route = useRoute();
 
 const steps = ref([
   {
@@ -44,34 +55,60 @@ const steps = ref([
 ]);
 
 const currentActive = ref(2);
-console.log(route.params.orderId);
-function cancelOrder() {
-  modalState.title = "取消訂單";
-  modalState.title = "確定要取消訂單?";
-  modalState.isVisible = true;
-}
 
-function closeModal() {
-  modalState.isVisible = false;
+function cancelOrder() {
+  // modalState.title = "取消訂單";
+  // modalState.text = "確定要取消訂單?";
+  // modalState.isVisible = true;
+  showModal({
+    title: "取消訂單",
+    text: "確定要取消訂單?",
+    icon: "",
+    isVisible: true,
+    onSuccess: () => {
+      cancelSuccess();
+    },
+  });
 }
+// "取消訂單",
+//     "確定要取消訂單?",
+//     "",
+//     () => {
+//       cancelSuccess();
+//     },
+//     () => {
+//       console.log("cancel");
+//     }
+
+// function closeModal() {
+// modalState.isVisible = false;
+// }
 
 function cancelSuccess() {
-  modalState.title = "取消成功";
-  modalState.text = "您的訂單已取消";
-  modalState.icon = "success";
-  modalState.isVisible = true;
+  //   modalState.title = "取消成功";
+  //   modalState.text = "您的訂單已取消";
+  //   modalState.icon = "success";
+  //   modalState.isVisible = true;
+  //   setTimeout(() => {
+  //     modalState.title = "";
+  //     modalState.text = "";
+  //     modalState.icon = "";
+  //     modalState.isVisible = false;
+  //   }, 2000);
+  showModal({
+    title: "取消成功",
+    text: "您的訂單已取消",
+    icon: "success",
+  });
   setTimeout(() => {
-    modalState.title = "";
-    modalState.text = "";
-    modalState.icon = "";
-    modalState.isVisible = false;
+    closeModal();
   }, 2000);
 }
 
-function confirmModal() {
-  modalState.isVisible = false;
-  cancelSuccess();
-}
+// function confirmModal() {
+// modalState.isVisible = false;
+// cancelSuccess();
+// }
 </script>
 
 <template>
@@ -196,17 +233,31 @@ function confirmModal() {
       訂購人資訊
     </h2>
     <div class="space-y-6 text-xl font-medium text-main-black/70">
-      <div>電子郵件 : abcde10@gmail.com</div>
-      <div>訂購人 : 陳大仁</div>
-      <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">連絡電話 : 0912345678</div>
-        <div class="whitespace-nowrap">公司 : 無</div>
+      <div>電子郵件 : {{ orderDetailInfo.OrderAddress.email }}</div>
+      <div>
+        訂購人 :
+        {{
+          orderDetailInfo.OrderAddress.first_name +
+          orderDetailInfo.OrderAddress.last_name
+        }}
       </div>
       <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">所在國家與地區 : 台灣</div>
-        <div class="whitespace-nowrap">郵遞區號 : 123</div>
+        <div class="mr-[21px]">
+          連絡電話 : {{ orderDetailInfo.OrderAddress.phone_number }}
+        </div>
+        <div class="whitespace-nowrap">
+          公司 : {{ orderDetailInfo.OrderAddress.company_name ?? "無" }}
+        </div>
       </div>
-      <div>地址 : 台北市中正區忠孝東路1段100號5樓-3</div>
+      <div class="flex flex-wrap gap-y-[21px]">
+        <div class="mr-[21px]">
+          所在國家與地區 : {{ orderDetailInfo.OrderAddress.country }}
+        </div>
+        <div class="whitespace-nowrap">
+          郵遞區號 : {{ orderDetailInfo.OrderAddress.zip_code }}
+        </div>
+      </div>
+      <div>地址 : {{ orderDetailInfo.OrderAddress.address }}</div>
     </div>
     <div class="border-b border-main-black my-11 2md:my-12"></div>
     <h2
@@ -217,17 +268,30 @@ function confirmModal() {
       >
     </h2>
     <div class="space-y-6 text-xl font-medium text-main-black/70">
-      <div>電子郵件 : abcde10@gmail.com</div>
-      <div>訂購人 : 陳大仁</div>
-      <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">連絡電話 : 0912345678</div>
-        <div class="whitespace-nowrap">公司 : 無</div>
+      <div>
+        訂購人 :
+        {{
+          orderDetailInfo.ReceiveAddress.first_name +
+          orderDetailInfo.ReceiveAddress.last_name
+        }}
       </div>
       <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">所在國家與地區 : 台灣</div>
-        <div class="whitespace-nowrap">郵遞區號 : 123</div>
+        <div class="mr-[21px]">
+          連絡電話 : {{ orderDetailInfo.ReceiveAddress.phone_number }}
+        </div>
+        <div class="whitespace-nowrap">
+          公司 : {{ orderDetailInfo.ReceiveAddress.company_name ?? "無" }}
+        </div>
       </div>
-      <div>地址 : 台北市中正區忠孝東路1段100號5樓-3</div>
+      <div class="flex flex-wrap gap-y-[21px]">
+        <div class="mr-[21px]">
+          所在國家與地區 : {{ orderDetailInfo.ReceiveAddress.country }}
+        </div>
+        <div class="whitespace-nowrap">
+          郵遞區號 : {{ orderDetailInfo.ReceiveAddress.zip_code }}
+        </div>
+      </div>
+      <div>地址 : {{ orderDetailInfo.ReceiveAddress.address }}</div>
     </div>
     <div class="border-b border-main-black my-11 2md:my-12"></div>
     <h2 class="text-[28px] leading-[1.4] font-medium text-main-black/70 mb-9">
@@ -285,12 +349,10 @@ function confirmModal() {
     </template>
 
     <Modal
-      :title="modalState.title"
-      :text="modalState.text"
-      :icon="modalState.icon"
-      :is-visible="modalState.isVisible"
-      @close="closeModal"
-      @confirm="confirmModal"
+      v-bind="modalState"
+      :isVisible="isVisible"
+      @close="cancel"
+      @confirm="confirm"
     ></Modal>
   </div>
 </template>
