@@ -5,28 +5,31 @@ const { confirm, cancel } = store;
 const { isVisible, resetPasswordState } = storeToRefs(store);
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
-const { setUserInfo, setToken } = userStore;
+const { setUserInfo, setToken, clearUserInfo } = userStore;
 const cookie = useCookie("token");
-const user = ref(null);
-const currentUser = await getCurrentUser();
-user.value = currentUser;
-watchEffect(() => {
-  if (user.value) {
-    console.log(user.value.stsTokenManager.accessToken);
-    cookie.value = user.value.stsTokenManager.accessToken;
-    setUserInfo(user.value);
-    setToken(user.value.stsTokenManager.accessToken);
-  }
-});
-// watch(user, (newVal) => {
-//   console.log(newVal);
-//   if (newVal) {
-//     console.log(newVal.stsTokenManager.accessToken);
-//     cookie.value = newVal.stsTokenManager.accessToken;
-//     setUserInfo(newVal);
-//     setToken(newVal.stsTokenManager.accessToken);
+const currentUser = ref(null);
+const user = useCurrentUser();
+console.log(user);
+currentUser.value = await getCurrentUser();
+console.log(currentUser.value);
+setUserInfo(currentUser.value);
+// watchEffect(() => {
+//   if (userInfo.value) {
+//     console.log(userInfo.value);
+//     cookie.value = userInfo.value.stsTokenManager.accessToken;
+//     setUserInfo(userInfo.value);
+//     setToken(userInfo.value.stsTokenManager.accessToken);
 //   }
 // });
+watch(userInfo, (newVal) => {
+  console.log(newVal);
+  if (newVal) {
+    console.log(newVal.stsTokenManager.accessToken);
+    cookie.value = newVal.stsTokenManager.accessToken;
+    setUserInfo(newVal);
+    setToken(newVal.stsTokenManager.accessToken);
+  }
+});
 // console.log(cookie);
 // const auth = useFirebaseAuth();
 // onBeforeMount(() => {

@@ -4,8 +4,8 @@ import { login } from "@/api/member";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const userStore = useUserStore();
-const { userInfo } = storeToRefs(userStore);
-const { setToken } = userStore;
+// const { userInfo } = storeToRefs(userStore);
+const { setToken, setUserInfo } = userStore;
 // const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 localize("zh_TW", {
@@ -19,20 +19,19 @@ const auth = useFirebaseAuth();
 async function loginWithFirebase(values, { resetForm }) {
   console.log("submit", values);
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password
-    );
-    console.log(userCredential);
-    setToken(userCredential.user.accessToken);
-    cookie.value = userCredential.user.accessToken;
-    userInfo.value = userCredential.user;
-    const res = await login();
-    console.log(res);
-    if (res) {
-      router.push("/");
-    }
+    await signInWithEmailAndPassword(auth, values.email, values.password);
+    const user = useCurrentUser();
+    console.log(user.value.accessToken);
+    cookie.value = user.value.accessToken;
+    setToken(user.value.accessToken);
+    setUserInfo(user.value);
+    nextTick(async () => {
+      const res = await login();
+      console.log(res);
+      if (res) {
+        router.push("/");
+      }
+    });
     // if (userCredential.user) {
     // }
     // .then((userCredential) => {
@@ -48,6 +47,9 @@ async function loginWithFirebase(values, { resetForm }) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorCode, errorMessage);
+    // navigateTo("/login", {
+    //   external: true,
+    // });
   }
 }
 </script>

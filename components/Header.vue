@@ -8,15 +8,16 @@ import {
 const route = useRoute();
 const store = useProductStore();
 const { products } = storeToRefs(store);
-const { setProduct } = store;
+const { setProduct, productClear } = store;
 const userStore = useUserStore();
 const { isLogin } = storeToRefs(userStore);
 const { clearUserInfo } = userStore;
-
+const cartStore = useCartStore();
+const { cartClear } = cartStore;
 const { currency } = useCurrency();
 
 const useResetPassword = useResetPasswordStore();
-const { showResetPasswordModal } = useResetPassword;
+const { showResetPasswordModal, passwordClear } = useResetPassword;
 
 const openMenu = ref(false);
 const isModalOpen = ref(false);
@@ -54,8 +55,10 @@ const user = useCurrentUser();
 
 function handleSignOut() {
   signOut(auth).then(() => {
-    // router.push("/login");
     clearUserInfo();
+    passwordClear();
+    productClear();
+    cartClear();
     openMenu.value = false;
     navigateTo("/login");
   });
@@ -118,15 +121,17 @@ async function navigateToIndex() {
     external: true,
   });
 }
-
+// const user = useCurrentUser();
+console.log();
 watch(
   isLogin,
   async (newValue, oldValue) => {
+    console.log(newValue, oldValue);
     if (newValue) {
       await getCart();
     }
   },
-  { immediate: true, once: true }
+  { immediate: true }
 );
 </script>
 

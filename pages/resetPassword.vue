@@ -4,8 +4,9 @@ import { getCustomToken } from "@/api/member";
 import { signInWithCustomToken, updatePassword } from "firebase/auth";
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
-const { setToken } = userStore;
+const { setUserInfo, setToken } = userStore;
 const auth = useFirebaseAuth();
+const cookie = useCookie("token");
 async function onSubmit(values) {
   console.log("submit", values);
   const user = auth.currentUser;
@@ -42,8 +43,9 @@ async function signWithToken(token) {
   try {
     const userCredential = await signInWithCustomToken(auth, token);
     console.log(userCredential);
+    cookie.value = userCredential.user.stsTokenManager.accessToken;
     setToken(userCredential.user.accessToken);
-    userInfo.value = userCredential.user;
+    setUserInfo(userCredential.user);
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;

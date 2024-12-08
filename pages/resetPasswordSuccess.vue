@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup>
+definePageMeta({
+  middleware: [
+    function () {
+      console.log("resetPasswordSuccess");
+    },
+  ],
+});
+</script>
 
 <template>
   <div class="max-w-[720px] mx-auto pt-[100px] pb-40 px-6">

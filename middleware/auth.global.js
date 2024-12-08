@@ -8,17 +8,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     "/payComplete",
   ];
   const cookie = useCookie("token");
-  // const user = await getCurrentUser();
-  // const user = await useState("user", () => getCurrentUser());
-  // console.log(user.value);
-  // const user = await getCurrentUser();
+  console.log(cookie.value, to.path);
   if (cookie.value && whiteList.includes(to.path)) {
-    if (to.path !== "/payComplete") {
+    if (to.path !== "/payComplete" && to.path !== "/resetPasswordSuccess") {
       return navigateTo("/");
     }
   }
 
   if (!cookie.value && !whiteList.includes(to.path)) {
-    return navigateTo(to.path);
+    return navigateTo("/login");
   }
 });

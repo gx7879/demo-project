@@ -7,7 +7,7 @@ const { data: payment, error } = await useAsyncData("payment", () =>
   gateway({
     id,
     ChoosePaymentList: 1,
-    OrderResultURL: "http://localhost:3000/payComplete",
+    OrderResultURL: "http://localhost:3000/payComplete?orderId=" + id,
   })
 );
 console.log(error.value, payment.value.status);
@@ -23,7 +23,7 @@ useHead({
       tagPosition: "bodyClose",
       onload: () => {
         const checkJqueryLoaded = setInterval(() => {
-          if (window.ECPay) {
+          if (window.$) {
             clearInterval(checkJqueryLoaded);
             jqueryLoaded.value = true;
           }
@@ -35,7 +35,7 @@ useHead({
       tagPosition: "bodyClose",
       onload: () => {
         const checkSDKLoaded = setInterval(() => {
-          if (window.$) {
+          if (window.ECPay) {
             clearInterval(checkSDKLoaded);
             ecpayLoaded.value = true;
           }

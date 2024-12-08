@@ -36,6 +36,9 @@ export const useResetPasswordStore = defineStore(
     const setIsVisible = (data) => {
       isVisible.value = data;
     };
+    const passwordClear = () => {
+      currentMail.value = "";
+    };
     return {
       currentMail,
       isVisible,
@@ -48,6 +51,7 @@ export const useResetPasswordStore = defineStore(
       setIsVisible,
       confirm,
       cancel,
+      passwordClear,
     };
   },
   {

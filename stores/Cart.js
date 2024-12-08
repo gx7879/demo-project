@@ -5,10 +5,14 @@ export const useCartStore = defineStore("cart", () => {
   const setCart = (data) => {
     cart.value = data;
   };
+  const cartClear = () => {
+    cart.value = [];
+  };
   return {
     cart,
     getCart,
     setCart,
     isSubmittingOrder,
+    cartClear,
   };
 });

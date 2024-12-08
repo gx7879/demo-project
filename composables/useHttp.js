@@ -17,9 +17,9 @@ function handleError(response) {
     500: () => err("服务器内部错误"),
     403: () => {
       err("没有权限访问该资源");
-      // userStore.clearUserInfo();
+      userStore.clearUserInfo();
       // TODO 跳转实际登录页
-      // navigateTo("/");
+      navigateTo("/");
     },
     401: () => {
       err("登录状态已过期，需要重新登录");
