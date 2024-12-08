@@ -19,13 +19,13 @@ function handleError(response) {
       err("没有权限访问该资源");
       userStore.clearUserInfo();
       // TODO 跳转实际登录页
-      navigateTo("/");
+      navigateTo("/login");
     },
     401: () => {
       err("登录状态已过期，需要重新登录");
       userStore.clearUserInfo();
       // TODO 跳转实际登录页
-      navigateTo("/");
+      navigateTo("/login");
     },
   };
 

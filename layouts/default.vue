@@ -21,31 +21,31 @@ setUserInfo(currentUser.value);
 //     setToken(userInfo.value.stsTokenManager.accessToken);
 //   }
 // });
-watch(userInfo, (newVal) => {
-  console.log(newVal);
-  if (newVal) {
-    console.log(newVal.stsTokenManager.accessToken);
-    cookie.value = newVal.stsTokenManager.accessToken;
-    setUserInfo(newVal);
-    setToken(newVal.stsTokenManager.accessToken);
-  }
-});
-// console.log(cookie);
-// const auth = useFirebaseAuth();
-// onBeforeMount(() => {
-//   onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//       // console.log(user);
-//       setUserInfo(user);
-//       cookie.value = user.stsTokenManager.accessToken;
-//       setToken(user.stsTokenManager.accessToken);
-//     } else {
-//       setUserInfo(null);
-//       cookie.value = null;
-//       setToken(null);
-//     }
-//   });
+// watch(userInfo, (newVal) => {
+//   console.log(newVal);
+//   if (newVal) {
+//     console.log(newVal.stsTokenManager.accessToken);
+//     cookie.value = newVal.stsTokenManager.accessToken;
+//     setUserInfo(newVal);
+//     setToken(newVal.stsTokenManager.accessToken);
+//   }
 // });
+// console.log(cookie);
+const auth = useFirebaseAuth();
+onBeforeMount(() => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // console.log(user);
+      setUserInfo(user);
+      cookie.value = user.stsTokenManager.accessToken;
+      setToken(user.stsTokenManager.accessToken);
+    } else {
+      setUserInfo(null);
+      cookie.value = null;
+      setToken(null);
+    }
+  });
+});
 </script>
 
 <template>

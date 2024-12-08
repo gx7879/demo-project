@@ -34,7 +34,7 @@ function handleCopy() {
   }
   copy(orderId.value);
 }
-
+const { currency } = useCurrency();
 const steps = ref([
   {
     id: 1,
@@ -200,23 +200,59 @@ function cancelSuccess() {
 
           <div class="text-main-black/70 flex flex-col flex-1 2md:block">
             <div>
-              <div class="leading-[1.4] font-bold">ARK-002</div>
+              <div class="leading-[1.4] font-bold">
+                {{
+                  orderDetailInfo.OrderCommodities[0].CommodityPropertyInfo
+                    .Commodity.name
+                }}
+              </div>
               <span class="leading-[1.4] font-light">Black</span>
             </div>
             <span class="text-right mt-auto self-end 2md:hidden">
-              TWD 89,000*1
+              TWD
+              {{
+                currency(
+                  orderDetailInfo.OrderCommodities[0].price *
+                    orderDetailInfo.OrderCommodities[0].amount
+                )
+              }}
             </span>
           </div>
         </div>
         <div class="hidden 2md:block"></div>
-        <div class="hidden 2md:block">TWD 89,000</div>
-        <div class="hidden 2md:block text-center">1</div>
-        <div class="hidden 2md:block text-right">TWD 89,000</div>
+        <div class="hidden 2md:block">
+          TWD
+          {{
+            currency(
+              orderDetailInfo.OrderCommodities[0].CommodityPropertyInfo.price
+            )
+          }}
+        </div>
+        <div class="hidden 2md:block text-center">
+          {{ orderDetailInfo.OrderCommodities[0].amount }}
+        </div>
+        <div class="hidden 2md:block text-right">
+          TWD
+          {{
+            currency(
+              orderDetailInfo.OrderCommodities[0].price *
+                orderDetailInfo.OrderCommodities[0].amount
+            )
+          }}
+        </div>
       </div>
       <div class="flex flex-col items-end space-y-4 mt-3">
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-medium">小計:</div>
-          <div>TWD 89,000</div>
+          <div>
+            TWD
+            {{
+              currency(
+                orderDetailInfo.OrderCommodities[0].price *
+                  orderDetailInfo.OrderCommodities[0].amount
+              )
+            }}
+          </div>
         </div>
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-medium">運費:</div>
@@ -224,7 +260,15 @@ function cancelSuccess() {
         </div>
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-bold">總計:</div>
-          <div class="font-bold">TWD 89,000</div>
+          <div class="font-bold">
+            TWD
+            {{
+              currency(
+                orderDetailInfo.OrderCommodities[0].price *
+                  orderDetailInfo.OrderCommodities[0].amount
+              )
+            }}
+          </div>
         </div>
       </div>
     </div>
