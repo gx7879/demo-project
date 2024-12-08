@@ -10,7 +10,10 @@ const { data: payment, error } = await useAsyncData("payment", () =>
     OrderResultURL: "http://localhost:3000/payComplete",
   })
 );
-console.log(error);
+console.log(error.value, payment.value.status);
+if (error.value || payment.value.status === "fail") {
+  navigateTo("/");
+}
 const jqueryLoaded = ref(false);
 const ecpayLoaded = ref(false);
 useHead({
@@ -57,9 +60,10 @@ function paymentConfirm() {
       });
       console.log("result", result);
       await navigateTo(result.ThreeDInfo.ThreeDURL, {
-        open: {
-          target: "_blank",
-        },
+        external: true,
+        // open: {
+        //   target: "_blank",
+        // },
       });
       // window.open(result.ThreeDInfo.ThreeDURL)
       return true;

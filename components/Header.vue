@@ -11,6 +11,7 @@ const { products } = storeToRefs(store);
 const { setProduct } = store;
 const userStore = useUserStore();
 const { isLogin } = storeToRefs(userStore);
+const { clearUserInfo } = userStore;
 
 const { currency } = useCurrency();
 
@@ -49,17 +50,21 @@ function resetPassword() {
 
 const auth = useFirebaseAuth();
 const user = useCurrentUser();
-const router = useRouter();
+// const router = useRouter();
 
 function handleSignOut() {
   signOut(auth).then(() => {
-    router.push("/login");
+    // router.push("/login");
+    clearUserInfo();
+    openMenu.value = false;
+    navigateTo("/login");
   });
 }
 
 function handleLogin() {
-  const router = useRouter();
-  router.push("/login");
+  // const router = useRouter();
+  // router.push("/login");
+  navigateTo("/login");
 }
 
 const amountTotal = computed(() => {
@@ -108,6 +113,12 @@ function goToOrder(navigate) {
   navigate();
 }
 
+async function navigateToIndex() {
+  await navigateTo("/", {
+    external: true,
+  });
+}
+
 watch(
   isLogin,
   async (newValue) => {
@@ -133,8 +144,7 @@ watch(
         :class="{ 'border-white': !openMenu, 'border-main-black/70': openMenu }"
       >
         <svg
-          class="2md:hidden fill-current stroke-current"
-          :class="{ 'text-white': !openMenu, 'text-main-black/70': openMenu }"
+          class="2md:hidden fill-current stroke-current text-main-black/70"
           width="36"
           height="36"
           viewBox="0 0 36 36"
@@ -152,7 +162,11 @@ watch(
         </svg>
 
         <div class="h-5 lg:h-7 aspect-[23/4]">
-          <NuxtImg class="w-full" src="/header-logo.svg"></NuxtImg>
+          <NuxtImg
+            @click="navigateToIndex"
+            class="w-full cursor-pointer"
+            src="/header-logo.svg"
+          ></NuxtImg>
         </div>
         <div class="flex items-center">
           <!-- <NuxtLink
