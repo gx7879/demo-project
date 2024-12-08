@@ -1,4 +1,5 @@
 <script setup>
+import { onClickOutside } from "@vueuse/core";
 import { signOut } from "firebase/auth";
 import {
   shoppingCarts,
@@ -121,16 +122,10 @@ async function navigateToIndex() {
     external: true,
   });
 }
-// watch(
-//   isLogin,
-//   async (newValue, oldValue) => {
-//     console.log(newValue, oldValue);
-//     if (newValue) {
-//       await getCart();
-//     }
-//   },
-//   { immediate: true }
-// );
+const menu = ref(null);
+onClickOutside(menu, () => {
+  openMenu.value = false;
+});
 </script>
 
 <template>
@@ -207,7 +202,7 @@ async function navigateToIndex() {
         </div>
       </div>
     </div>
-    <Vue3SlideUpDown v-model="openMenu" :opacityClosed="1">
+    <Vue3SlideUpDown ref="menu" v-model="openMenu" :opacityClosed="1">
       <div class="px-[50px] py-10 bg-bg-gray relative z-50">
         <h6 class="text-main-black/70 text-[28px] leading-[1.4] mb-3">
           會員專區
