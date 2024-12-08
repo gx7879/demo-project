@@ -1,11 +1,17 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
 import { login } from "@/api/member";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
 const userStore = useUserStore();
 // const { userInfo } = storeToRefs(userStore);
 const { setToken, setUserInfo } = userStore;
+const productStore = useProductStore();
+const { getCart } = productStore;
 // const { $auth, $signInWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 localize("zh_TW", {
@@ -27,6 +33,7 @@ async function loginWithFirebase(values, { resetForm }) {
     setUserInfo(user.value);
     nextTick(async () => {
       const res = await login();
+      await getCart();
       console.log(res);
       if (res) {
         router.push("/");
@@ -52,6 +59,32 @@ async function loginWithFirebase(values, { resetForm }) {
     // });
   }
 }
+
+function googleLogin() {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider)
+    .then(async (result) => {
+      // const user = useCurrentUser();
+      const user = result.user;
+      console.log(user.accessToken);
+      cookie.value = user.accessToken;
+      setToken(user.accessToken);
+      setUserInfo(user);
+      nextTick(async () => {
+        const res = await login();
+        await getCart();
+        console.log(res);
+        if (res) {
+          router.push("/");
+        }
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    });
+}
 </script>
 
 <template>
@@ -59,9 +92,22 @@ async function loginWithFirebase(values, { resetForm }) {
     <h1 class="text-4xl text-main-black/70 font-bold mb-12">立即登入</h1>
     <div class="text-sm mb-6">使用第三方帳號登入</div>
     <div class="flex justify-center items-center gap-12 mb-12">
-      <NuxtImg width="36" src="/facebook-login-icon.png"></NuxtImg>
-      <NuxtImg width="36" src="/google-login-icon.png"></NuxtImg>
-      <NuxtImg width="36" src="/apple-login-icon.png"></NuxtImg>
+      <NuxtImg
+        width="36"
+        class="cursor-pointer"
+        src="/facebook-login-icon.png"
+      ></NuxtImg>
+      <NuxtImg
+        width="36"
+        @click="googleLogin"
+        class="cursor-pointer"
+        src="/google-login-icon.png"
+      ></NuxtImg>
+      <NuxtImg
+        width="36"
+        class="cursor-pointer"
+        src="/apple-login-icon.png"
+      ></NuxtImg>
       <!-- <img src="assets/images/facebook-login-icon.png" alt="" />
       <img src="assets/images/google-login-icon.png" alt="" />
       <img src="assets/images/apple-login-icon.png" alt="" /> -->

@@ -7,12 +7,14 @@ const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setUserInfo, setToken, clearUserInfo } = userStore;
 const cookie = useCookie("token");
-const currentUser = ref(null);
-const user = useCurrentUser();
-console.log(user);
-currentUser.value = await getCurrentUser();
-console.log(currentUser.value);
-setUserInfo(currentUser.value);
+const productStore = useProductStore();
+const { setProduct, productClear, getCart } = productStore;
+// const currentUser = ref(null);
+// const user = useCurrentUser();
+// console.log(user);
+// currentUser.value = await getCurrentUser();
+// console.log(currentUser.value);
+// setUserInfo(currentUser.value);
 // watchEffect(() => {
 //   if (userInfo.value) {
 //     console.log(userInfo.value);
@@ -32,17 +34,23 @@ setUserInfo(currentUser.value);
 // });
 // console.log(cookie);
 const auth = useFirebaseAuth();
+
 onBeforeMount(() => {
   onAuthStateChanged(auth, (user) => {
+    console.log(user);
     if (user) {
-      // console.log(user);
+      console.log(user);
       setUserInfo(user);
       cookie.value = user.stsTokenManager.accessToken;
       setToken(user.stsTokenManager.accessToken);
+      nextTick(async () => {
+        await getCart();
+      });
     } else {
       setUserInfo(null);
       cookie.value = null;
       setToken(null);
+      productClear();
     }
   });
 });

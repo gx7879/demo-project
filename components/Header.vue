@@ -121,18 +121,16 @@ async function navigateToIndex() {
     external: true,
   });
 }
-// const user = useCurrentUser();
-console.log();
-watch(
-  isLogin,
-  async (newValue, oldValue) => {
-    console.log(newValue, oldValue);
-    if (newValue) {
-      await getCart();
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   isLogin,
+//   async (newValue, oldValue) => {
+//     console.log(newValue, oldValue);
+//     if (newValue) {
+//       await getCart();
+//     }
+//   },
+//   { immediate: true }
+// );
 </script>
 
 <template>
