@@ -40,7 +40,7 @@ function closeModal() {
 }
 
 function confirmModal() {
-  if (password) {
+  if (props.password) {
     emit("confirm", enterPassword.value);
   } else {
     emit("confirm");
@@ -95,7 +95,7 @@ function confirmModal() {
           <div v-if="icon" class="flex justify-center">
             <NuxtImg :src="`/${icon}.png`"></NuxtImg>
           </div>
-          <p class="text-xl font-medium text-main-black/70 text-left">
+          <p class="text-xl font-medium text-main-black/70">
             {{ text }}
           </p>
           <div v-if="password" class="text-left">

@@ -52,18 +52,25 @@ function cancelOrder() {
   // modalState.title = "取消訂單";
   // modalState.text = "確定要取消訂單?";
   // modalState.isVisible = true;
-  showModal(
-    "取消訂單",
-    "確定要取消訂單?",
-    "",
-    () => {
+  showModal({
+    title: "取消訂單",
+    text: "確定要取消訂單?",
+    icon: "",
+    isVisible: true,
+    onSuccess: () => {
       cancelSuccess();
     },
-    () => {
-      console.log("cancel");
-    }
-  );
+  });
 }
+// "取消訂單",
+//     "確定要取消訂單?",
+//     "",
+//     () => {
+//       cancelSuccess();
+//     },
+//     () => {
+//       console.log("cancel");
+//     }
 
 // function closeModal() {
 // modalState.isVisible = false;
@@ -80,7 +87,11 @@ function cancelSuccess() {
   //     modalState.icon = "";
   //     modalState.isVisible = false;
   //   }, 2000);
-  showModal("取消成功", "您的訂單已取消", "success");
+  showModal({
+    title: "取消成功",
+    text: "您的訂單已取消",
+    icon: "success",
+  });
   setTimeout(() => {
     closeModal();
   }, 2000);
@@ -303,9 +314,7 @@ function cancelSuccess() {
     </template>
 
     <Modal
-      :title="modalState.title"
-      :text="modalState.text"
-      :icon="modalState.icon"
+      v-bind="modalState"
       :isVisible="isVisible"
       @close="cancel"
       @confirm="confirm"

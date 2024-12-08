@@ -1,20 +1,15 @@
 export function useModal() {
   const isVisible = ref(false);
-  const modalState = ref({
-    title: "",
-    text: "",
-    icon: "",
-    onConfirm: null,
-    onCancel: null,
-  });
-  const showModal = (title, text, icon, onConfirm, onCancel) => {
-    modalState.value = {
-      title,
-      text,
-      icon,
-      onConfirm: onConfirm || null,
-      onCancel: onCancel || null,
-    };
+  const modalState = ref({});
+  const showModal = (props = {}) => {
+    // modalState.value = {
+    //   title,
+    //   text,
+    //   icon,
+    //   onConfirm: onConfirm || null,
+    //   onCancel: onCancel || null,
+    // };
+    modalState.value = props;
     isVisible.value = true;
     console.log(isVisible.value);
   };
@@ -24,12 +19,12 @@ export function useModal() {
 
   const confirm = () => {
     closeModal();
-    if (modalState.value.onConfirm) modalState.value.onConfirm();
+    // if (modalState.value.onConfirm) modalState.value.onConfirm();
   };
 
   const cancel = () => {
     closeModal();
-    if (modalState.value.onCancel) modalState.value.onCancel();
+    // if (modalState.value.onCancel) modalState.value.onCancel();
   };
 
   return {
