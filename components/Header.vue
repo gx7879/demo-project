@@ -143,7 +143,7 @@ onClickOutside(menu, () => {
         :class="{ 'border-white': !openMenu, 'border-main-black/70': openMenu }"
       >
         <svg
-          class="2md:hidden fill-current stroke-current text-main-black/70"
+          class="2md:hidden fill-current stroke-current text-main-black/70 cursor-pointer"
           width="36"
           height="36"
           viewBox="0 0 36 36"

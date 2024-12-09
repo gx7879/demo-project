@@ -117,8 +117,7 @@ async function submit(values) {
       price: totalPrice.value,
       shopping_carts: [
         {
-          shopping_cart_id: 0,
-          commodity_info_id: products.value[0].commodity_info_id,
+          shopping_cart_id: products.value[0].id,
           price: products.value[0].CommodityInfo.price,
           amount: products.value[0].amount,
           subtotal: amountTotal.value,
