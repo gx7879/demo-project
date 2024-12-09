@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  FacebookAuthProvider,
+  OAuthProvider,
 } from "firebase/auth";
 
 const userStore = useUserStore();
@@ -64,7 +66,56 @@ function googleLogin() {
   const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider)
     .then(async (result) => {
-      // const user = useCurrentUser();
+      const user = result.user;
+      console.log(user.accessToken);
+      cookie.value = user.accessToken;
+      setToken(user.accessToken);
+      setUserInfo(user);
+      nextTick(async () => {
+        const res = await login();
+        await getCart();
+        console.log(res);
+        if (res) {
+          router.push("/");
+        }
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    });
+}
+
+function facebookLogin() {
+  const provider = new FacebookAuthProvider();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log(user.accessToken);
+      cookie.value = user.accessToken;
+      setToken(user.accessToken);
+      setUserInfo(user);
+      nextTick(async () => {
+        const res = await login();
+        await getCart();
+        console.log(res);
+        if (res) {
+          router.push("/");
+        }
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    });
+}
+
+function appleLogin() {
+  const provider = new OAuthProvider("apple.com");
+  signInWithPopup(auth, provider)
+    .then((result) => {
       const user = result.user;
       console.log(user.accessToken);
       cookie.value = user.accessToken;
@@ -94,6 +145,7 @@ function googleLogin() {
     <div class="flex justify-center items-center gap-12 mb-12">
       <NuxtImg
         width="36"
+        @click="facebookLogin"
         class="cursor-pointer"
         src="/facebook-login-icon.png"
       ></NuxtImg>
@@ -105,6 +157,7 @@ function googleLogin() {
       ></NuxtImg>
       <NuxtImg
         width="36"
+        @click="appleLogin"
         class="cursor-pointer"
         src="/apple-login-icon.png"
       ></NuxtImg>

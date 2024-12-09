@@ -1,10 +1,11 @@
 <script setup>
 import { localize } from "@vee-validate/i18n";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setToken } = userStore;
-const { $auth, $createUserWithEmailAndPassword } = useNuxtApp();
+// const { $auth, $createUserWithEmailAndPassword } = useNuxtApp();
 const router = useRouter();
 const email = ref(null);
 localize("zh_TW", {
@@ -19,11 +20,13 @@ localize("zh_TW", {
   },
 });
 
+const auth = useFirebaseAuth();
+
 async function createAccount(values, { resetForm }) {
   console.log("submit", values);
   try {
-    const userCredential = await $createUserWithEmailAndPassword(
-      $auth,
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
       values.email,
       values.password
     );

@@ -30,3 +30,7 @@ export function userProfiles() {
 export function orders(data) {
   return useHttp.get(Api.orders, data);
 }
+
+export function updateUserProfiles(data) {
+  return useHttp.post(Api.userProfiles, data);
+}

@@ -73,7 +73,7 @@ onBeforeMount(() => {
     <Header></Header>
     <div>
       <!-- Layout: default -->
-      <NuxtLoadingIndicator color="red" :height="5" :throttle="0" />
+      <NuxtLoadingIndicator color="#231815" :height="5" :throttle="0" />
       <slot />
     </div>
     <Footer></Footer>

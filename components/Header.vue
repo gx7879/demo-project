@@ -130,6 +130,7 @@ onClickOutside(menu, () => {
 
 <template>
   <header
+    ref="menu"
     class="relative z-50"
     :class="{
       'h-[337px] md:h-[401px] bg-[url(@/assets/images/banner.png)] bg-cover bg-center':
@@ -202,7 +203,7 @@ onClickOutside(menu, () => {
         </div>
       </div>
     </div>
-    <Vue3SlideUpDown ref="menu" v-model="openMenu" :opacityClosed="1">
+    <Vue3SlideUpDown v-model="openMenu" :opacityClosed="1">
       <div class="px-[50px] py-10 bg-bg-gray relative z-50">
         <h6 class="text-main-black/70 text-[28px] leading-[1.4] mb-3">
           會員專區

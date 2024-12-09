@@ -1,5 +1,5 @@
 <script setup>
-import { userProfiles } from "@/api/member";
+import { userProfiles, updateUserProfiles } from "@/api/member";
 import dayjs from "dayjs";
 import { DatePicker } from "ant-design-vue";
 const dateFormat = "YYYY/MM/DD";
@@ -12,12 +12,12 @@ const user = computed(() => userProfile.value);
 const now = dayjs();
 const value1 = ref(null);
 const info = ref({
-  lastName: null,
-  firstName: null,
+  lastName: user.value?.last_name,
+  firstName: user.value?.first_name,
   birthday: user.value?.birthday,
-  sex: null,
-  phone: null,
-  address: null,
+  gender: user.value?.gender,
+  phone: user.value?.phone,
+  address: user.value?.address,
 });
 const store = useResetPasswordStore();
 const { showResetPasswordModal } = store;
@@ -42,10 +42,24 @@ function editInfo() {
   });
 }
 
-function onSubmit(values) {
+async function onSubmit(values) {
   console.log("submit", values);
   info.value = values;
-  editInfoStatus.value = false;
+  try {
+    const result = await updateUserProfiles({
+      first_name: info.value.firstName,
+      last_name: info.value.lastName,
+      phone: info.value.phone,
+      address: info.value.address,
+      gender: info.value.gender,
+      birthday: info.value.birthday,
+    });
+    editInfoStatus.value = false;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
 }
 
 const provider = computed(() => {
@@ -57,21 +71,27 @@ const provider = computed(() => {
 });
 
 const isFbLogin = computed(() => {
-  return false;
   if (!provider.value.length) return false;
-  return provider?.value?.includes("facebook") ?? false;
+  return provider?.value?.includes("facebook.com") ?? false;
 });
 const isGoogleLogin = computed(() => {
-  console.log(provider?.value);
-  // return false;
   if (!provider.value.length) return false;
   return provider?.value?.includes("google.com") ?? false;
 });
 const isAppleLogin = computed(() => {
-  return false;
   if (!provider.value.length) return false;
-  return provider?.value?.includes("apple") ?? false;
+  return provider?.value?.includes("apple.com") ?? false;
 });
+
+const genderFormat = (gender) => {
+  const type = {
+    0: null,
+    1: "男",
+    2: "女",
+    3: "其他",
+  };
+  return type[gender] ?? null;
+};
 </script>
 
 <template>
@@ -81,7 +101,6 @@ const isAppleLogin = computed(() => {
     >
       會員資料
     </h2>
-    {{ userProfile }}
     <div class="pt-6 mb-12 space-y-6">
       <div class="text-xl font-medium text-main-black/70">
         電子郵件 : {{ currentMail }}
@@ -211,7 +230,7 @@ const isAppleLogin = computed(() => {
         </div>
         <div>
           <label
-            for="Sex"
+            for="gender"
             class="block text-xl text-main-black/70 font-normal mb-3"
             >性別
           </label>
@@ -222,9 +241,9 @@ const isAppleLogin = computed(() => {
             <li>
               <VeeField
                 id="female"
-                name="sex"
+                name="gender"
                 type="radio"
-                value="female"
+                value="2"
                 class="hidden peer"
                 rules="required"
               />
@@ -239,8 +258,8 @@ const isAppleLogin = computed(() => {
               <VeeField
                 type="radio"
                 id="male"
-                name="sex"
-                value="male"
+                name="gender"
+                value="1"
                 class="hidden peer"
                 rules="required"
               />
@@ -255,8 +274,8 @@ const isAppleLogin = computed(() => {
               <VeeField
                 type="radio"
                 id="other"
-                name="sex"
-                value="other"
+                name="gender"
+                value="3"
                 class="hidden peer"
                 rules="required"
               />
@@ -268,7 +287,7 @@ const isAppleLogin = computed(() => {
               </label>
             </li>
           </ul>
-          <VeeErrorMessage name="sex" class="text-error-msg text-sm" />
+          <VeeErrorMessage name="gender" class="text-error-msg text-sm" />
         </div>
         <div>
           <label
@@ -321,7 +340,7 @@ const isAppleLogin = computed(() => {
           生日 : {{ info?.birthday ?? "未填寫" }}
         </div>
         <div class="text-xl font-medium text-main-black/70">
-          性別 : {{ info?.sex ?? "未填寫" }}
+          性別 : {{ genderFormat(info?.gender) ?? "未填寫" }}
         </div>
         <div class="text-xl font-medium text-main-black/70">
           連絡電話 : {{ info?.phone ?? "未填寫" }}
