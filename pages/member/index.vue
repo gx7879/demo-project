@@ -80,12 +80,12 @@ async function onSubmit(values) {
   info.value = values;
   try {
     const result = await updateUserProfiles({
-      first_name: userInfo.value.firstName,
-      last_name: userInfo.value.lastName,
-      phone: userInfo.value.phone,
-      address: userInfo.value.address,
-      gender: userInfo.value.gender,
-      birthday: userInfo.value.birthday,
+      first_name: info.value.firstName,
+      last_name: info.value.lastName,
+      phone: info.value.phone,
+      address: info.value.address,
+      gender: info.value.gender,
+      birthday: info.value.birthday,
     });
     editInfoStatus.value = false;
   } catch (error) {
@@ -276,7 +276,7 @@ const genderFormat = (gender) => {
                 id="female"
                 name="gender"
                 type="radio"
-                value="2"
+                :value="2"
                 class="hidden peer"
                 rules="required"
               />
@@ -292,7 +292,7 @@ const genderFormat = (gender) => {
                 type="radio"
                 id="male"
                 name="gender"
-                value="1"
+                :value="1"
                 class="hidden peer"
                 rules="required"
               />
@@ -308,7 +308,7 @@ const genderFormat = (gender) => {
                 type="radio"
                 id="other"
                 name="gender"
-                value="3"
+                :value="3"
                 class="hidden peer"
                 rules="required"
               />
