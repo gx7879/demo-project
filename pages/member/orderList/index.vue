@@ -1,6 +1,12 @@
 <script setup>
 import { orders } from "@/api/member";
-const { data: orderList } = await useAsyncData("orderList", () => orders());
+const { data: orderList } = await useAsyncData("orderList", () =>
+  orders({
+    filter: {
+      "order_status_id.list": [4, 5],
+    },
+  })
+);
 console.log(orderList.value);
 // const orders = ref([]);
 
@@ -24,6 +30,7 @@ function orderStatusTransfer(id) {
     2: "已付款",
     3: "運輸中",
     4: "已完成",
+    5: "已取消",
   };
   return orderStatus[id];
 }

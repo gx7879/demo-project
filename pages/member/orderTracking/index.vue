@@ -3,7 +3,7 @@ import { orders } from "@/api/member";
 const { data: orderList } = await useAsyncData("orderList", () =>
   orders({
     filter: {
-      "order_status_id.list": [2, 3, 4],
+      "order_status_id.list": [1, 2, 3],
     },
   })
 );
@@ -29,6 +29,7 @@ function orderStatusTransfer(id) {
     2: "已付款",
     3: "運輸中",
     4: "已完成",
+    5: "已取消",
   };
   return orderStatus[id];
 }
