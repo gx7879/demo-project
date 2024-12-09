@@ -42,10 +42,11 @@ function closeModal() {
 function confirmModal() {
   if (props.password) {
     emit("confirm", enterPassword.value);
+    props.onSuccess(enterPassword.value);
   } else {
     emit("confirm");
+    props.onSuccess();
   }
-  props.onSuccess();
 }
 </script>
 

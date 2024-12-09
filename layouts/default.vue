@@ -36,6 +36,7 @@ const { setMail } = resetPassword;
 // });
 // console.log(cookie);
 const auth = useFirebaseAuth();
+const route = useRoute();
 
 onBeforeMount(() => {
   onAuthStateChanged(auth, (user) => {
@@ -47,6 +48,9 @@ onBeforeMount(() => {
       cookie.value = user.stsTokenManager.accessToken;
       setToken(user.stsTokenManager.accessToken);
       setMail(currentMail);
+      if (route.path === "/login") {
+        navigateTo("/");
+      }
       nextTick(async () => {
         await getCart();
       });

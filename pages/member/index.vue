@@ -1,4 +1,5 @@
 <script setup>
+import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { userProfiles, updateUserProfiles } from "@/api/member";
 import dayjs from "dayjs";
 import { DatePicker } from "ant-design-vue";
@@ -7,17 +8,17 @@ const cookie = useCookie("token");
 const { data: userProfile } = await useAsyncData("userProfiles", () =>
   userProfiles()
 );
-const user = computed(() => userProfile.value);
+const userInfo = computed(() => userProfile.value);
 
 const now = dayjs();
 const value1 = ref(null);
 const info = ref({
-  lastName: user.value?.last_name,
-  firstName: user.value?.first_name,
-  birthday: user.value?.birthday,
-  gender: user.value?.gender,
-  phone: user.value?.phone,
-  address: user.value?.address,
+  lastName: userInfo.value?.last_name,
+  firstName: userInfo.value?.first_name,
+  birthday: userInfo.value?.birthday,
+  gender: userInfo.value?.gender,
+  phone: userInfo.value?.phone,
+  address: userInfo.value?.address,
 });
 const store = useResetPasswordStore();
 const { showResetPasswordModal } = store;
@@ -25,8 +26,11 @@ const { resetPasswordAuth, currentMail } = storeToRefs(store);
 
 const userStore = useUserStore();
 const { getUserInfo } = storeToRefs(userStore);
+const { setUserInfo, setToken } = userStore;
 
 const editInfoStatus = ref(false);
+const auth = useFirebaseAuth();
+const myForm = ref(null);
 
 function editInfo() {
   showResetPasswordModal({
@@ -36,10 +40,39 @@ function editInfo() {
     onCancel: () => {
       console.log("cancel");
     },
-    onSuccess: () => {
-      editInfoStatus.value = true;
+    onSuccess: (password) => {
+      console.log(auth.currentUser.email, password);
+      let credential = EmailAuthProvider.credential(
+        auth.currentUser.email,
+        password
+      );
+      reauthenticateWithCredential(auth.currentUser, credential)
+        .then(() => {
+          editInfoStatus.value = true;
+          nextTick(() => {
+            myForm.value.setValues(info.value);
+          });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+          // An error ocurred
+          // ...
+        });
     },
   });
+  // showResetPasswordModal({
+  //   title: "修改基本資料",
+  //   text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
+  //   password: true,
+  //   onCancel: () => {
+  //     console.log("cancel");
+  //   },
+  //   onSuccess: () => {
+  //     editInfoStatus.value = true;
+  //   },
+  // });
 }
 
 async function onSubmit(values) {
@@ -47,12 +80,12 @@ async function onSubmit(values) {
   info.value = values;
   try {
     const result = await updateUserProfiles({
-      first_name: info.value.firstName,
-      last_name: info.value.lastName,
-      phone: info.value.phone,
-      address: info.value.address,
-      gender: info.value.gender,
-      birthday: info.value.birthday,
+      first_name: userInfo.value.firstName,
+      last_name: userInfo.value.lastName,
+      phone: userInfo.value.phone,
+      address: userInfo.value.address,
+      gender: userInfo.value.gender,
+      birthday: userInfo.value.birthday,
     });
     editInfoStatus.value = false;
   } catch (error) {
@@ -166,30 +199,14 @@ const genderFormat = (gender) => {
       </button>
     </h2>
     <template v-if="editInfoStatus && resetPasswordAuth">
-      <VeeForm class="space-y-6 max-w-[660px" @submit="onSubmit">
+      <VeeForm ref="myForm" class="space-y-6 max-w-[660px" @submit="onSubmit">
         <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
-          <div>
-            <label
-              for="lastName"
-              class="block text-xl text-main-black/70 font-normal mb-3"
-            >
-              姓氏
-            </label>
-            <VeeField
-              type="text"
-              name="lastName"
-              class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
-              placeholder=""
-              rules="required"
-            />
-            <VeeErrorMessage name="lastName" class="text-error-msg text-sm" />
-          </div>
           <div>
             <label
               for="firstName"
               class="block text-xl text-main-black/70 font-normal mb-3"
             >
-              名字
+              姓氏
             </label>
             <VeeField
               type="text"
@@ -199,6 +216,22 @@ const genderFormat = (gender) => {
               rules="required"
             />
             <VeeErrorMessage name="firstName" class="text-error-msg text-sm" />
+          </div>
+          <div>
+            <label
+              for="lastName"
+              class="block text-xl text-main-black/70 font-normal mb-3"
+            >
+              名字
+            </label>
+            <VeeField
+              type="text"
+              name="lastName"
+              class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+              placeholder=""
+              rules="required"
+            />
+            <VeeErrorMessage name="lastName" class="text-error-msg text-sm" />
           </div>
         </div>
         <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
