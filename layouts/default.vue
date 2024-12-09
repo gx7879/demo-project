@@ -9,6 +9,8 @@ const { setUserInfo, setToken, clearUserInfo } = userStore;
 const cookie = useCookie("token");
 const productStore = useProductStore();
 const { setProduct, productClear, getCart } = productStore;
+const resetPassword = useResetPasswordStore();
+const { setMail } = resetPassword;
 // const currentUser = ref(null);
 // const user = useCurrentUser();
 // console.log(user);
@@ -40,9 +42,13 @@ onBeforeMount(() => {
     console.log(user);
     if (user) {
       console.log(user);
+      const currentMail = user.providerData.filter(
+        (provider) => provider.providerId === "password"
+      )[0].email;
       setUserInfo(user);
       cookie.value = user.stsTokenManager.accessToken;
       setToken(user.stsTokenManager.accessToken);
+      setMail(currentMail);
       nextTick(async () => {
         await getCart();
       });
@@ -67,6 +73,7 @@ onBeforeMount(() => {
     <Header></Header>
     <div>
       <!-- Layout: default -->
+      <NuxtLoadingIndicator color="red" :height="5" :throttle="0" />
       <slot />
     </div>
     <Footer></Footer>

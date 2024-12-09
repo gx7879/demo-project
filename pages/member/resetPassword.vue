@@ -12,6 +12,9 @@ definePageMeta({
   ],
 });
 
+const store = useResetPasswordStore();
+const { currentMail } = storeToRefs(store);
+
 const btnStatus = ref(false);
 const time = ref(60);
 let timeInterval = null;
@@ -30,11 +33,11 @@ function reSend() {
   }, 1000);
 }
 
-const mail = ref("abcde10@gmail.com");
+// const mail = ref("abcde10@gmail.com");
 
-function changeMail() {
-  mail.value = "abcde10@gmail.com";
-}
+// function changeMail() {
+//   mail.value = "abcde10@gmail.com";
+// }
 
 const router = useRouter();
 
@@ -56,11 +59,12 @@ function onSubmit(values) {
         驗證電子郵件地址
       </h1>
       <p class="mb-12 text-xl text-main-black/80">
-        驗證您的 電子郵件，代碼已寄送至 : {{ mail }}(<span
+        驗證您的 電子郵件，代碼已寄送至 : {{ currentMail }}
+        <!-- (<span
           class="cursor-pointer"
           @click="changeMail"
-          >變更</span
-        >)
+          >變更 </span
+        >) -->
       </p>
       <VeeForm class="max-w-[460px] mx-auto mb-12" @submit="onSubmit">
         <div class="mb-6 text-left">

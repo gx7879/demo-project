@@ -7,17 +7,6 @@ const cookie = useCookie("token");
 const { data: userProfile } = await useAsyncData("userProfiles", () =>
   userProfiles()
 );
-// const {
-//   data: userProfile,
-//   pending,
-//   error,
-// } = await useAsyncData("userProfiles", () =>
-//   $fetch("https://arkdemo.31app.tw/api/user/user_profiles/self", {
-//     method: "GET",
-//     headers: { Authorization: `Bearer ${cookie.value}` },
-//   })
-// );
-// console.log(data);
 const user = computed(() => userProfile.value);
 
 const now = dayjs();
@@ -32,7 +21,10 @@ const info = ref({
 });
 const store = useResetPasswordStore();
 const { showResetPasswordModal } = store;
-const { resetPasswordAuth } = storeToRefs(store);
+const { resetPasswordAuth, currentMail } = storeToRefs(store);
+
+const userStore = useUserStore();
+const { getUserInfo } = storeToRefs(userStore);
 
 const editInfoStatus = ref(false);
 
@@ -50,15 +42,36 @@ function editInfo() {
   });
 }
 
-const isFbLogin = ref(true);
-const isGoogleLogin = ref(false);
-const isAppleLogin = ref(false);
-
 function onSubmit(values) {
   console.log("submit", values);
   info.value = values;
   editInfoStatus.value = false;
 }
+
+const provider = computed(() => {
+  console.log(getUserInfo.value);
+  return (
+    getUserInfo?.value?.providerData.map((provider) => provider.providerId) ??
+    []
+  );
+});
+
+const isFbLogin = computed(() => {
+  return false;
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("facebook") ?? false;
+});
+const isGoogleLogin = computed(() => {
+  console.log(provider?.value);
+  // return false;
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("google.com") ?? false;
+});
+const isAppleLogin = computed(() => {
+  return false;
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("apple") ?? false;
+});
 </script>
 
 <template>
@@ -71,7 +84,7 @@ function onSubmit(values) {
     {{ userProfile }}
     <div class="pt-6 mb-12 space-y-6">
       <div class="text-xl font-medium text-main-black/70">
-        電子郵件 : abcde10@gmail.com
+        電子郵件 : {{ currentMail }}
       </div>
       <div class="flex justify-between items-center">
         <div class="flex items-center">

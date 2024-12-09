@@ -3,6 +3,8 @@ import { defineStore } from "pinia";
 export const useResetPasswordStore = defineStore(
   "resetPassword",
   () => {
+    const userStore = useUserStore();
+    const { userInfo } = storeToRefs(userStore);
     const currentMail = ref("");
     const resetPasswordAuth = ref(false);
     const isVisible = ref(false);
@@ -36,6 +38,9 @@ export const useResetPasswordStore = defineStore(
     const setIsVisible = (data) => {
       isVisible.value = data;
     };
+    const setMail = (data) => {
+      currentMail.value = data;
+    };
     const passwordClear = () => {
       currentMail.value = "";
     };
@@ -51,6 +56,7 @@ export const useResetPasswordStore = defineStore(
       setIsVisible,
       confirm,
       cancel,
+      setMail,
       passwordClear,
     };
   },
