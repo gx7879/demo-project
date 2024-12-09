@@ -42,9 +42,7 @@ onBeforeMount(() => {
     console.log(user);
     if (user) {
       console.log(user);
-      const currentMail = user.providerData.filter(
-        (provider) => provider.providerId === "password"
-      )[0].email;
+      const currentMail = user.providerData[0].email;
       setUserInfo(user);
       cookie.value = user.stsTokenManager.accessToken;
       setToken(user.stsTokenManager.accessToken);

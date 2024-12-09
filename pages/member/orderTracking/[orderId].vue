@@ -54,7 +54,7 @@ const steps = ref([
   },
 ]);
 
-const currentActive = ref(2);
+const currentActive = ref(orderDetailInfo.value.order_status_id);
 
 function cancelOrder() {
   // modalState.title = "取消訂單";
@@ -261,11 +261,11 @@ function cancelSuccess() {
     </div>
     <div class="border-b border-main-black my-11 2md:my-12"></div>
     <h2
-      class="text-[28px] leading-[1.4] font-medium text-main-black/70 mb-9 flex flex-wrap"
+      class="text-[28px] leading-[1.4] font-medium text-main-black/70 mb-9 flex flex-wrap items-end"
     >
-      收貨資訊<span class="text-xl whitespace-nowrap"
-        >(詳細運送資料將由專人與您聯繫)</span
-      >
+      收貨資訊<span class="text-xl whitespace-nowrap">
+        (詳細運送資料將由專人與您聯繫)
+      </span>
     </h2>
     <div class="space-y-6 text-xl font-medium text-main-black/70">
       <div>
