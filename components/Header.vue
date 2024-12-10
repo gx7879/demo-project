@@ -68,6 +68,7 @@ function handleSignOut() {
 function handleLogin() {
   // const router = useRouter();
   // router.push("/login");
+  openMenu.value = false;
   navigateTo("/login");
 }
 

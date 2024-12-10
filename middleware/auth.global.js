@@ -6,6 +6,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     "/resetPassword",
     "/resetPasswordSuccess",
     "/payComplete",
+    "/register",
+    "/serviceTerms",
+    "/privacyPolicy",
   ];
   const cookie = useCookie("token");
   // const { data: user } = await useAsyncData("user", () => getCurrentUser());
