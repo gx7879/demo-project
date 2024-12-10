@@ -9,6 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     "/register",
     "/serviceTerms",
     "/privacyPolicy",
+    "/shipping",
   ];
   const cookie = useCookie("token");
   // const { data: user } = await useAsyncData("user", () => getCurrentUser());
