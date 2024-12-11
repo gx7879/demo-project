@@ -63,13 +63,11 @@ const fetch = $fetch.create({
       public: { apiBase },
     } = useRuntimeConfig();
     options.baseURL = apiBase;
-    console.log(apiBase);
+    // console.log(apiBase);
 
     // 添加请求头, 没登录不携带token
     // const userStore = useUserStore();
-    // console.log("111");
     // if (!userStore.isLogin) return;
-    // console.log("222");
     const cookie = useCookie("token");
     if (!cookie.value) return;
 

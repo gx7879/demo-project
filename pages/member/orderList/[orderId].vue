@@ -206,12 +206,7 @@ function formatOrderStatus(id) {
         </div>
         <div class="hidden 2md:block text-right">
           TWD
-          {{
-            currency(
-              orderDetailInfo.OrderCommodities[0].price *
-                orderDetailInfo.OrderCommodities[0].amount
-            )
-          }}
+          {{ currency(orderDetailInfo.OrderCommodities[0].price) }}
         </div>
       </div>
       <div class="flex flex-col items-end space-y-4 mt-3">
@@ -219,12 +214,7 @@ function formatOrderStatus(id) {
           <div class="text-sm font-medium">小計:</div>
           <div>
             TWD
-            {{
-              currency(
-                orderDetailInfo.OrderCommodities[0].price *
-                  orderDetailInfo.OrderCommodities[0].amount
-              )
-            }}
+            {{ currency(orderDetailInfo.OrderCommodities[0].price) }}
           </div>
         </div>
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
@@ -235,12 +225,7 @@ function formatOrderStatus(id) {
           <div class="text-sm font-bold">總計:</div>
           <div class="font-bold">
             TWD
-            {{
-              currency(
-                orderDetailInfo.OrderCommodities[0].price *
-                  orderDetailInfo.OrderCommodities[0].amount
-              )
-            }}
+            {{ currency(orderDetailInfo.OrderCommodities[0].price) }}
           </div>
         </div>
       </div>
