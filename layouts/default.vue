@@ -1,8 +1,9 @@
 <script setup>
 import { onAuthStateChanged } from "firebase/auth";
 const store = useResetPasswordStore();
-const { confirm, cancel } = store;
-const { isVisible, resetPasswordState } = storeToRefs(store);
+const modalStore = useModalStore();
+const { confirm, cancel } = modalStore;
+const { isVisible, modalState } = storeToRefs(modalStore);
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const { setUserInfo, setToken, clearUserInfo } = userStore;
@@ -79,9 +80,8 @@ onBeforeMount(() => {
       <slot />
     </div>
     <Footer></Footer>
-    {{ resetPasswordState.onConfirm }}
     <Modal
-      v-bind="resetPasswordState"
+      v-bind="modalState"
       :isVisible="isVisible"
       @close="cancel"
       @confirm="confirm"

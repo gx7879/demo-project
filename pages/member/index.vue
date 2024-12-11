@@ -21,8 +21,11 @@ const info = ref({
   address: userInfo.value?.address,
 });
 const store = useResetPasswordStore();
-const { showResetPasswordModal } = store;
 const { resetPasswordAuth, currentMail } = storeToRefs(store);
+const { setResetPasswordAuth } = store;
+
+const modalStore = useModalStore();
+const { showModal } = modalStore;
 
 const userStore = useUserStore();
 const { getUserInfo } = storeToRefs(userStore);
@@ -33,7 +36,7 @@ const auth = useFirebaseAuth();
 const myForm = ref(null);
 
 function editInfo() {
-  showResetPasswordModal({
+  showModal({
     title: "修改基本資料",
     text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
     password: true,
@@ -49,6 +52,7 @@ function editInfo() {
       reauthenticateWithCredential(auth.currentUser, credential)
         .then(() => {
           editInfoStatus.value = true;
+          setResetPasswordAuth(true);
           nextTick(() => {
             myForm.value.setValues(info.value);
           });
@@ -62,7 +66,7 @@ function editInfo() {
         });
     },
   });
-  // showResetPasswordModal({
+  // showModal({
   //   title: "修改基本資料",
   //   text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
   //   password: true,
@@ -88,6 +92,7 @@ async function onSubmit(values) {
       birthday: info.value.birthday,
     });
     editInfoStatus.value = false;
+    setResetPasswordAuth(false);
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;

@@ -12,8 +12,8 @@ const { data: orderDetailInfo, error } = await useAsyncData("orderDetail", () =>
 
 console.log(orderDetailInfo);
 
-const { isVisible, modalState, showModal, closeModal, confirm, cancel } =
-  useModal();
+const modalStore = useModalStore();
+const { showModal, setIsVisible } = modalStore;
 
 const orderStatus = ref("");
 
@@ -68,7 +68,7 @@ function cancelSuccess() {
     icon: "success",
   });
   setTimeout(() => {
-    closeModal();
+    setIsVisible(false);
   }, 2000);
 }
 
@@ -350,13 +350,6 @@ function formatOrderStatus(id) {
         </button>
       </div>
     </template>
-
-    <Modal
-      v-bind="modalState"
-      :isVisible="isVisible"
-      @close="cancel"
-      @confirm="confirm"
-    ></Modal>
   </div>
 </template>
 

@@ -3,8 +3,11 @@ const route = useRoute();
 
 // const { isVisible, modalState, showModal, closeModal, confirm, cancel } = useModal();
 
-const store = useResetPasswordStore();
-const { showResetPasswordModal } = store;
+const store = useModalStore();
+const { showModal } = store;
+
+const resetPasswordStore = useResetPasswordStore();
+const { setResetPasswordAuth } = resetPasswordStore;
 
 const activePage = function (name) {
   if (route.path) return route.path.includes(name);
@@ -12,7 +15,7 @@ const activePage = function (name) {
 };
 
 function resetPassword() {
-  showResetPasswordModal({
+  showModal({
     title: "變更密碼",
     text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
     password: true,
@@ -20,6 +23,7 @@ function resetPassword() {
       console.log("cancel");
     },
     onSuccess: () => {
+      setResetPasswordAuth(true);
       const router = useRouter();
       router.push("/member/resetPassword");
     },

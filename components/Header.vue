@@ -18,7 +18,9 @@ const { cartClear } = cartStore;
 const { currency } = useCurrency();
 
 const useResetPassword = useResetPasswordStore();
-const { showResetPasswordModal, passwordClear } = useResetPassword;
+const { passwordClear } = useResetPassword;
+const useModal = useModalStore();
+const { showModal } = useModal;
 
 const openMenu = ref(false);
 const isModalOpen = ref(false);
@@ -35,7 +37,7 @@ const closeCart = function () {
 };
 
 function resetPassword() {
-  showResetPasswordModal({
+  showModal({
     title: "變更密碼",
     text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
     password: true,
