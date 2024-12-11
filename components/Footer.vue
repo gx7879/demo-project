@@ -43,7 +43,10 @@
           <div class="mb-3">
             <NuxtLink to="/contact">聯繫客服</NuxtLink>
           </div>
-          <div>專利與商標</div>
+          <div class="mb-3">
+            <NuxtLink to="/serviceTerms">網站使用條款</NuxtLink>
+          </div>
+          <div><NuxtLink to="/privacyPolicy">隱私權政策</NuxtLink></div>
         </div>
         <div class="flex flex-col items-start px-2">
           <div class="border-b border-white pb-1.5 font-bold mb-3">

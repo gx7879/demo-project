@@ -19,8 +19,8 @@ const { currency } = useCurrency();
 
 const useResetPassword = useResetPasswordStore();
 const { passwordClear } = useResetPassword;
-const useModal = useModalStore();
-const { showModal } = useModal;
+const modalStore = useModalStore();
+const { showModal } = modalStore;
 
 const openMenu = ref(false);
 const isModalOpen = ref(false);
@@ -213,7 +213,7 @@ onClickOutside(menu, () => {
         </h6>
         <div class="2md:flex justify-between items-end">
           <ul
-            class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-cols-3 gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
+            class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-cols-3 2md:grid-rows-2 2md:grid-flow-col gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
           >
             <li>
               <NuxtLink to="/member" @click.native="openMenu = false"

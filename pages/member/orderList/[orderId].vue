@@ -1,6 +1,6 @@
 <script setup>
 import { useClipboard } from "@vueuse/core";
-import { orderDetail } from "@/api/order";
+import { orderDetail, updateOrder } from "@/api/order";
 
 const route = useRoute();
 
@@ -11,6 +11,8 @@ const { data: orderDetailInfo, error } = await useAsyncData("orderDetail", () =>
 );
 
 console.log(orderDetailInfo);
+
+const recipientInfo = ref(orderDetailInfo.value.ReceiveAddress);
 
 const modalStore = useModalStore();
 const { showModal, setIsVisible } = modalStore;
@@ -81,6 +83,95 @@ function formatOrderStatus(id) {
     5: "已取消",
   };
   return status[id];
+}
+const infoEditStatus = ref(false);
+const myForm = ref(null);
+function editOrderInfo() {
+  infoEditStatus.value = true;
+  nextTick(() => {
+    myForm.value.setValues({
+      recipientLastName: recipientInfo.value.last_name,
+      recipientFirstName: recipientInfo.value.first_name,
+      recipientPhone: recipientInfo.value.phone_number,
+      recipientCountry: recipientInfo.value.country,
+      recipientPostalCode: recipientInfo.value.zip_code,
+      recipientAddress: recipientInfo.value.address,
+    });
+  });
+}
+
+function canceleditInfo() {
+  infoEditStatus.value = false;
+}
+
+const isSameAsOrder = ref(false);
+
+const handleCheckboxChange = (setFieldValue) => {
+  if (isSameAsOrder.value) {
+    setFieldValue(
+      "recipientLastName",
+      orderDetailInfo.value.OrderAddress.last_name
+    );
+    setFieldValue(
+      "recipientFirstName",
+      orderDetailInfo.value.OrderAddress.first_name
+    );
+    setFieldValue(
+      "recipientPhone",
+      orderDetailInfo.value.OrderAddress.phone_number
+    );
+    setFieldValue(
+      "recipientCountry",
+      orderDetailInfo.value.OrderAddress.country
+    );
+    setFieldValue(
+      "recipientPostalCode",
+      orderDetailInfo.value.OrderAddress.zip_code
+    );
+    setFieldValue(
+      "recipientAddress",
+      orderDetailInfo.value.OrderAddress.address
+    );
+  } else {
+    setFieldValue("recipientLastName", "");
+    setFieldValue("recipientFirstName", "");
+    setFieldValue("recipientPhone", "");
+    setFieldValue("recipientCountry", "");
+    setFieldValue("recipientPostalCode", "");
+    setFieldValue("recipientAddress", "");
+  }
+};
+
+async function submitEditInfo(values) {
+  console.log(values);
+  try {
+    const result = await updateOrder({
+      order_id: orderDetailInfo.value.id,
+      receive_address: {
+        is_same: isSameAsOrder.value,
+        first_name: values.recipientFirstName,
+        last_name: values.recipientLastName,
+        phone_number: values.recipientPhone,
+        country: values.recipientCountry,
+        zip_code: values.recipientPostalCode,
+        address: values.recipientAddress,
+      },
+    });
+    console.log(result);
+    recipientInfo.value = {
+      first_name: values.recipientFirstName,
+      last_name: values.recipientLastName,
+      phone_number: values.recipientPhone,
+      country: values.recipientCountry,
+      zip_code: values.recipientPostalCode,
+      address: values.recipientAddress,
+    };
+    canceleditInfo();
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  }
 }
 </script>
 
@@ -270,32 +361,191 @@ function formatOrderStatus(id) {
         (詳細運送資料將由專人與您聯繫)
       </span>
     </h2>
-    <div class="space-y-6 text-xl font-medium text-main-black/70">
-      <div>
-        訂購人 :
-        {{
-          orderDetailInfo.ReceiveAddress.first_name +
-          orderDetailInfo.ReceiveAddress.last_name
-        }}
+    <template v-if="infoEditStatus">
+      <div class="max-w-[660px]">
+        <veeForm
+          ref="myForm"
+          v-slot="{ setFieldValue }"
+          @submit="submitEditInfo"
+        >
+          <div class="flex items-center mb-6">
+            <div class="flex items-center h-6">
+              <input
+                id="isSameAsOrder"
+                type="checkbox"
+                v-model="isSameAsOrder"
+                class="w-6 h-6 border border-main-black/80 rounded bg-white focus:ring-3 focus:ring-blue-300 checked:bg-main-black/80"
+                @change="handleCheckboxChange(setFieldValue)"
+              />
+            </div>
+            <label
+              for="isSameAsOrder"
+              class="flex gap-x-1 ms-2 text-xl text-main-black/80"
+            >
+              同訂購人資訊
+            </label>
+          </div>
+          <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
+            <div class="mb-6">
+              <label
+                for="recipientFirstName"
+                class="block text-xl text-main-black/70 font-normal mb-3"
+              >
+                姓氏
+              </label>
+              <VeeField
+                type="text"
+                name="recipientFirstName"
+                class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+                placeholder=""
+                rules="required"
+              />
+              <VeeErrorMessage
+                name="recipientFirstName"
+                class="text-error-msg text-sm"
+              />
+            </div>
+            <div>
+              <label
+                for="recipientLastName"
+                class="block text-xl text-main-black/70 font-normal mb-3"
+              >
+                名字
+              </label>
+              <VeeField
+                type="text"
+                name="recipientLastName"
+                class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+                placeholder=""
+                rules="required"
+              />
+              <VeeErrorMessage
+                name="recipientLastName"
+                class="text-error-msg text-sm"
+              />
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-[1fr,_2fr] sm:gap-x-3">
+            <div class="mb-6">
+              <label
+                for="recipientPhone"
+                class="block text-xl text-main-black/70 font-normal mb-3"
+              >
+                連絡電話
+              </label>
+              <VeeField
+                type="text"
+                name="recipientPhone"
+                class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+                placeholder="0912345678"
+                rules="required"
+              />
+              <VeeErrorMessage
+                name="recipientPhone"
+                class="text-error-msg text-sm"
+              />
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-[2fr,_1fr] sm:gap-x-3">
+            <div class="mb-6">
+              <label
+                for="recipientCountry"
+                class="block text-xl text-main-black/70 font-normal mb-3"
+              >
+                所在國家與地區
+              </label>
+              <VeeField
+                type="text"
+                name="recipientCountry"
+                class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+                placeholder="台灣"
+                rules="required"
+              />
+              <VeeErrorMessage
+                name="recipientCountry"
+                class="text-error-msg text-sm"
+              />
+            </div>
+            <div>
+              <label
+                for="recipientPostalCode"
+                class="block text-xl text-main-black/70 font-normal mb-3"
+              >
+                郵遞區號
+              </label>
+              <VeeField
+                type="text"
+                name="recipientPostalCode"
+                class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+                placeholder="112"
+                rules="required"
+              />
+              <VeeErrorMessage
+                name="recipientPostalCode"
+                class="text-error-msg text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              for="recipientAddress"
+              class="block text-xl text-main-black/70 font-normal mb-3"
+            >
+              地址
+            </label>
+            <VeeField
+              type="text"
+              name="recipientAddress"
+              class="bg-gray-50 border border-notice-gray placeholder:text-[#b3b3b3] text-lg leading-[26px] rounded-[10px] block w-full px-4 py-[15px]"
+              placeholder="台北市中正區中正路123號"
+              rules="required"
+            />
+            <VeeErrorMessage
+              name="recipientAddress"
+              class="text-error-msg text-sm"
+            />
+          </div>
+          <div class="flex gap-4 flex-col 2md:flex-row mt-10">
+            <button
+              @click="canceleditInfo"
+              class="h-[52px] text-lg font-bold rounded-[5px] border border-main-black/80 text-main-black/80 2md:flex-1 disabled:text-main-black/20 disabled:border-main-black/20"
+            >
+              取消
+            </button>
+            <button
+              class="h-[52px] text-lg font-bold rounded-[5px] bg-main-black/80 text-white 2md:flex-1 disabled:bg-main-black/20"
+            >
+              確定
+            </button>
+          </div>
+        </veeForm>
       </div>
-      <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">
-          連絡電話 : {{ orderDetailInfo.ReceiveAddress.phone_number }}
+    </template>
+    <template v-else>
+      <div class="space-y-6 text-xl font-medium text-main-black/70">
+        <div>
+          訂購人 :
+          {{ recipientInfo.first_name + recipientInfo.last_name }}
         </div>
-        <div class="whitespace-nowrap">
-          公司 : {{ orderDetailInfo.ReceiveAddress.company_name ?? "無" }}
+        <div class="flex flex-wrap gap-y-[21px]">
+          <div class="mr-[21px]">
+            連絡電話 : {{ recipientInfo.phone_number }}
+          </div>
+          <div class="whitespace-nowrap">
+            公司 : {{ recipientInfo.company_name ?? "無" }}
+          </div>
         </div>
+        <div class="flex flex-wrap gap-y-[21px]">
+          <div class="mr-[21px]">
+            所在國家與地區 : {{ recipientInfo.country }}
+          </div>
+          <div class="whitespace-nowrap">
+            郵遞區號 : {{ recipientInfo.zip_code }}
+          </div>
+        </div>
+        <div>地址 : {{ recipientInfo.address }}</div>
       </div>
-      <div class="flex flex-wrap gap-y-[21px]">
-        <div class="mr-[21px]">
-          所在國家與地區 : {{ orderDetailInfo.ReceiveAddress.country }}
-        </div>
-        <div class="whitespace-nowrap">
-          郵遞區號 : {{ orderDetailInfo.ReceiveAddress.zip_code }}
-        </div>
-      </div>
-      <div>地址 : {{ orderDetailInfo.ReceiveAddress.address }}</div>
-    </div>
+    </template>
     <div class="border-b border-main-black my-11 2md:my-12"></div>
     <h2 class="text-[28px] leading-[1.4] font-medium text-main-black/70 mb-9">
       付款資訊
@@ -325,12 +575,15 @@ function formatOrderStatus(id) {
       <div class="flex gap-6 flex-col 2md:flex-row">
         <button
           @click="cancelOrder"
-          class="h-[52px] text-lg font-bold rounded-[5px] border border-main-black/80 text-main-black/80 2md:flex-1"
+          :disabled="infoEditStatus"
+          class="h-[52px] text-lg font-bold rounded-[5px] border border-main-black/80 text-main-black/80 2md:flex-1 disabled:text-main-black/20 disabled:border-main-black/20"
         >
           取消訂單
         </button>
         <button
-          class="h-[52px] text-lg font-bold rounded-[5px] bg-main-black/80 text-white 2md:flex-1"
+          @click="editOrderInfo"
+          :disabled="infoEditStatus"
+          class="h-[52px] text-lg font-bold rounded-[5px] bg-main-black/80 text-white 2md:flex-1 disabled:bg-main-black/20"
         >
           編輯訂購資訊
         </button>

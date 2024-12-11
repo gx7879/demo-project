@@ -41,9 +41,9 @@ const route = useRoute();
 
 onBeforeMount(() => {
   onAuthStateChanged(auth, (user) => {
-    console.log(user);
+    // console.log(user);
     if (user) {
-      console.log(user);
+      // console.log(user);
       const currentMail = user.providerData[0].email;
       setUserInfo(user);
       cookie.value = user.stsTokenManager.accessToken;
