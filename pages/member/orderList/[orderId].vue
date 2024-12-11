@@ -17,13 +17,6 @@ const { isVisible, modalState, showModal, closeModal, confirm, cancel } =
 
 const orderStatus = ref("");
 
-// const modalState = reactive({
-//   title: "",
-//   text: "",
-//   icon: "",
-//   isVisible: false,
-// });
-
 const { copy, isSupported } = useClipboard();
 
 function handleCopy() {
@@ -57,9 +50,6 @@ const steps = ref([
 const currentActive = ref(orderDetailInfo.value.order_status_id);
 
 function cancelOrder() {
-  // modalState.title = "取消訂單";
-  // modalState.text = "確定要取消訂單?";
-  // modalState.isVisible = true;
   showModal({
     title: "取消訂單",
     text: "確定要取消訂單?",
@@ -70,31 +60,8 @@ function cancelOrder() {
     },
   });
 }
-// "取消訂單",
-//     "確定要取消訂單?",
-//     "",
-//     () => {
-//       cancelSuccess();
-//     },
-//     () => {
-//       console.log("cancel");
-//     }
-
-// function closeModal() {
-// modalState.isVisible = false;
-// }
 
 function cancelSuccess() {
-  //   modalState.title = "取消成功";
-  //   modalState.text = "您的訂單已取消";
-  //   modalState.icon = "success";
-  //   modalState.isVisible = true;
-  //   setTimeout(() => {
-  //     modalState.title = "";
-  //     modalState.text = "";
-  //     modalState.icon = "";
-  //     modalState.isVisible = false;
-  //   }, 2000);
   showModal({
     title: "取消成功",
     text: "您的訂單已取消",
@@ -105,10 +72,16 @@ function cancelSuccess() {
   }, 2000);
 }
 
-// function confirmModal() {
-// modalState.isVisible = false;
-// cancelSuccess();
-// }
+function formatOrderStatus(id) {
+  const status = {
+    1: "訂單成立",
+    2: "待出貨",
+    3: "已出貨",
+    4: "已完成",
+    5: "已取消",
+  };
+  return status[id];
+}
 </script>
 
 <template>
@@ -130,7 +103,7 @@ function cancelSuccess() {
         ></NuxtImg>
       </div>
       <div class="text-4xl leading-[1.4] font-medium text-main-black/70">
-        已出貨
+        {{ formatOrderStatus(orderDetailInfo.order_status_id) }}
       </div>
       <span class="text-[#fa0e0e] mt-[5px] block">貨品轉址運送中...</span>
     </div>

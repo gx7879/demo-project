@@ -17,13 +17,6 @@ const { isVisible, modalState, showModal, closeModal, confirm, cancel } =
 
 const orderStatus = ref("");
 
-// const modalState = reactive({
-//   title: "",
-//   text: "",
-//   icon: "",
-//   isVisible: false,
-// });
-
 const { copy, isSupported } = useClipboard();
 
 function handleCopy() {
@@ -34,7 +27,7 @@ function handleCopy() {
   }
   copy(orderId.value);
 }
-
+const { currency } = useCurrency();
 const steps = ref([
   {
     id: 1,
@@ -57,9 +50,6 @@ const steps = ref([
 const currentActive = ref(orderDetailInfo.value.order_status_id);
 
 function cancelOrder() {
-  // modalState.title = "取消訂單";
-  // modalState.text = "確定要取消訂單?";
-  // modalState.isVisible = true;
   showModal({
     title: "取消訂單",
     text: "確定要取消訂單?",
@@ -70,31 +60,8 @@ function cancelOrder() {
     },
   });
 }
-// "取消訂單",
-//     "確定要取消訂單?",
-//     "",
-//     () => {
-//       cancelSuccess();
-//     },
-//     () => {
-//       console.log("cancel");
-//     }
-
-// function closeModal() {
-// modalState.isVisible = false;
-// }
 
 function cancelSuccess() {
-  //   modalState.title = "取消成功";
-  //   modalState.text = "您的訂單已取消";
-  //   modalState.icon = "success";
-  //   modalState.isVisible = true;
-  //   setTimeout(() => {
-  //     modalState.title = "";
-  //     modalState.text = "";
-  //     modalState.icon = "";
-  //     modalState.isVisible = false;
-  //   }, 2000);
   showModal({
     title: "取消成功",
     text: "您的訂單已取消",
@@ -105,10 +72,16 @@ function cancelSuccess() {
   }, 2000);
 }
 
-// function confirmModal() {
-// modalState.isVisible = false;
-// cancelSuccess();
-// }
+function formatOrderStatus(id) {
+  const status = {
+    1: "訂單成立",
+    2: "待出貨",
+    3: "已出貨",
+    4: "已完成",
+    5: "已取消",
+  };
+  return status[id];
+}
 </script>
 
 <template>
@@ -130,7 +103,7 @@ function cancelSuccess() {
         ></NuxtImg>
       </div>
       <div class="text-4xl leading-[1.4] font-medium text-main-black/70">
-        已出貨
+        {{ formatOrderStatus(orderDetailInfo.order_status_id) }}
       </div>
       <span class="text-[#fa0e0e] mt-[5px] block">貨品轉址運送中...</span>
     </div>
@@ -200,23 +173,59 @@ function cancelSuccess() {
 
           <div class="text-main-black/70 flex flex-col flex-1 2md:block">
             <div>
-              <div class="leading-[1.4] font-bold">ARK-002</div>
+              <div class="leading-[1.4] font-bold">
+                {{
+                  orderDetailInfo.OrderCommodities[0].CommodityPropertyInfo
+                    .Commodity.name
+                }}
+              </div>
               <span class="leading-[1.4] font-light">Black</span>
             </div>
             <span class="text-right mt-auto self-end 2md:hidden">
-              TWD 89,000*1
+              TWD
+              {{
+                currency(
+                  orderDetailInfo.OrderCommodities[0].price *
+                    orderDetailInfo.OrderCommodities[0].amount
+                )
+              }}
             </span>
           </div>
         </div>
         <div class="hidden 2md:block"></div>
-        <div class="hidden 2md:block">TWD 89,000</div>
-        <div class="hidden 2md:block text-center">1</div>
-        <div class="hidden 2md:block text-right">TWD 89,000</div>
+        <div class="hidden 2md:block">
+          TWD
+          {{
+            currency(
+              orderDetailInfo.OrderCommodities[0].CommodityPropertyInfo.price
+            )
+          }}
+        </div>
+        <div class="hidden 2md:block text-center">
+          {{ orderDetailInfo.OrderCommodities[0].amount }}
+        </div>
+        <div class="hidden 2md:block text-right">
+          TWD
+          {{
+            currency(
+              orderDetailInfo.OrderCommodities[0].price *
+                orderDetailInfo.OrderCommodities[0].amount
+            )
+          }}
+        </div>
       </div>
       <div class="flex flex-col items-end space-y-4 mt-3">
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-medium">小計:</div>
-          <div>TWD 89,000</div>
+          <div>
+            TWD
+            {{
+              currency(
+                orderDetailInfo.OrderCommodities[0].price *
+                  orderDetailInfo.OrderCommodities[0].amount
+              )
+            }}
+          </div>
         </div>
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-medium">運費:</div>
@@ -224,7 +233,15 @@ function cancelSuccess() {
         </div>
         <div class="text-main-black/70 max-w-80 w-full flex justify-between">
           <div class="text-sm font-bold">總計:</div>
-          <div class="font-bold">TWD 89,000</div>
+          <div class="font-bold">
+            TWD
+            {{
+              currency(
+                orderDetailInfo.OrderCommodities[0].price *
+                  orderDetailInfo.OrderCommodities[0].amount
+              )
+            }}
+          </div>
         </div>
       </div>
     </div>
@@ -263,7 +280,8 @@ function cancelSuccess() {
     <h2
       class="text-[28px] leading-[1.4] font-medium text-main-black/70 mb-9 flex flex-wrap items-end"
     >
-      收貨資訊<span class="text-xl whitespace-nowrap">
+      收貨資訊
+      <span class="text-xl whitespace-nowrap">
         (詳細運送資料將由專人與您聯繫)
       </span>
     </h2>
