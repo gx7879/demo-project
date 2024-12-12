@@ -5,6 +5,7 @@ const Api = {
   getCustomToken: "/api/auth/get_custom_token",
   userProfiles: "/api/user/user_profiles/self",
   orders: "/api/order/orders",
+  emailVerify: "/api/auth/email_verify",
 };
 
 export function login(data) {
@@ -33,4 +34,8 @@ export function orders(data) {
 
 export function updateUserProfiles(data) {
   return useHttp.post(Api.userProfiles, data);
+}
+
+export function emailVerify(data) {
+  return useHttp.post(Api.emailVerify, data);
 }

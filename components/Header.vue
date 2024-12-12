@@ -1,6 +1,10 @@
 <script setup>
 import { onClickOutside } from "@vueuse/core";
-import { signOut } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  signOut,
+} from "firebase/auth";
 import {
   shoppingCarts,
   deleteShoppingCart,
@@ -18,7 +22,7 @@ const { cartClear } = cartStore;
 const { currency } = useCurrency();
 
 const useResetPassword = useResetPasswordStore();
-const { passwordClear } = useResetPassword;
+const { setResetPasswordAuth, passwordClear } = useResetPassword;
 const modalStore = useModalStore();
 const { showModal } = modalStore;
 
@@ -36,6 +40,8 @@ const closeCart = function () {
   isModalOpen.value = false;
 };
 
+const auth = useFirebaseAuth();
+
 function resetPassword() {
   showModal({
     title: "變更密碼",
@@ -44,15 +50,29 @@ function resetPassword() {
     onCancel: () => {
       console.log("cancel");
     },
-    onSuccess: () => {
-      const router = useRouter();
-      router.push("/member/resetPassword");
+    onSuccess: (password) => {
+      let credential = EmailAuthProvider.credential(
+        auth.currentUser.email,
+        password
+      );
+      reauthenticateWithCredential(auth.currentUser, credential)
+        .then(() => {
+          setResetPasswordAuth(true);
+          const router = useRouter();
+          router.push("/member/resetPassword");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+          // An error ocurred
+          // ...
+        });
     },
   });
   openMenu.value = false;
 }
 
-const auth = useFirebaseAuth();
 const user = useCurrentUser();
 // const router = useRouter();
 
