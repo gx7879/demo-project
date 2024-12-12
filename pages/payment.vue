@@ -57,6 +57,25 @@ watchEffect(() => {
   }
 });
 
+function ErrHandle(strErr) {
+  if (strErr != null) {
+    $("#ECPayPayment").append(
+      '<div style="text-align: center;"><label style="color: red;">' +
+        strErr +
+        "</label></div>"
+    );
+    console.log(strErr);
+  } else {
+    $("#ECPayPayment").append(
+      '<div style="text-align: center;"><label style="color: red;">Token取得失敗</label></div>'
+    );
+    console.log("Wrong");
+  }
+  // navigateTo("/");
+
+  //$('#btnPay').hide();
+}
+
 function paymentConfirm() {
   try {
     ECPay.getPayToken(async function (paymentInfo, errMsg) {
@@ -131,89 +150,7 @@ function ecpayInit() {
     }
     return result;
   }
-
-  function ErrHandle(strErr) {
-    if (strErr != null) {
-      $("#ECPayPayment").append(
-        '<div style="text-align: center;"><label style="color: red;">' +
-          strErr +
-          "</label></div>"
-      );
-      console.log(strErr);
-    } else {
-      $("#ECPayPayment").append(
-        '<div style="text-align: center;"><label style="color: red;">Token取得失敗</label></div>'
-      );
-      console.log("Wrong");
-    }
-    navigateTo("/");
-
-    //$('#btnPay').hide();
-  }
 }
-
-// onMounted(() => {
-//   const Environment = "STAGE"; //請設定要連線的環境: 測試 STAGE ,正式PROD
-//   const envi = GetEnvi(Environment);
-//   console.log(payment.value);
-//   let _token = payment.value.Token;
-//   //初始化SDK畫面
-//   try {
-//     ECPay.initialize(envi, 1, function (errMsg) {
-//       if (_token === "") {
-//         _token = prompt("請填入Token: ");
-//       }
-
-//       // try {
-//       ECPay.createPayment(
-//         _token,
-//         ECPay.Language.zhTW,
-//         function (errMsg) {
-//           //console.log('Callback Message: ' + errMsg);
-//           if (errMsg != null) ErrHandle(errMsg);
-//         },
-//         "V2"
-//       );
-//       // } catch (err) {
-//       //   ErrHandle(err);
-//       // }
-//     });
-//   } catch (err) {
-//     ErrHandle(err);
-//   }
-
-//   function GetEnvi(env) {
-//     let result = "STAGE";
-//     switch (env) {
-//       case "STAGE":
-//         result = "Stage";
-//         break;
-//       case "PROD":
-//         result = "Prod";
-//         break;
-//     }
-//     return result;
-//   }
-
-//   function ErrHandle(strErr) {
-//     if (strErr != null) {
-//       $("#ECPayPayment").append(
-//         '<div style="text-align: center;"><label style="color: red;">' +
-//           strErr +
-//           "</label></div>"
-//       );
-//       console.log(strErr);
-//     } else {
-//       $("#ECPayPayment").append(
-//         '<div style="text-align: center;"><label style="color: red;">Token取得失敗</label></div>'
-//       );
-//       console.log("Wrong");
-//     }
-//     navigateTo("/");
-
-//     //$('#btnPay').hide();
-//   }
-// });
 </script>
 
 <template>
