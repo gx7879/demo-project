@@ -6,6 +6,9 @@ const route = useRoute();
 const store = useModalStore();
 const { showModal } = store;
 
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+
 const resetPasswordStore = useResetPasswordStore();
 const { setResetPasswordAuth } = resetPasswordStore;
 
@@ -29,6 +32,13 @@ function resetPassword() {
     },
   });
 }
+const passwordProvider = computed(() => {
+  return (
+    userInfo.value.providerData.find(
+      (provider) => provider.providerId === "password"
+    ) ?? null
+  );
+});
 </script>
 
 <template>
@@ -108,7 +118,7 @@ function resetPassword() {
             <path d="m9 6-9 5.196V.804L9 6Z" fill="#4B4240" />
           </svg>
         </li>
-        <li class="flex items-center">
+        <li v-if="passwordProvider" class="flex items-center">
           <button
             class="peer cursor-pointer"
             :class="{
