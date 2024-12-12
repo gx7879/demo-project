@@ -15,7 +15,7 @@ const store = useProductStore();
 const { products } = storeToRefs(store);
 const { setProduct, productClear } = store;
 const userStore = useUserStore();
-const { isLogin } = storeToRefs(userStore);
+const { isLogin, userInfo } = storeToRefs(userStore);
 const { clearUserInfo } = userStore;
 const cartStore = useCartStore();
 const { cartClear } = cartStore;
@@ -149,6 +149,14 @@ const menu = ref(null);
 onClickOutside(menu, () => {
   openMenu.value = false;
 });
+
+const passwordProvider = computed(() => {
+  return (
+    userInfo.value.providerData.find(
+      (provider) => provider.providerId === "password"
+    ) ?? null
+  );
+});
 </script>
 
 <template>
@@ -233,7 +241,11 @@ onClickOutside(menu, () => {
         </h6>
         <div class="2md:flex justify-between items-end">
           <ul
-            class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-cols-3 2md:grid-rows-2 2md:grid-flow-col gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
+            class="text-xl text-main-black/70 px-4 py-6 border-t border-l border-main-black grid 2md:grid-rows-2 2md:grid-flow-col gap-x-[60px] gap-y-6 auto-cols-auto mb-6 2md:mb-0"
+            :class="{
+              '2md:grid-cols-3': passwordProvider,
+              '2md:grid-cols-2': !passwordProvider,
+            }"
           >
             <li>
               <NuxtLink to="/member" @click.native="openMenu = false"
@@ -260,7 +272,7 @@ onClickOutside(menu, () => {
                 >訂購紀錄
               </NuxtLink>
             </li>
-            <li>
+            <li v-if="passwordProvider">
               <a class="cursor-pointer" @click.native="resetPassword"
                 >變更密碼
               </a>

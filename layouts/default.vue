@@ -1,41 +1,16 @@
 <script setup>
 import { onAuthStateChanged } from "firebase/auth";
-const store = useResetPasswordStore();
 const modalStore = useModalStore();
 const { confirm, cancel } = modalStore;
 const { isVisible, modalState } = storeToRefs(modalStore);
 const userStore = useUserStore();
-const { userInfo } = storeToRefs(userStore);
 const { setUserInfo, setToken, clearUserInfo } = userStore;
 const cookie = useCookie("token");
 const productStore = useProductStore();
 const { setProduct, productClear, getCart } = productStore;
 const resetPassword = useResetPasswordStore();
 const { setMail } = resetPassword;
-// const currentUser = ref(null);
-// const user = useCurrentUser();
-// console.log(user);
-// currentUser.value = await getCurrentUser();
-// console.log(currentUser.value);
-// setUserInfo(currentUser.value);
-// watchEffect(() => {
-//   if (userInfo.value) {
-//     console.log(userInfo.value);
-//     cookie.value = userInfo.value.stsTokenManager.accessToken;
-//     setUserInfo(userInfo.value);
-//     setToken(userInfo.value.stsTokenManager.accessToken);
-//   }
-// });
-// watch(userInfo, (newVal) => {
-//   console.log(newVal);
-//   if (newVal) {
-//     console.log(newVal.stsTokenManager.accessToken);
-//     cookie.value = newVal.stsTokenManager.accessToken;
-//     setUserInfo(newVal);
-//     setToken(newVal.stsTokenManager.accessToken);
-//   }
-// });
-// console.log(cookie);
+
 const auth = useFirebaseAuth();
 const route = useRoute();
 
