@@ -152,7 +152,7 @@ onClickOutside(menu, () => {
 
 const passwordProvider = computed(() => {
   return (
-    userInfo.value.providerData.find(
+    userInfo?.value?.providerData?.find(
       (provider) => provider.providerId === "password"
     ) ?? null
   );

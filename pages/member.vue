@@ -7,7 +7,7 @@ const store = useModalStore();
 const { showModal } = store;
 
 const userStore = useUserStore();
-const { userInfo } = storeToRefs(userStore);
+const { userInfo, getUserInfo } = storeToRefs(userStore);
 
 const resetPasswordStore = useResetPasswordStore();
 const { setResetPasswordAuth } = resetPasswordStore;
@@ -34,7 +34,7 @@ function resetPassword() {
 }
 const passwordProvider = computed(() => {
   return (
-    userInfo.value.providerData.find(
+    userInfo?.value?.providerData?.find(
       (provider) => provider.providerId === "password"
     ) ?? null
   );

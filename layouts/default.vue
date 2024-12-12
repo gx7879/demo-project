@@ -4,7 +4,7 @@ const modalStore = useModalStore();
 const { confirm, cancel } = modalStore;
 const { isVisible, modalState } = storeToRefs(modalStore);
 const userStore = useUserStore();
-const { setUserInfo, setToken, clearUserInfo } = userStore;
+const { setUserInfo, setToken, clearUserInfo, setProvider } = userStore;
 const cookie = useCookie("token");
 const productStore = useProductStore();
 const { setProduct, productClear, getCart } = productStore;
@@ -20,10 +20,14 @@ onBeforeMount(() => {
     if (user) {
       // console.log(user);
       const currentMail = user.providerData[0].email;
+      const provider = user?.providerData?.map(
+        (provider) => provider.providerId
+      );
       setUserInfo(user);
       cookie.value = user.stsTokenManager.accessToken;
       setToken(user.stsTokenManager.accessToken);
       setMail(currentMail);
+      setProvider(provider);
       if (route.path === "/login") {
         navigateTo("/");
       }

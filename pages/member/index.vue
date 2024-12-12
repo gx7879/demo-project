@@ -1,5 +1,10 @@
 <script setup>
-import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  OAuthProvider,
+  reauthenticateWithPopup,
+} from "firebase/auth";
 import { userProfiles, updateUserProfiles } from "@/api/member";
 import dayjs from "dayjs";
 import { DatePicker } from "ant-design-vue";
@@ -28,55 +33,91 @@ const modalStore = useModalStore();
 const { showModal } = modalStore;
 
 const userStore = useUserStore();
-const { getUserInfo } = storeToRefs(userStore);
+const { getUserInfo, provider } = storeToRefs(userStore);
 const { setUserInfo, setToken } = userStore;
 
 const editInfoStatus = ref(false);
 const auth = useFirebaseAuth();
 const myForm = ref(null);
 
+const isFbLogin = computed(() => {
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("facebook.com") ?? false;
+});
+const isGoogleLogin = computed(() => {
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("google.com") ?? false;
+});
+const isAppleLogin = computed(() => {
+  if (!provider.value.length) return false;
+  return provider?.value?.includes("apple.com") ?? false;
+});
+
+const passwordProvider = computed(() => {
+  return (
+    getUserInfo?.value?.providerData?.find(
+      (provider) => provider.providerId === "password"
+    ) ?? null
+  );
+});
+
 function editInfo() {
-  showModal({
-    title: "修改基本資料",
-    text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
-    password: true,
-    onCancel: () => {
-      console.log("cancel");
-    },
-    onSuccess: (password) => {
-      console.log(auth.currentUser.email, password);
-      let credential = EmailAuthProvider.credential(
-        auth.currentUser.email,
-        password
-      );
-      reauthenticateWithCredential(auth.currentUser, credential)
-        .then(() => {
-          editInfoStatus.value = true;
-          setResetPasswordAuth(true);
-          nextTick(() => {
-            myForm.value.setValues(info.value);
+  if (passwordProvider.value) {
+    showModal({
+      title: "修改基本資料",
+      text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
+      password: true,
+      onCancel: () => {
+        console.log("cancel");
+      },
+      onSuccess: (password) => {
+        console.log(auth.currentUser.email, password);
+        let credential = EmailAuthProvider.credential(
+          auth.currentUser.email,
+          password
+        );
+        reauthenticateWithCredential(auth.currentUser, credential)
+          .then(() => {
+            editInfoStatus.value = true;
+            setResetPasswordAuth(true);
+            nextTick(() => {
+              myForm.value.setValues(info.value);
+            });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+            showModal({
+              title: "驗證失敗",
+              text: "請確認您的密碼是否正確",
+            });
           });
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage);
-          // An error ocurred
-          // ...
+      },
+    });
+  } else {
+    const providerObj = getUserInfo.value.providerData.find(
+      (provider) => provider.providerId !== "password"
+    );
+    const provider = new OAuthProvider(providerObj.providerId);
+    reauthenticateWithPopup(auth.currentUser, provider)
+      .then((result) => {
+        editInfoStatus.value = true;
+        setResetPasswordAuth(true);
+        nextTick(() => {
+          myForm.value.setValues(info.value);
         });
-    },
-  });
-  // showModal({
-  //   title: "修改基本資料",
-  //   text: "為確保您的個人安全,請輸入您的密碼,並進行身分認證。",
-  //   password: true,
-  //   onCancel: () => {
-  //     console.log("cancel");
-  //   },
-  //   onSuccess: () => {
-  //     editInfoStatus.value = true;
-  //   },
-  // });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        showModal({
+          title: "驗證失敗",
+          text: "請確認您的第三方帳號選擇是否正確",
+        });
+      });
+  }
 }
 
 async function onSubmit(values) {
@@ -100,27 +141,6 @@ async function onSubmit(values) {
   }
 }
 
-const provider = computed(() => {
-  console.log(getUserInfo.value);
-  return (
-    getUserInfo?.value?.providerData.map((provider) => provider.providerId) ??
-    []
-  );
-});
-
-const isFbLogin = computed(() => {
-  if (!provider.value.length) return false;
-  return provider?.value?.includes("facebook.com") ?? false;
-});
-const isGoogleLogin = computed(() => {
-  if (!provider.value.length) return false;
-  return provider?.value?.includes("google.com") ?? false;
-});
-const isAppleLogin = computed(() => {
-  if (!provider.value.length) return false;
-  return provider?.value?.includes("apple.com") ?? false;
-});
-
 const genderFormat = (gender) => {
   const type = {
     0: null,
@@ -143,6 +163,7 @@ const genderFormat = (gender) => {
       <div class="text-xl font-medium text-main-black/70">
         電子郵件 : {{ currentMail }}
       </div>
+      <!-- <ClientOnly> -->
       <div class="flex justify-between items-center">
         <div class="flex items-center">
           <NuxtImg class="mr-3 w-9" src="/facebook-login-icon.png"></NuxtImg>
@@ -163,7 +184,7 @@ const genderFormat = (gender) => {
       <div class="flex justify-between items-center">
         <div class="flex items-center">
           <NuxtImg class="mr-3 w-9" src="/google-login-icon.png"></NuxtImg>
-          <div class="text-xl font-medium text-main-black/70">未綁定</div>
+          <div class="text-xl font-medium text-main-black/70">與google綁定</div>
         </div>
         <button
           class="w-[98px] text-lg leading-none font-bold px-3 py-[9px] rounded-[5px]"
@@ -178,7 +199,7 @@ const genderFormat = (gender) => {
       <div class="flex justify-between items-center">
         <div class="flex items-center">
           <NuxtImg class="mr-3 w-9" src="/apple-login-icon.png"></NuxtImg>
-          <div class="text-xl font-medium text-main-black/70">未綁定</div>
+          <div class="text-xl font-medium text-main-black/70">與apple綁定</div>
         </div>
         <button
           class="w-[98px] text-lg leading-none font-bold px-3 py-[9px] rounded-[5px]"
@@ -190,6 +211,7 @@ const genderFormat = (gender) => {
           {{ !isAppleLogin ? "綁定" : "解除綁定" }}
         </button>
       </div>
+      <!-- </ClientOnly> -->
     </div>
     <h2
       class="mb-3 text-main-black/80 text-[28px] leading-[1.4] font-medium pb-3 flex justify-between items-center"
