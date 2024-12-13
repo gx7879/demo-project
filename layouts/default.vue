@@ -19,7 +19,7 @@ onBeforeMount(() => {
     // console.log(user);
     if (user) {
       // console.log(user);
-      const currentMail = user.providerData[0].email;
+      const currentMail = user?.providerData[0]?.email;
       const provider = user?.providerData?.map(
         (provider) => provider.providerId
       );

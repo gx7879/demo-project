@@ -4,6 +4,9 @@ import {
   reauthenticateWithCredential,
   OAuthProvider,
   reauthenticateWithPopup,
+  linkWithPopup,
+  unlink,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { userProfiles, updateUserProfiles } from "@/api/member";
 import dayjs from "dayjs";
@@ -25,16 +28,16 @@ const info = ref({
   phone: userInfo.value?.phone,
   address: userInfo.value?.address,
 });
-const store = useResetPasswordStore();
-const { resetPasswordAuth, currentMail } = storeToRefs(store);
-const { setResetPasswordAuth } = store;
+const resetPassword = useResetPasswordStore();
+const { resetPasswordAuth, currentMail } = storeToRefs(resetPassword);
+const { setResetPasswordAuth, setMail } = resetPassword;
 
 const modalStore = useModalStore();
 const { showModal } = modalStore;
 
 const userStore = useUserStore();
 const { getUserInfo, provider } = storeToRefs(userStore);
-const { setUserInfo, setToken } = userStore;
+const { setUserInfo, setToken, clearUserInfo, setProvider } = userStore;
 
 const editInfoStatus = ref(false);
 const auth = useFirebaseAuth();
@@ -150,6 +153,54 @@ const genderFormat = (gender) => {
   };
   return type[gender] ?? null;
 };
+
+const checkLinkedProviders = async () => {
+  const user = auth.currentUser;
+  if (user) {
+    const currentMail = user?.providerData[0]?.email;
+    const provider = user?.providerData?.map((provider) => provider.providerId);
+    setUserInfo(user);
+    cookie.value = user.stsTokenManager.accessToken;
+    setToken(user.stsTokenManager.accessToken);
+    setMail(currentMail);
+    setProvider(provider);
+  } else {
+    setUserInfo(null);
+    cookie.value = null;
+    setToken(null);
+    productClear();
+    clearUserInfo();
+  }
+};
+
+function facebookLinkAndunLink() {}
+
+async function googleLinkAndunLink() {
+  if (!isGoogleLogin.value) {
+    const provider = new GoogleAuthProvider();
+    linkWithPopup(auth.currentUser, provider)
+      .then(async () => {
+        await checkLinkedProviders();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  } else {
+    unlink(auth.currentUser, "google.com")
+      .then(async () => {
+        await checkLinkedProviders();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  }
+}
+
+function appleLinkAndunLink() {}
 </script>
 
 <template>
@@ -177,6 +228,7 @@ const genderFormat = (gender) => {
             'border border-main-black/80 text-main-black/80': isFbLogin,
             'bg-main-black/80 text-white': !isFbLogin,
           }"
+          @click="facebookLinkAndunLink"
         >
           {{ !isFbLogin ? "綁定" : "解除綁定" }}
         </button>
@@ -192,6 +244,7 @@ const genderFormat = (gender) => {
             'border border-main-black/80 text-main-black/80': isGoogleLogin,
             'bg-main-black/80 text-white': !isGoogleLogin,
           }"
+          @click="googleLinkAndunLink"
         >
           {{ !isGoogleLogin ? "綁定" : "解除綁定" }}
         </button>
@@ -207,6 +260,7 @@ const genderFormat = (gender) => {
             'border border-main-black/80 text-main-black/80': isAppleLogin,
             'bg-main-black/80 text-white': !isAppleLogin,
           }"
+          @click="appleLinkAndunLink"
         >
           {{ !isAppleLogin ? "綁定" : "解除綁定" }}
         </button>
