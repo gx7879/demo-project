@@ -14,24 +14,10 @@ console.log(error.value, payment.value.status);
 if (error.value || payment.value.status === "fail") {
   navigateTo("/");
 }
-const jqueryLoaded = ref(false);
+
 const ecpayLoaded = ref(false);
 useHead({
   script: [
-    {
-      tagPriority: "before:script:ecpay",
-      src: "https://code.jquery.com/jquery-3.5.1.min.js",
-      tagPosition: "bodyClose",
-      onload: () => {
-        const checkJqueryLoaded = setInterval(() => {
-          console.log(window.$);
-          if (window.$) {
-            clearInterval(checkJqueryLoaded);
-            jqueryLoaded.value = true;
-          }
-        }, 100);
-      },
-    },
     {
       key: "ecpay",
       src: "https://ecpg.ecpay.com.tw/Scripts/sdk-1.0.0.js?t=20210121100116",
@@ -50,7 +36,7 @@ useHead({
 });
 
 watchEffect(() => {
-  if (jqueryLoaded.value && ecpayLoaded.value) {
+  if (ecpayLoaded.value) {
     nextTick(() => {
       ecpayInit();
     });

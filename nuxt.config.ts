@@ -2,6 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  app: {
+    head: {
+      script: [{ src: "https://code.jquery.com/jquery-3.5.1.min.js" }]
+    }
+  },
   modules: [
     "@pinia/nuxt",
     "nuxt-vuefire",
