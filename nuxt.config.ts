@@ -19,9 +19,9 @@ export default defineNuxtConfig({
     "nuxt-lodash",
     "@nuxtjs/google-fonts"
   ],
-  image: {
-    dir: "assets/images",
-  },
+  // image: {
+  //   dir: "assets/images",
+  // },
   imports: {
     dirs: ["stores"],
   },
