@@ -7,7 +7,7 @@ const { data: payment, error } = await useAsyncData("payment", () =>
   gateway({
     id,
     ChoosePaymentList: 1,
-    OrderResultURL: "http://localhost:3000/payComplete?orderId=" + id,
+    OrderResultURL: "https://arkdemo.31app.tw/payComplete?orderId=" + id,
   })
 );
 console.log(error.value, payment.value.status);
